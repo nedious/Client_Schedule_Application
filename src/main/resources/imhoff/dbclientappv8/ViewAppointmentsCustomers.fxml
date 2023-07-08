@@ -27,7 +27,7 @@
                 <Font size="14.0" />
             </font>
         </Button>
-        <TableView fx:id="appointments_tblview_AppointmentsMain" layoutX="24.0" layoutY="98.0" prefHeight="200.0" prefWidth="869.0">
+        <TableView fx:id="appointmentMainTable" layoutX="24.0" layoutY="98.0" prefHeight="200.0" prefWidth="869.0">
             <columns>
                 <TableColumn fx:id="appointmentID" prefWidth="75.0" text="Appt ID" />
                 <TableColumn fx:id="appointmentTitle" prefWidth="75.0" text="Title" />
@@ -66,7 +66,7 @@
                 <Font size="14.0" />
             </font>
         </Button>
-        <TableView fx:id="customers_tblview_AppointmentsMain" layoutX="24.0" layoutY="425.0" prefHeight="200.0" prefWidth="869.0">
+        <TableView fx:id="customerMainTable" layoutX="24.0" layoutY="425.0" prefHeight="200.0" prefWidth="869.0">
             <columns>
                 <TableColumn fx:id="customerID" prefWidth="75.0" text="Customer ID" />
                 <TableColumn fx:id="customerName" prefWidth="150" text="Name" />

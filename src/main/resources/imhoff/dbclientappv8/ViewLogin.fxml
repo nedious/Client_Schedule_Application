@@ -1,20 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.PasswordField?>
-<?import javafx.scene.control.SplitMenuButton?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.effect.DropShadow?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.shape.Line?>
-<?import javafx.scene.text.Font?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.LoginViewController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.LoginController">
    <left>
-      <AnchorPane prefHeight="400.0" prefWidth="230.0" style="-fx-background-color: #43966f;" BorderPane.alignment="CENTER">
+      <AnchorPane prefHeight="400.0" prefWidth="230.0" style="-fx-background-color: #8ecbf9;" BorderPane.alignment="CENTER">
          <children>
             <Label alignment="CENTER" layoutX="5.0" layoutY="123.0" prefHeight="17.0" prefWidth="220.0" text="Global" textFill="WHITE">
                <font>
@@ -61,8 +55,8 @@
             </Label>
             <TextField fx:id="loginUsernameTextField" layoutX="87.0" layoutY="115.0" promptText="Username" />
             <PasswordField fx:id="loginPasswordField" layoutX="87.0" layoutY="158.0" promptText="Password" />
-            <Button fx:id="loginLoginButton" layoutX="30.0" layoutY="215.0" mnemonicParsing="false" onAction="#loginLoginButtonOnAction" prefHeight="31.0" prefWidth="210.0" style="-fx-background-color: #6ba3d5;" text="Login" textFill="#f5f3f3" />
-            <Button fx:id="loginExitButton" layoutX="30.0" layoutY="254.0" mnemonicParsing="false" onAction="#loginExitButtonOnAction" prefHeight="32.0" prefWidth="210.0" style="-fx-background-color: #6ba3d5;" text="Exit" textFill="#f5f3f3" />
+            <Button fx:id="loginLoginButton" layoutX="30.0" layoutY="215.0" mnemonicParsing="false" onAction="#loginLoginButtonClick" prefHeight="31.0" prefWidth="210.0" style="-fx-background-color: #6ba3d5;" text="Login" textFill="#f5f3f3" />
+            <Button fx:id="loginExitButton" layoutX="30.0" layoutY="254.0" mnemonicParsing="false" onAction="#loginExitButtonClick" prefHeight="32.0" prefWidth="210.0" style="-fx-background-color: #6ba3d5;" text="Exit" textFill="#f5f3f3" />
             <Label fx:id="loginTimeZoneLabel" alignment="CENTER" layoutX="18.0" layoutY="353.0" text="Time Zone">
                <font>
                   <Font size="14.0" />

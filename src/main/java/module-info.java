@@ -2,7 +2,12 @@ module imhoff.dbclientappv8 {
     requires javafx.controls;
     requires javafx.fxml;
 
+    requires java.sql;
 
-    opens imhoff.dbclientappv8 to javafx.fxml;
-    exports imhoff.dbclientappv8;
+    opens Model;
+
+    exports Main;
+
+    opens Controller;
+    exports Controller;
 }
