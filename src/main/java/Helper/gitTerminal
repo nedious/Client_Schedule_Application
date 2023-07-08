@@ -1,0 +1,45 @@
+//for reference use this link or search for github tutorial: https://www.youtube.com/watch?v=RGOj5yH7evk
+
+cd (folder_name)                    // change directory within folder:
+git status                          // status of git: this shows all files updated or deleted but haven't been saved in a commit yet
+git commit -am                      // short hand: you need to do 'git add' then 'git commit' to commit, so a short hand is '-am' = "a stands for add, m stands for message"
+git branch                          // investigating branches: 'git branch' will result in *branchName (ie '* main' telling you are in the main branch)
+git checkout -b newFileName         // create a NEW branch: 'get checkout' is used to switch between branches. adding '-b newFileName' creates a new branch
+git branch -d branchName            // deleting branches: '-d' = delete
+git checkout branchName             // switch between branches
+        * to MERGE branch to master, must go to github
+git diff branchName                 // what are the differences between branches? use 'git diff' to compare two versions and lines of code changed
+git merge mainBranchName            // frequently adding the master branch to your local file is wise
+git push origin master              // Make commit live by Push. origin = location of git repository. master = name of branch
+git log                             // log of your actions
+git clone (paste repository https)        //to clone repository
+clear                               // clears terminal window
+
+ls -la
+        // are you in a git repository? lets find out: (will reveal hidden folders)
+        //ls = list
+        //look for .git folder, this means you are in git repository, it saves your changes over time
+
+git add .
+        //track all files before saving to git:
+        //. = all
+        // otherwise, you could type the individual file you want to track ie: getTerminal
+
+git commit -m "title" -m "description"
+        //make commit and save *Locally*
+        //-m "enter your message" = message (1st -m is for title of message, 2nd -m is for description)
+
+git reset fileNameToUnstage
+        // ERROR!!! Did you make an error? here's how to fix
+        // you added changes via 'git add' and now you want to undo that:
+        //this reverses the staging (fileNameToUnstage is not necessary)
+
+git reset HEAD~1
+        //ERROR!!! did you already commit a change to the main?
+        // fix by using this: this tells the git to go back a full commit thus nullifying the recent commit in error
+
+git reset --hard 1234commit#number#from#log#1234
+        // in log of actions there is a unique commit hash number.
+        // if you want to completely go back to a previous point in time you can copy the log number, then
+        //paste that in after a reset and '--hard' says delete everything after that log number
+        //not HEAD is pointing to a different commit
