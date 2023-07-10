@@ -73,7 +73,7 @@
                 <TableColumn fx:id="customerAddress" prefWidth="150" text="Address" />
                 <TableColumn fx:id="customerPostalCode" prefWidth="150" text="Postal Code" />
                 <TableColumn fx:id="customerCountry" prefWidth="109.0" text="Country" />
-                <TableColumn fx:id="customerProvince" prefWidth="115.0" text="State/Province" />
+                <TableColumn fx:id="stateProvinceDivisionID" prefWidth="115.0" text="State/Province" />
                 <TableColumn fx:id="customerPhoneNumber" prefWidth="116.0" text="Phone Number" />
             </columns>
         </TableView>
