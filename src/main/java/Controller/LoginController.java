@@ -110,7 +110,7 @@ public class LoginController implements Initializable {
     }
 
     /**
-     * Method: loginExitButtonOnAction. When user clicks exit button, application closes
+     * Method: loginExitButtonClick. When user clicks exit button, application closes
      * @param event
      */
     public void loginExitButtonClick(ActionEvent event) {
