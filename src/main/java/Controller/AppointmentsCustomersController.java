@@ -115,7 +115,10 @@ public class AppointmentsCustomersController {
 
     }
 
-
+    /**
+     * Method: addNewCustomerButtonClick. takes user to AddNewCustomer screen
+     * @param event user click
+     * */
     @FXML void addNewCustomerButtonClick(ActionEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("/imhoff/dbclientappv8/ViewAddNewCustomers.fxml"));
@@ -125,10 +128,11 @@ public class AppointmentsCustomersController {
         stage.setScene(scene);
         stage.show();
     }
-    @FXML void deleteSelectedAppointmentButtonClick(ActionEvent event) {
+
+    @FXML void deleteSelectedCustomerButtonClick(ActionEvent event) {
 
     }
-    @FXML void deleteSelectedCustomerButtonClick(ActionEvent event) {
+    @FXML void deleteSelectedAppointmentButtonClick(ActionEvent event) {
 
     }
 
