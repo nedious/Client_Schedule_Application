@@ -47,6 +47,7 @@ public abstract class JDBC {
         return connection;
     }
 
+
     /**
      * Method closeConnection: closes connection to database
      * */

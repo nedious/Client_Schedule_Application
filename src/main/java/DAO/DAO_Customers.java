@@ -51,8 +51,25 @@ public class DAO_Customers {
         return customersObservableList;
     }
 
-}
 
+    /**
+     * Method: maxID. identifies max value from Customer_ID column, this is then used when generating a new customer ID
+     * @return maxValue. max value from column Customer_ID in customers table
+     * */
+
+    public static int maxID() throws SQLException {
+        String sqlSelect = "SELECT MAX(Customer_ID) FROM customers";
+        PreparedStatement preparedStatement = JDBC.getConnection().prepareStatement(sqlSelect);
+        ResultSet resultSet = preparedStatement.executeQuery();
+
+        int maxValue = 0;
+        if (resultSet.next()) {
+            maxValue = resultSet.getInt(1);
+            System.out.println("maxID(): Max Customer_ID: " + maxValue);
+        }
+        return maxValue;
+    }
+}
 
 
 

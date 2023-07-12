@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="550.0" prefWidth="600.0" style="-fx-background-color: #8ecbf9  #8ecbf9;" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.AddCustomerController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="550.0" prefWidth="600.0" style="-fx-background-color: #8ecbf9  #8ecbf9;" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.AddCustomerController">
     <children>
         <Label alignment="CENTER" layoutX="187.0" layoutY="23.0" prefHeight="31.0" prefWidth="252.0" text="Add New Customer">
             <font>

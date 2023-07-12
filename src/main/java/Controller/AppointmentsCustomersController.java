@@ -7,7 +7,10 @@ import Model.Customers;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableColumn;
@@ -15,8 +18,12 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.sql.SQLException;
 
+/**
+ * class: AppointmentsCustomersController: displays appointment and customer data in two tables
+ * */
 public class AppointmentsCustomersController {
 
 // -------------- appointment table (columns) --------------- //
@@ -67,7 +74,7 @@ public class AppointmentsCustomersController {
 // --------------- Methods -------------------- //
 
     /**
-     * Method: initialize. Generates appointment table
+     * Method: initialize. Generates appointment table and customer table
      * @throws SQLException
      */
     public void initialize() throws SQLException{
@@ -107,13 +114,25 @@ public class AppointmentsCustomersController {
     @FXML void addNewAppointmentButtonClick(ActionEvent event) {
 
     }
-    @FXML void addNewCustomerButtonClick(ActionEvent event) {
+
+    /**
+     * Method: addNewCustomerButtonClick. takes user to AddNewCustomer screen
+     * @param event user click
+     * */
+    @FXML void addNewCustomerButtonClick(ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/imhoff/dbclientappv8/ViewAddNewCustomers.fxml"));
+        Parent parent = loader.load();
+        Stage stage = (Stage) addNewCustomerButton.getScene().getWindow();
+        Scene scene = new Scene(parent);
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    @FXML void deleteSelectedCustomerButtonClick(ActionEvent event) {
 
     }
     @FXML void deleteSelectedAppointmentButtonClick(ActionEvent event) {
-
-    }
-    @FXML void deleteSelectedCustomerButtonClick(ActionEvent event) {
 
     }
 

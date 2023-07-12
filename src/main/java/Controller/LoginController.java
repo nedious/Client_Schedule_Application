@@ -30,7 +30,7 @@ import java.util.ResourceBundle;
 
 /**
  * class: LoginController: validates user login credentials, tracks login's to "login_activity.txt",
- * TODO: ... changes locale/language based on OS settings... disables on current system. See if it works with VM. Add note then on first line.
+ *  TODO: ... changes locale/language based on OS settings... disables on current system. See if it works with VM. Add note then on first line.
  * class serves as the controller for a specific view in JavaFX app. Controllers are responsible for handling user interactions, updating the view, and performing any necessary business logic.
  *
  * The Initializable interface is part of the JavaFX framework and provides a method called initialize() that is automatically invoked after the FXML file has been loaded and all the associated UI elements have been instantiated.
