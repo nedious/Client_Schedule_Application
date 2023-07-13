@@ -1,5 +1,17 @@
 package Helper;
 
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.stage.Stage;
+
+import java.io.IOException;
+import java.util.Optional;
+
 public class AlertDisplay {
 
     /**
@@ -11,6 +23,9 @@ public class AlertDisplay {
     public static void displayAlert(int alertType) {
 
         javafx.scene.control.Alert alertError = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.ERROR);
+        javafx.scene.control.Alert alertWarning = new javafx.scene.control.Alert(Alert.AlertType.WARNING);
+        javafx.scene.control.Alert alertConfirmation = new javafx.scene.control.Alert(Alert.AlertType.CONFIRMATION);
+
 
         switch (alertType) {
 // --------------------- login errors --------------------- //
@@ -65,6 +80,12 @@ public class AlertDisplay {
                 alertError.showAndWait();
                 break;
 // --------------------- errors --------------------- //
+            case 9:
+                alertError.setTitle("Error");
+                alertError.setHeaderText("No customer selected");
+                alertError.setContentText("Select customer to update");
+                alertError.showAndWait();
+                break;
 
         }
     }
@@ -82,5 +103,28 @@ public class AlertDisplay {
  *
  * */
 
+
+//    /**
+//     * Method addCustomerCancelButtonClick. When user clicks, they are prompted by alert if they wish to discard entered data. If yes, they are redirected to Appt and customer table screen
+//     * @param event user click
+//     * @throws IOException
+//     * */
+//    @FXML
+//    void addCustomerCancelButtonClick(ActionEvent event) throws IOException {
+//        Alert alertCancel = new Alert(Alert.AlertType.CONFIRMATION);
+//        alertCancel.setTitle("Canceling");
+//        alertCancel.setHeaderText("Do you want to Cancel?");
+//        alertCancel.setContentText("Customer data will not be saved");
+//        Optional<ButtonType> result = alertCancel.showAndWait();
+//
+//        if(result.get() == ButtonType.OK){            FXMLLoader loader = new FXMLLoader();
+//            loader.setLocation(getClass().getResource("/imhoff/dbclientappv8/ViewAppointmentsCustomers.fxml"));
+//            Parent parent = loader.load();
+//            Stage stage = (Stage) addCustomerCancelButton.getScene().getWindow();
+//            Scene scene = new Scene(parent);
+//            stage.setScene(scene);
+//            stage.show();
+//        }
+//    }
 
 
