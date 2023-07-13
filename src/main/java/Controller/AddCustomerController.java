@@ -4,6 +4,7 @@ import DAO.DAO_Countries;
 import DAO.DAO_StateProvinceDivision;
 import Helper.AlertDisplay;
 import Helper.JDBC;
+import Model.Customers;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -43,6 +44,7 @@ public class AddCustomerController implements Initializable {
 
     // --------------- Methods -------------- //
 
+
     /**
      * Initialize customersTable
      * lambda expression that allows stateProvinceDivisionNames and countryNames to populate in observable list that is used in customer combo-box. Name data is gathered from first_level_divisions table and countries table.
@@ -50,6 +52,14 @@ public class AddCustomerController implements Initializable {
      * @param resourceBundle
      */
     @Override public void initialize(URL url, ResourceBundle resourceBundle) {
+
+        try {
+            customerID = customerIDInt();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        addCustomerAutoGenerateIDNumTextField.setText(String.valueOf(customerID));
+
         try {
             JDBC.getConnection();
 
@@ -73,6 +83,17 @@ public class AddCustomerController implements Initializable {
             e.printStackTrace();
         }
     }
+
+    public void populateFieldsWithCustomer(Customers customer) {
+        addCustomerAutoGenerateIDNumTextField.setText(String.valueOf(customer.getCustomerID()));
+        addCustomerNameTextField.setText(customer.getCustomerName());
+        addCustomerAddressTextField.setText(customer.getCustomerAddress());
+        addCustomerPostalCodeTextField.setText(customer.getCustomerPostalCode());
+        addCustomerCountryComboBox.setValue(customer.getCustomerCountry());
+        addCustomerStateProvinceComboBox.setValue(customer.getStateProvinceDivisionID());
+        addCustomerPhoneNumberTextField.setText(customer.getCustomerPhoneNumber());
+    }
+
 
 
     /**
@@ -124,21 +145,31 @@ public class AddCustomerController implements Initializable {
         }catch (Exception e){
             e.printStackTrace();
         }
-
     }
 
-    private static int id = 1200;
+    private static int customerID;      // customerID for addCustomer form
+
+    static {
+        try {
+            customerID = maxID();       // make customerID
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     /**
-     * Method: makeNewAutoGenIDNum increments value of id by one every time new customer is added.
+     * Method: customerIDInt increments value of id by one every time new customer is added.
+     * @return id
      */
-    public static int makeNewAutoGenIDNum() throws SQLException {
-//        String sqlMaxID = "SELECT MAX(Customer_ID) FROM customers";
-//        PreparedStatement preparedStatementMaxID = JDBC.getConnection().prepareStatement(sqlMaxID);
-
-        id++;
-        return id;
+    public static int customerIDInt() throws SQLException {
+        customerID++;
+        return customerID;
     }
+
+    /**
+     * Method: addCustomerSaveButtonClick. when user clicks button the data is saved. if there are empty fields user will be notified and prompted to enter data
+     *  lambda expression that allows stateProvinceDivisionNames to populate in observable list that is used in customer combo-box
+     * */
     @FXML void addCustomerSaveButtonClick(ActionEvent event) {
         try {
 //            String stateValue = addCustomerStateProvinceComboBox.getValue(); // Get the selected value from the combo box
@@ -168,7 +199,7 @@ public class AddCustomerController implements Initializable {
 
             if(blankValues(customerName, customerAddress, customerPostalCode, customerCountry, customerState, customerPhoneNum)){
 
-            int divisionID = 0;
+            int divisionID = 0;     // state/province/division ID num that corresponds to state name
             System.out.println("divisionID:  " + divisionID);
 
             //  The loop iterates over each DAO_StateProvinceDivision object in the collection returned by getAllStateProvinceDivision() method.
@@ -179,24 +210,20 @@ public class AddCustomerController implements Initializable {
 //                System.out.println("COMBOBOX: addCustomerStateProvinceComboBox.getValue() :::  " + addCustomerStateProvinceComboBox.getValue());
 //                System.out.println("Value COMBOBOX:  " + addCustomerStateProvinceComboBox.getValue());
 
-
                 if (addCustomerStateProvinceComboBox.getValue().equals(division.getStateProvinceDivisionName())) {      // if the combobox selection is equal to the state/province name from the division ordered list, then divisionID is set to division.getStateProvinceDivisionID();
                     divisionID = division.getStateProvinceDivisionID();
                     System.out.println("divisionID: ?? ::: " + divisionID);
                 }
             }
 
-
             String sqlInsert = "INSERT INTO customers (Customer_ID, Customer_Name, Address, Postal_Code, Phone, Create_Date, Created_By, Last_Update, Last_Updated_By, Division_ID) VALUES (?,?,?,?,?,?,?,?,?,?)";
 
-//            Integer newAutoGeneratedCustomerID = (int) (Math.random() * 1000);
-
-            Integer newAutoGeneratedCustomerID = maxID() + 1;       // maxID() pulls from DAO_Customers and finds max value in Customer_ID column
+            Integer customerIDInt = maxID() + 1;       // maxID() pulls from DAO_Customers and finds max value in Customer_ID column
 //            System.out.println("newAutoGeneratedCustomerID: " + maxID());
 
             PreparedStatement preparedStatement = JDBC.getConnection().prepareStatement(sqlInsert);
 
-            preparedStatement.setInt(1, newAutoGeneratedCustomerID);
+            preparedStatement.setInt(1, customerIDInt);
             preparedStatement.setString(2, addCustomerNameTextField.getText());
             preparedStatement.setString(3, addCustomerAddressTextField.getText());
             preparedStatement.setString(4, addCustomerPostalCodeTextField.getText());

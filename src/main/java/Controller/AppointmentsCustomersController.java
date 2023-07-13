@@ -1,9 +1,16 @@
 package Controller;
 
 import DAO.DAO_Appointments;
+import DAO.DAO_Countries;
 import DAO.DAO_Customers;
+import DAO.DAO_StateProvinceDivision;
+import Helper.AlertDisplay;
+import Helper.JDBC;
 import Model.Appointments;
+import Model.Countries;
 import Model.Customers;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -11,10 +18,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
@@ -64,6 +68,8 @@ public class AppointmentsCustomersController {
     // customer buttons
     @FXML private Button addNewCustomerButton;
     @FXML private Button updateSelectedCustomerButton;
+        public static Customers updateCustomer;
+
     @FXML private Button deleteSelectedCustomerButton;
 
     // reports and logout buttons
@@ -78,7 +84,6 @@ public class AppointmentsCustomersController {
      * @throws SQLException
      */
     public void initialize() throws SQLException{
-
         // --------- Appointments Table ----------- //
 
         ObservableList<Appointments> allAppointments = DAO_Appointments.getAllAppointments();
@@ -124,12 +129,55 @@ public class AppointmentsCustomersController {
         loader.setLocation(getClass().getResource("/imhoff/dbclientappv8/ViewAddNewCustomers.fxml"));
         Parent parent = loader.load();
         Stage stage = (Stage) addNewCustomerButton.getScene().getWindow();
+
+//        // Open "AddCustomerController" and pass the customerList
+//        FXMLLoader loader = new FXMLLoader(getClass().getResource("/imhoff/dbclientappv8/ViewAddNewCustomers.fxml"));
+//        Parent root = loader.load();
+//        AddCustomerController addCustomerController = loader.getController();
+//        addCustomerController.setCustomerList(customerList);
+
+        // Show the "addCustomer" in a new window
         Scene scene = new Scene(parent);
         stage.setScene(scene);
         stage.show();
     }
 
-    @FXML void deleteSelectedCustomerButtonClick(ActionEvent event) {
+    @FXML
+    void deleteSelectedCustomerButtonClick(ActionEvent event) {
+
+    }
+
+    /**
+     * Method: updateSelectedCustomerButtonClick. user can select customer and the data will populate in customer form in order to update customer info
+     * @param event
+     * @throws SQLException
+     */
+    @FXML void updateSelectedCustomerButtonClick(ActionEvent event) throws SQLException, IOException {
+
+        Customers selectedCustomer = customerMainTable.getSelectionModel().getSelectedItem();
+
+        if(customerMainTable.getSelectionModel().getSelectedItem() == null){
+            AlertDisplay.displayAlert(9);
+        } else if (selectedCustomer != null) {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/imhoff/dbclientappv8/ViewAddNewCustomers.fxml"));
+            Parent parent = loader.load();
+            Stage stage = (Stage) updateSelectedCustomerButton.getScene().getWindow();
+
+            AddCustomerController addCustomerController = loader.getController();
+            addCustomerController.populateFieldsWithCustomer(selectedCustomer);
+
+            // Opens the AddCustomerController form
+            Scene scene = new Scene(parent);
+            stage.setTitle("Update Customer");
+            stage.setScene(scene);
+            stage.show();
+
+//            Stage stage = new Stage();
+//            stage.setTitle("Update Customer");
+//            stage.setScene(new Scene(parent));
+//            stage.showAndWait();
+
+        }
 
     }
     @FXML void deleteSelectedAppointmentButtonClick(ActionEvent event) {
@@ -153,11 +201,6 @@ public class AppointmentsCustomersController {
 
     @FXML
     void updateSelectedAppointmentButtonClick(ActionEvent event) {
-
-    }
-
-    @FXML
-    void updateSelectedCustomerButtonClick(ActionEvent event) {
 
     }
 
