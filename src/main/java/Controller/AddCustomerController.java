@@ -41,23 +41,28 @@ public class AddCustomerController implements Initializable {
     @FXML private Button addCustomerSaveButton;
     @FXML private Button addCustomerCancelButton;
 
+    // ------------ generate customerID -------------//
+    private static int customerID;      // customerID for addCustomer form to autopopulate form with customerID
+
+    static {
+        try {
+            customerID = maxID();       // make customerID
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     // --------------- Methods -------------- //
 
-
     /**
-     * Initialize customersTable
+     * /**
+     * Method: initialize. generates customersTable values. generates appropriate customerID value. has lambda expression to populate state and country names for combo-boxes
      * lambda expression that allows stateProvinceDivisionNames and countryNames to populate in observable list that is used in customer combo-box. Name data is gathered from first_level_divisions table and countries table.
      * @param url
      * @param resourceBundle
      */
     @Override public void initialize(URL url, ResourceBundle resourceBundle) {
 
-        try {
-            customerID = customerIDInt();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
         addCustomerAutoGenerateIDNumTextField.setText(String.valueOf(customerID));
 
         try {
@@ -83,18 +88,6 @@ public class AddCustomerController implements Initializable {
             e.printStackTrace();
         }
     }
-
-    public void populateFieldsWithCustomer(Customers customer) {
-        addCustomerAutoGenerateIDNumTextField.setText(String.valueOf(customer.getCustomerID()));
-        addCustomerNameTextField.setText(customer.getCustomerName());
-        addCustomerAddressTextField.setText(customer.getCustomerAddress());
-        addCustomerPostalCodeTextField.setText(customer.getCustomerPostalCode());
-        addCustomerCountryComboBox.setValue(customer.getCustomerCountry());
-        addCustomerStateProvinceComboBox.setValue(customer.getStateProvinceDivisionID());
-        addCustomerPhoneNumberTextField.setText(customer.getCustomerPhoneNumber());
-    }
-
-
 
     /**
      * Method: addCustomerCountryComboBoxSelectionChange. Creates  observable list of division names, makes sub observable lists for US,UK, and Canada, those are assigned per the country code
@@ -147,25 +140,6 @@ public class AddCustomerController implements Initializable {
         }
     }
 
-    private static int customerID;      // customerID for addCustomer form
-
-    static {
-        try {
-            customerID = maxID();       // make customerID
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    /**
-     * Method: customerIDInt increments value of id by one every time new customer is added.
-     * @return id
-     */
-    public static int customerIDInt() throws SQLException {
-        customerID++;
-        return customerID;
-    }
-
     /**
      * Method: addCustomerSaveButtonClick. when user clicks button the data is saved. if there are empty fields user will be notified and prompted to enter data
      *  lambda expression that allows stateProvinceDivisionNames to populate in observable list that is used in customer combo-box
@@ -199,8 +173,8 @@ public class AddCustomerController implements Initializable {
 
             if(blankValues(customerName, customerAddress, customerPostalCode, customerCountry, customerState, customerPhoneNum)){
 
-            int divisionID = 0;     // state/province/division ID num that corresponds to state name
-            System.out.println("divisionID:  " + divisionID);
+                int divisionID = 0;     // state/province/division ID num that corresponds to state name
+//                System.out.println("divisionID:  " + divisionID);
 
             //  The loop iterates over each DAO_StateProvinceDivision object in the collection returned by getAllStateProvinceDivision() method.
             for (DAO_StateProvinceDivision division : DAO_StateProvinceDivision.getAllStateProvinceDivision()) {
@@ -209,17 +183,17 @@ public class AddCustomerController implements Initializable {
 
 //                System.out.println("COMBOBOX: addCustomerStateProvinceComboBox.getValue() :::  " + addCustomerStateProvinceComboBox.getValue());
 //                System.out.println("Value COMBOBOX:  " + addCustomerStateProvinceComboBox.getValue());
-
                 if (addCustomerStateProvinceComboBox.getValue().equals(division.getStateProvinceDivisionName())) {      // if the combobox selection is equal to the state/province name from the division ordered list, then divisionID is set to division.getStateProvinceDivisionID();
                     divisionID = division.getStateProvinceDivisionID();
-                    System.out.println("divisionID: ?? ::: " + divisionID);
+//                    System.out.println("divisionID now assigned: " + divisionID);
+                    break;
                 }
             }
 
             String sqlInsert = "INSERT INTO customers (Customer_ID, Customer_Name, Address, Postal_Code, Phone, Create_Date, Created_By, Last_Update, Last_Updated_By, Division_ID) VALUES (?,?,?,?,?,?,?,?,?,?)";
 
             Integer customerIDInt = maxID() + 1;       // maxID() pulls from DAO_Customers and finds max value in Customer_ID column
-//            System.out.println("newAutoGeneratedCustomerID: " + maxID());
+//            System.out.println("customerIDInt: " + maxID());
 
             PreparedStatement preparedStatement = JDBC.getConnection().prepareStatement(sqlInsert);
 
@@ -237,7 +211,6 @@ public class AddCustomerController implements Initializable {
             int rowsAffected = preparedStatement.executeUpdate();
             System.out.println(rowsAffected + " row inserted successfully. (Expecting 1 row inserted)");
 
-
                 FXMLLoader loader = new FXMLLoader();
                 loader.setLocation(getClass().getResource("/imhoff/dbclientappv8/ViewAppointmentsCustomers.fxml"));
                 Parent parent = loader.load();
@@ -251,7 +224,6 @@ public class AddCustomerController implements Initializable {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
     }
 
     /**
@@ -266,25 +238,12 @@ public class AddCustomerController implements Initializable {
             String addCustomerStateProvinceComboBox,
             String addCustomerPhoneNumberTextField
     ) {
-
-        if(addCustomerNameTextField.equals("")){
-            AlertDisplay.displayAlert(3);
-        }
-        if(addCustomerAddressTextField.equals("")){
-            AlertDisplay.displayAlert(4);
-        }
-        if(addCustomerPostalCodeTextField.equals("")){
-            AlertDisplay.displayAlert(5);
-        }
-        if(addCustomerCountryComboBox == null){
-            AlertDisplay.displayAlert(6);
-        }
-        if(addCustomerStateProvinceComboBox == null){
-            AlertDisplay.displayAlert(7);
-        }
-        if(addCustomerPhoneNumberTextField.equals("")){
-            AlertDisplay.displayAlert(8);
-        }
+        if(addCustomerNameTextField.equals("")){AlertDisplay.displayAlert(3);}
+        if(addCustomerAddressTextField.equals("")){AlertDisplay.displayAlert(4);}
+        if(addCustomerPostalCodeTextField.equals("")){AlertDisplay.displayAlert(5);}
+        if(addCustomerCountryComboBox == null){AlertDisplay.displayAlert(6);}
+        if(addCustomerStateProvinceComboBox == null){AlertDisplay.displayAlert(7);}
+        if(addCustomerPhoneNumberTextField.equals("")){AlertDisplay.displayAlert(8);}
         return true;
     }
 
@@ -300,7 +259,8 @@ public class AddCustomerController implements Initializable {
         alertCancel.setContentText("Customer data will not be saved");
         Optional<ButtonType> result = alertCancel.showAndWait();
 
-        if(result.get() == ButtonType.OK){            FXMLLoader loader = new FXMLLoader();
+        if(result.get() == ButtonType.OK){
+            FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource("/imhoff/dbclientappv8/ViewAppointmentsCustomers.fxml"));
             Parent parent = loader.load();
             Stage stage = (Stage) addCustomerCancelButton.getScene().getWindow();
@@ -309,5 +269,4 @@ public class AddCustomerController implements Initializable {
             stage.show();
         }
     }
-
 }

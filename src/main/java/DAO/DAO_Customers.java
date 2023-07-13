@@ -51,7 +51,6 @@ public class DAO_Customers {
         return customersObservableList;
     }
 
-
     /**
      * Method: maxID. identifies max value from Customer_ID column, this is then used when generating a new customer ID
      * @return maxValue. max value from column Customer_ID in customers table

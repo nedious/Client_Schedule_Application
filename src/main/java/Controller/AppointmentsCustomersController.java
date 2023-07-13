@@ -9,7 +9,6 @@ import Helper.JDBC;
 import Model.Appointments;
 import Model.Countries;
 import Model.Customers;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -68,8 +67,6 @@ public class AppointmentsCustomersController {
     // customer buttons
     @FXML private Button addNewCustomerButton;
     @FXML private Button updateSelectedCustomerButton;
-        public static Customers updateCustomer;
-
     @FXML private Button deleteSelectedCustomerButton;
 
     // reports and logout buttons
@@ -130,13 +127,6 @@ public class AppointmentsCustomersController {
         Parent parent = loader.load();
         Stage stage = (Stage) addNewCustomerButton.getScene().getWindow();
 
-//        // Open "AddCustomerController" and pass the customerList
-//        FXMLLoader loader = new FXMLLoader(getClass().getResource("/imhoff/dbclientappv8/ViewAddNewCustomers.fxml"));
-//        Parent root = loader.load();
-//        AddCustomerController addCustomerController = loader.getController();
-//        addCustomerController.setCustomerList(customerList);
-
-        // Show the "addCustomer" in a new window
         Scene scene = new Scene(parent);
         stage.setScene(scene);
         stage.show();
@@ -159,26 +149,19 @@ public class AppointmentsCustomersController {
         if(customerMainTable.getSelectionModel().getSelectedItem() == null){
             AlertDisplay.displayAlert(9);
         } else if (selectedCustomer != null) {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/imhoff/dbclientappv8/ViewAddNewCustomers.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/imhoff/dbclientappv8/ViewUpdateCustomer.fxml"));
             Parent parent = loader.load();
             Stage stage = (Stage) updateSelectedCustomerButton.getScene().getWindow();
 
-            AddCustomerController addCustomerController = loader.getController();
-            addCustomerController.populateFieldsWithCustomer(selectedCustomer);
+            UpdateCustomerController updateCustomerController = loader.getController();
+            updateCustomerController.populateFieldsWithCustomer(selectedCustomer);
 
             // Opens the AddCustomerController form
             Scene scene = new Scene(parent);
             stage.setTitle("Update Customer");
             stage.setScene(scene);
             stage.show();
-
-//            Stage stage = new Stage();
-//            stage.setTitle("Update Customer");
-//            stage.setScene(new Scene(parent));
-//            stage.showAndWait();
-
         }
-
     }
     @FXML void deleteSelectedAppointmentButtonClick(ActionEvent event) {
 
