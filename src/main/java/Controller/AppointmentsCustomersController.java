@@ -23,6 +23,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.time.LocalDate;
 
 /**
  * class: AppointmentsCustomersController: displays appointment and customer data in two tables
@@ -47,6 +48,7 @@ public class AppointmentsCustomersController {
     @FXML private RadioButton allAppointmentsRadio;
     @FXML private RadioButton currentWeekRadio;
     @FXML private RadioButton currentMonthRadio;
+    private ToggleGroup toggleGroup;
 
     // appointment buttons
     @FXML private Button addNewAppointmentButton;
@@ -111,6 +113,13 @@ public class AppointmentsCustomersController {
         customerCountry.setCellValueFactory(new PropertyValueFactory<>("customerCountry"));
         stateProvinceDivisionID.setCellValueFactory(new PropertyValueFactory<>("stateProvinceDivisionID"));
         customerPhoneNumber.setCellValueFactory(new PropertyValueFactory<>("customerPhoneNumber"));
+
+        // --------- Radio button toggle group ----------- //
+
+        toggleGroup = new ToggleGroup();
+        allAppointmentsRadio.setToggleGroup(toggleGroup);
+        currentWeekRadio.setToggleGroup(toggleGroup);
+        currentMonthRadio.setToggleGroup(toggleGroup);
     }
 
     /**
@@ -208,16 +217,37 @@ public class AppointmentsCustomersController {
 
     }
     @FXML void selectAllAppointmentsRadio(ActionEvent event) {
+        try {
+            ObservableList<Appointments> allAppointments = DAO_Appointments.getAllAppointments();
+            appointmentMainTable.setItems(allAppointments);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    @FXML void selectCurrentWeekRadio(ActionEvent event) {
+        try {
+            LocalDate startDate = LocalDate.now();
+            LocalDate endDate = startDate.plusDays(6);
 
+            ObservableList<Appointments> appointmentsForCurrentWeek = DAO_Appointments.getAppointmentsForDateRange(startDate, endDate);
+            appointmentMainTable.setItems(appointmentsForCurrentWeek);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
     @FXML void selectCurrentMonthRadio(ActionEvent event) {
+        try {
+            LocalDate startDate = LocalDate.now().withDayOfMonth(1);
+            LocalDate endDate = startDate.withDayOfMonth(startDate.lengthOfMonth());
 
+            ObservableList<Appointments> appointmentsForCurrentMonth = DAO_Appointments.getAppointmentsForDateRange(startDate, endDate);
+            appointmentMainTable.setItems(appointmentsForCurrentMonth);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
-    @FXML
-    void selectCurrentWeekRadio(ActionEvent event) {
 
-    }
 
 /**
  * Method logoutButtonClick. When user clicks logout, application closes.

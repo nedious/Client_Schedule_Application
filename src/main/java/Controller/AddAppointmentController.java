@@ -20,8 +20,11 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.*;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 import static DAO.DAO_Appointments.maxApptID;
 
@@ -39,7 +42,7 @@ public class AddAppointmentController implements Initializable {
 
     @FXML private ComboBox<Integer> addNewApptCustomerIDComboBox;     // customerID combo box
     @FXML private ComboBox<Integer> addNewApptUserIDComboBox;         // userID combo box
-    @FXML private ComboBox<Integer> addNewApptContactComboBox;        // contact combo box
+    @FXML private ComboBox<String> addNewApptContactComboBox;        // contact combo box
 
     @FXML private Label systemLister;                           // local computer time dynamic
 
@@ -91,12 +94,28 @@ public class AddAppointmentController implements Initializable {
             // Set the retrieved user IDs as items in the combo box
             addNewApptUserIDComboBox.setItems(userIDs);
 
-        // --------------- contactID combo box -------------//
-            // Retrieve contactID from the database
-            ObservableList<Integer> contactIDs = DAO_Contacts.getAllContactIDs();
+//        // --------------- contactID combo box -------------//
+//            // Retrieve contactID from the database
+//            ObservableList<Integer> contactIDs = DAO_Contacts.getAllContactIDs();
+//
+//            // Set the retrieved contact IDs as items in the combo box
+//            addNewApptContactComboBox.setItems(contactIDs);
 
-            // Set the retrieved contact IDs as items in the combo box
-            addNewApptContactComboBox.setItems(contactIDs);
+//            // --------------- contactName combo box -------------//
+//            // Retrieve contactID from the database
+//            ObservableList<String> contactNames = DAO_Contacts.getContactName();
+//
+//            // Set the retrieved contact IDs as items in the combo box
+//            addNewApptContactComboBox.setItems(contactNames);
+
+            // Retrieve contacts from the database
+            ObservableList<DAO_Contacts> contacts = DAO_Contacts.getAllContacts();
+
+            // Create a map of contact names to their corresponding IDs
+            Map<String, Integer> contactMap = contacts.stream().collect(Collectors.toMap(DAO_Contacts::getContactName, DAO_Contacts::getContactID));
+
+            // Set the retrieved contact names as items in the combo box
+            addNewApptContactComboBox.setItems(FXCollections.observableArrayList(contactMap.keySet()));
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -139,6 +158,19 @@ public class AddAppointmentController implements Initializable {
         if (blankValues()) {
 
             try {
+                ObservableList<DAO_Contacts> contacts = DAO_Contacts.getAllContacts();
+                Map<String, Integer> contactMap = new HashMap<>();
+
+                for (DAO_Contacts contact : contacts) {
+                    contactMap.put(contact.getContactName(), contact.getContactID());
+                }
+
+                // Retrieve the selected contact name from the combo box
+                String selectedContactName = addNewApptContactComboBox.getValue();
+
+                // Find the corresponding Contact_ID for the selected contact name
+                int contactID = contactMap.get(selectedContactName);
+
                 // Retrieve the entered values
                 int appointmentID = Integer.parseInt(addNewApptAutoGenApptIDTextField.getText());
                 String title = addNewApptTitleTextField.getText();
@@ -156,7 +188,7 @@ public class AddAppointmentController implements Initializable {
                 String lastUpdatedBy = "admin";
                 int customerID = Integer.parseInt(addNewApptCustomerIDComboBox.getSelectionModel().getSelectedItem().toString());
                 int userID = Integer.parseInt(addNewApptUserIDComboBox.getSelectionModel().getSelectedItem().toString());
-                int contactID = Integer.parseInt(addNewApptContactComboBox.getSelectionModel().getSelectedItem().toString());
+//                int contactID = Integer.parseInt(addNewApptContactComboBox.getSelectionModel().getSelectedItem().toString());
 
                 // Create the SQL insert statement
                 String sqlInsert = "INSERT INTO appointments (Appointment_ID, Title, Description, Location, Type, Start, End, Create_Date, Created_By, Last_Update, Last_Updated_By, Customer_ID, User_ID, Contact_ID) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
