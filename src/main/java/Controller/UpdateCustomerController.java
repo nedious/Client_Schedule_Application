@@ -25,8 +25,6 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-import static DAO.DAO_Customers.maxID;
-
 /**
  * class: UpdateCustomerController: allows input from user to generate new customer data
  * */
@@ -220,12 +218,12 @@ public class UpdateCustomerController implements Initializable {
             String addCustomerStateProvinceComboBox,
             String addCustomerPhoneNumberTextField
     ) {
-        if(addCustomerNameTextField.equals("")){AlertDisplay.displayAlert(3);}          // name
-        if(addCustomerAddressTextField.equals("")){AlertDisplay.displayAlert(4);}       // address
-        if(addCustomerPostalCodeTextField.equals("")){AlertDisplay.displayAlert(5);}    // postal code
-        if(addCustomerCountryComboBox == null){AlertDisplay.displayAlert(6);}           //country combo box
-        if(addCustomerStateProvinceComboBox == null){AlertDisplay.displayAlert(7);}     // state combo box
-        if(addCustomerPhoneNumberTextField.equals("")){AlertDisplay.displayAlert(8);}   // phone number
+        if(addCustomerNameTextField.equals("")){AlertDisplay.displayAlert(3);return false;}          // name
+        else if(addCustomerAddressTextField.equals("")){AlertDisplay.displayAlert(4);return false;}       // address
+        else if(addCustomerPostalCodeTextField.equals("")){AlertDisplay.displayAlert(5);return false;}    // postal code
+        else if(addCustomerCountryComboBox == null){AlertDisplay.displayAlert(6);return false;}           //country combo box
+        else if(addCustomerStateProvinceComboBox == null){AlertDisplay.displayAlert(7);return false;}     // state combo box
+        else if(addCustomerPhoneNumberTextField.equals("")){AlertDisplay.displayAlert(8);return false;}   // phone number
         return true;
     }
 

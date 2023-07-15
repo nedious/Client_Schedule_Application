@@ -67,6 +67,23 @@ public class DAO_Customers {
         }
         return maxValue;
     }
+
+    /**
+     * Method getAllCustomerIDs. Generates customerID data and displays in ObservableList. Used to display in combo box for appointments
+     * @return getAllCustomerIDs
+     * @throws SQLException
+     */
+    public static ObservableList<Integer> getAllCustomerIDs() throws SQLException {
+        ObservableList<Integer> customerIDs = FXCollections.observableArrayList();
+        String sqlSelect = "SELECT Customer_ID FROM customers";
+        PreparedStatement preparedStatement = JDBC.getConnection().prepareStatement(sqlSelect);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        while (resultSet.next()) {
+            int customerID = resultSet.getInt("Customer_ID");
+            customerIDs.add(customerID);
+        }
+        return customerIDs;
+    }
 }
 
 

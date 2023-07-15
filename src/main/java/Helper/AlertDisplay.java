@@ -79,14 +79,73 @@ public class AlertDisplay {
                 alertError.setContentText("Enter customer phone number");
                 alertError.showAndWait();
                 break;
-// --------------------- errors --------------------- //
             case 9:
                 alertError.setTitle("Error");
                 alertError.setHeaderText("No customer selected");
                 alertError.setContentText("Select customer to update");
                 alertError.showAndWait();
                 break;
-
+// --------------------- add appointment errors --------------------- //
+            case 10:
+                alertError.setTitle("Error");
+                alertError.setHeaderText("Missing Title");
+                alertError.setContentText("Enter Appointment Title");
+                alertError.showAndWait();
+                break;
+            case 11:
+                alertError.setTitle("Error");
+                alertError.setHeaderText("Missing Type");
+                alertError.setContentText("Enter Appointment Type");
+                alertError.showAndWait();
+                break;
+            case 12:
+                alertError.setTitle("Error");
+                alertError.setHeaderText("Missing Description");
+                alertError.setContentText("Enter Appointment Description");
+                alertError.showAndWait();
+                break;
+            case 13:
+                alertError.setTitle("Error");
+                alertError.setHeaderText("Missing Location");
+                alertError.setContentText("Enter appointment Location");
+                alertError.showAndWait();
+                break;
+            case 14:
+                alertError.setTitle("Error");
+                alertError.setHeaderText("Missing Date");
+                alertError.setContentText("Enter appointment Date");
+                alertError.showAndWait();
+                break;
+            case 15:
+                alertError.setTitle("Error");
+                alertError.setHeaderText("Missing Start Time");
+                alertError.setContentText("Enter appointment Start Time");
+                alertError.showAndWait();
+                break;
+            case 16:
+                alertError.setTitle("Error");
+                alertError.setHeaderText("Missing End Time");
+                alertError.setContentText("Enter appointment End Time");
+                alertError.showAndWait();
+                break;
+            case 17:
+                alertError.setTitle("Error");
+                alertError.setHeaderText("Missing Customer ID");
+                alertError.setContentText("Enter appointment Customer ID");
+                alertError.showAndWait();
+                break;
+            case 18:
+                alertError.setTitle("Error");
+                alertError.setHeaderText("Missing User ID");
+                alertError.setContentText("Enter appointment User ID");
+                alertError.showAndWait();
+                break;
+            case 19:
+                alertError.setTitle("Error");
+                alertError.setHeaderText("Missing Contact ID");
+                alertError.setContentText("Enter appointment Contact ID");
+                alertError.showAndWait();
+                break;
         }
     }
 

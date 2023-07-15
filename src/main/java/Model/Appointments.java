@@ -1,5 +1,6 @@
 package Model;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class Appointments {
@@ -8,10 +9,11 @@ public class Appointments {
     private String apptTitle;
     private String apptDescription;
     private String apptLocation;
-    public int apptContactID;
     private String apptType;
+    private LocalDate apptDayPicker;
     private LocalDateTime apptStartDateTime;
     private LocalDateTime apptEndDateTime;
+    public int apptContactID;
     public int apptCustomerID;
     public int apptUserID;
 
@@ -53,6 +55,10 @@ public class Appointments {
 
     public String getApptType() {
         return apptType;
+    }
+
+    public LocalDate getApptDayPicker() {
+        return apptDayPicker;
     }
 
     public LocalDateTime getApptStartDateTime() {

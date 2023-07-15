@@ -2,6 +2,8 @@ package DAO;
 
 import Helper.JDBC;
 import Model.Users;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -40,23 +42,20 @@ public class DAO_Users extends Users {
         }
     }
 
-//    /**
-//     * Gets all user data
-//     * @return
-//     * @throws SQLException
-//     */
-//    public static ObservableList<UsersDAO> getAllUsers() throws SQLException {
-//        ObservableList<UsersDAO> userObservableList = FXCollections.observableArrayList();
-//        String sqlSelect = "SELECT * FROM users";
-//        PreparedStatement preparedStatement = JDBC.getConnection().prepareStatement(sqlSelect);
-//        ResultSet resultSet = preparedStatement.executeQuery();
-//        while (resultSet.next()) {
-//            int userID = resultSet.getInt("User_ID");
-//            String userName = resultSet.getString("User_Name");
-//            String userPass = resultSet.getString("Password");
-//            UsersDAO user = new UsersDAO(userID, userName, userPass);
-//            userObservableList.add(user);
-//        }
-//        return  userObservableList;
-//    }
+    /**
+     * Method: getAllUserIDs. gets userID from users table. used in appointments user combo box
+     * @return
+     * @throws SQLException
+     */
+    public static ObservableList<Integer> getAllUserIDs() throws SQLException {
+        ObservableList<Integer> userIDs = FXCollections.observableArrayList();
+        String sqlSelect = "SELECT User_ID FROM users";
+        PreparedStatement preparedStatement = JDBC.getConnection().prepareStatement(sqlSelect);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        while (resultSet.next()) {
+            int userID = resultSet.getInt("User_ID");
+            userIDs.add(userID);
+        }
+        return userIDs;
+    }
 }
