@@ -146,14 +146,6 @@ public class AddCustomerController implements Initializable {
      * */
     @FXML void addCustomerSaveButtonClick(ActionEvent event) {
         try {
-//            String stateValue = addCustomerStateProvinceComboBox.getValue(); // Get the selected value from the combo box
-//            System.out.println("State: " + addCustomerStateProvinceComboBox);
-//            System.out.println("StateValue: " + stateValue);
-//
-//            String countryValue = addCustomerCountryComboBox.getValue(); // Get the selected value from the combo box
-//            System.out.println("Country: " + addCustomerCountryComboBox);
-//            System.out.println("CountryValue: " + countryValue);
-
             // --------- STATE/PROVINCE table to observable List ------- //
             ObservableList<DAO_StateProvinceDivision> allDivisionsList = DAO_StateProvinceDivision.getAllStateProvinceDivision();
             ObservableList<String> allStateProvinceDivisionsNames = FXCollections.observableArrayList();
@@ -238,12 +230,12 @@ public class AddCustomerController implements Initializable {
             String addCustomerStateProvinceComboBox,
             String addCustomerPhoneNumberTextField
     ) {
-        if(addCustomerNameTextField.equals("")){AlertDisplay.displayAlert(3);}
-        if(addCustomerAddressTextField.equals("")){AlertDisplay.displayAlert(4);}
-        if(addCustomerPostalCodeTextField.equals("")){AlertDisplay.displayAlert(5);}
-        if(addCustomerCountryComboBox == null){AlertDisplay.displayAlert(6);}
-        if(addCustomerStateProvinceComboBox == null){AlertDisplay.displayAlert(7);}
-        if(addCustomerPhoneNumberTextField.equals("")){AlertDisplay.displayAlert(8);}
+        if(addCustomerNameTextField.equals("")){AlertDisplay.displayAlert(3); return false;}
+        else if(addCustomerAddressTextField.equals("")){AlertDisplay.displayAlert(4);return false;}
+        else if(addCustomerPostalCodeTextField.equals("")){AlertDisplay.displayAlert(5);return false;}
+        else if(addCustomerCountryComboBox == null){AlertDisplay.displayAlert(6);return false;}
+        else if(addCustomerStateProvinceComboBox == null){AlertDisplay.displayAlert(7);return false;}
+        else if(addCustomerPhoneNumberTextField.equals("")){AlertDisplay.displayAlert(8);return false;}
         return true;
     }
 

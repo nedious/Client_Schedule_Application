@@ -113,13 +113,26 @@ public class AppointmentsCustomersController {
         customerPhoneNumber.setCellValueFactory(new PropertyValueFactory<>("customerPhoneNumber"));
     }
 
-    @FXML void addNewAppointmentButtonClick(ActionEvent event) {
+    /**
+     * Method: addNewAppointmentButtonClick. takes user to AddAppointment screen
+     * @param event user click
+     * @throws IOException
+     * */
+    @FXML void addNewAppointmentButtonClick(ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/imhoff/dbclientappv8/ViewAddNewAppointment.fxml"));
+        Parent parent = loader.load();
+        Stage stage = (Stage) addNewAppointmentButton.getScene().getWindow();
 
+        Scene scene = new Scene(parent);
+        stage.setScene(scene);
+        stage.show();
     }
 
     /**
      * Method: addNewCustomerButtonClick. takes user to AddNewCustomer screen
      * @param event user click
+     * @throws IOException
      * */
     @FXML void addNewCustomerButtonClick(ActionEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader();
@@ -163,6 +176,30 @@ public class AppointmentsCustomersController {
             stage.show();
         }
     }
+
+    @FXML
+    void updateSelectedAppointmentButtonClick(ActionEvent event) throws IOException {
+
+        Appointments selectedAppointment = appointmentMainTable.getSelectionModel().getSelectedItem();
+
+        if(appointmentMainTable.getSelectionModel().getSelectedItem() == null){
+            AlertDisplay.displayAlert(9);
+        } else if (selectedAppointment != null) {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/imhoff/dbclientappv8/ViewUpdateAppointment.fxml"));
+            Parent parent = loader.load();
+            Stage stage = (Stage) updateSelectedCustomerButton.getScene().getWindow();
+
+            UpdateAppointmentController updateAppointmentController = loader.getController();
+            updateAppointmentController.populateFieldsWithAppointment(selectedAppointment);
+
+            // Opens the AddCustomerController form
+            Scene scene = new Scene(parent);
+            stage.setTitle("Update Apppointment");
+            stage.setScene(scene);
+            stage.show();
+        }
+    }
+
     @FXML void deleteSelectedAppointmentButtonClick(ActionEvent event) {
 
     }
@@ -179,11 +216,6 @@ public class AppointmentsCustomersController {
 
     @FXML
     void selectCurrentWeekRadio(ActionEvent event) {
-
-    }
-
-    @FXML
-    void updateSelectedAppointmentButtonClick(ActionEvent event) {
 
     }
 

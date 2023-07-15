@@ -40,4 +40,21 @@ public class DAO_Appointments {
         }
         return appointmentsObservableList;
     }
+
+    /**
+     * Method: maxApptID. identifies max value from Appointment_ID column, this is then used when generating a new appointment ID
+     * @return maxValue. max value from column Appointment_ID in appointments table
+     * */
+    public static int maxApptID() throws SQLException {
+        String sqlSelect = "SELECT MAX(Appointment_ID) FROM appointments";
+        PreparedStatement preparedStatement = JDBC.getConnection().prepareStatement(sqlSelect);
+        ResultSet resultSet = preparedStatement.executeQuery();
+
+        int maxValue = 0;
+        if (resultSet.next()) {
+            maxValue = resultSet.getInt(1);
+            System.out.println("maxApptID(): Max Appointment_ID: " + maxValue);
+        }
+        return maxValue;
+    }
 }

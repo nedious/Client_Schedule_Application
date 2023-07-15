@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="600.0" style="-fx-background-color: #8ecbf9  #8ecbf9;" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.AddAppointmentController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="600.0" style="-fx-background-color: #8ecbf9  #8ecbf9;" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.AddAppointmentController">
     <children>        <Label layoutX="176.0" layoutY="24.0" text="Add New Appointment">            <font>                <Font name="System Bold" size="26.0" />            </font>        </Label>        <Label layoutX="69.0" layoutY="85.0" text="Appointment ID">
         <font>
             <Font size="20.0" />
@@ -34,7 +34,7 @@
                 <Font size="20.0" />
             </font>
         </Label>
-        <Label layoutX="69.0" layoutY="335.0" text="Start Date">
+        <Label layoutX="69.0" layoutY="335.0" text="Date">
             <font>
                 <Font size="20.0" />
             </font>
@@ -44,44 +44,38 @@
                 <Font size="20.0" />
             </font>
         </Label>
-        <Label layoutX="69.0" layoutY="435.0" text="End Date">
+        <Label layoutX="69.0" layoutY="437.0" prefHeight="30.0" prefWidth="160.0" text="End Time">
             <font>
                 <Font size="20.0" />
             </font>
         </Label>
-        <Label layoutX="69.0" layoutY="485.0" prefHeight="30.0" prefWidth="160.0" text="End Time">
+        <Label layoutX="69.0" layoutY="487.0" text="Customer ID">
             <font>
                 <Font size="20.0" />
             </font>
         </Label>
-        <Label layoutX="69.0" layoutY="535.0" text="Customer ID">
+        <Label layoutX="69.0" layoutY="537.0" text="User ID">
             <font>
                 <Font size="20.0" />
             </font>
         </Label>
-        <Label layoutX="69.0" layoutY="585.0" text="User ID">
+        <Label layoutX="69.0" layoutY="587.0" text="Contact">
             <font>
                 <Font size="20.0" />
             </font>
         </Label>
-        <Label layoutX="69.0" layoutY="635.0" text="Contact">
-            <font>
-                <Font size="20.0" />
-            </font>
-        </Label>
-        <TextField fx:id="addNewApptAutoGenApptIDTextField" disable="true" layoutX="210.0" layoutY="85.0" opacity="0.5" prefHeight="25.0" prefWidth="300.0" text="Auto-Generated" />
+        <TextField fx:id="addNewApptAutoGenApptIDTextField" editable="false" layoutX="210.0" layoutY="85.0" opacity="0.5" prefHeight="25.0" prefWidth="300.0" />
         <TextField fx:id="addNewApptTitleTextField" layoutX="210.0" layoutY="135.0" prefHeight="25.0" prefWidth="300.0" />
         <TextField fx:id="addNewApptTypeTextField" layoutX="210.0" layoutY="185.0" prefHeight="25.0" prefWidth="300.0" />
         <TextField fx:id="addNewApptDescriptionTextField" layoutX="210.0" layoutY="235.0" prefHeight="25.0" prefWidth="300.0" />
         <TextField fx:id="addNewApptLocationTextField" layoutX="210.0" layoutY="285.0" prefHeight="25.0" prefWidth="300.0" />
-        <DatePicker fx:id="addNewApptStartDatePicker" layoutX="211.0" layoutY="335.0" prefHeight="25.0" prefWidth="300.0" />
-        <DatePicker fx:id="addNewApptEndDatePicker" layoutX="210.0" layoutY="435.0" prefHeight="25.0" prefWidth="300.0" />
+        <DatePicker fx:id="addNewApptDayDatePicker" layoutX="211.0" layoutY="335.0" prefHeight="25.0" prefWidth="300.0" />
         <ComboBox fx:id="addNewApptStartTimeComboBox" layoutX="210.0" layoutY="385.0" prefWidth="300.0" />
-        <ComboBox fx:id="addNewApptEndTimeComboBox" layoutX="210.0" layoutY="485.0" prefWidth="300.0" />
-        <ComboBox fx:id="addNewApptCustomerIDComboBox" layoutX="210.0" layoutY="535.0" prefWidth="300.0" />
-        <ComboBox fx:id="addNewApptUserIDComboBox" layoutX="210.0" layoutY="585.0" prefWidth="300.0" />
-        <ComboBox fx:id="addNewApptContactComboBox" layoutX="210.0" layoutY="635.0" prefWidth="300.0" />
-        <Label fx:id="systemLister" alignment="CENTER" contentDisplay="CENTER" layoutX="117.0" layoutY="671.0" prefHeight="30.0" prefWidth="350.0" text="Time listed in:" textFill="#190aff">
+        <ComboBox fx:id="addNewApptEndTimeComboBox" layoutX="210.0" layoutY="437.0" prefWidth="300.0" />
+        <ComboBox fx:id="addNewApptCustomerIDComboBox" layoutX="210.0" layoutY="487.0" prefWidth="300.0" />
+        <ComboBox fx:id="addNewApptUserIDComboBox" layoutX="210.0" layoutY="537.0" prefWidth="300.0" />
+        <ComboBox fx:id="addNewApptContactComboBox" layoutX="210.0" layoutY="587.0" prefWidth="300.0" />
+        <Label fx:id="systemLister" alignment="CENTER" contentDisplay="CENTER" layoutX="117.0" layoutY="648.0" prefHeight="30.0" prefWidth="350.0" text="Time listed in:" textFill="#190aff">
             <font>
                 <Font size="18.0" />
             </font>
