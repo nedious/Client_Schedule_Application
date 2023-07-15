@@ -8,6 +8,7 @@ import Helper.AlertDisplay;
 import Helper.JDBC;
 import Model.Customers;
 import Model.Appointments;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -27,8 +28,11 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 import static DAO.DAO_Appointments.maxApptID;
 
@@ -45,7 +49,8 @@ public class UpdateAppointmentController implements Initializable {
 
     @FXML private ComboBox<Integer> updateNewApptCustomerIDComboBox;     // customerID combo box
     @FXML private ComboBox<Integer> updateNewApptUserIDComboBox;         // userID combo box
-    @FXML private ComboBox<Integer> updateNewApptContactComboBox;        // contact combo box
+    @FXML private ComboBox<String> updateNewApptContactComboBox;        // contact combo box
+    private Map<Integer, String> contactMap;        // Declare the contactMap as a field of the class
 
     @FXML private Label systemLister;                           // local computer time dynamic
 
@@ -99,11 +104,20 @@ public class UpdateAppointmentController implements Initializable {
             updateNewApptUserIDComboBox.setItems(userIDs);
 
         // --------------- contactID combo box -------------//
-            // Retrieve contactID from the database
-            ObservableList<Integer> contactIDs = DAO_Contacts.getAllContactIDs();
+//            // Retrieve contactID from the database
+//            ObservableList<Integer> contactIDs = DAO_Contacts.getAllContactIDs();
+//
+//            // Set the retrieved contact IDs as items in the combo box
+//            updateNewApptContactComboBox.setItems(contactIDs);
 
-            // Set the retrieved contact IDs as items in the combo box
-            updateNewApptContactComboBox.setItems(contactIDs);
+            // Retrieve contacts from the database
+            ObservableList<DAO_Contacts> contacts = DAO_Contacts.getAllContacts();
+
+            // Create a map of contact IDs to their corresponding names
+            contactMap = contacts.stream().collect(Collectors.toMap(DAO_Contacts::getContactID, DAO_Contacts::getContactName));
+
+            // Set the retrieved contact names as items in the combo box
+            updateNewApptContactComboBox.setItems(FXCollections.observableArrayList(contactMap.values()));
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -158,7 +172,7 @@ public class UpdateAppointmentController implements Initializable {
 
         updateNewApptCustomerIDComboBox.setValue(appointment.getApptCustomerID());  // customerID combo box
         updateNewApptUserIDComboBox.setValue(appointment.getApptUserID());          // userID combo box
-        updateNewApptContactComboBox.setValue(appointment.getApptContactID());      // contact combo box
+        updateNewApptContactComboBox.setValue(contactMap.get(appointment.getApptContactID()));  // contact combo box
     }
 
 
@@ -167,6 +181,20 @@ public class UpdateAppointmentController implements Initializable {
         if (blankValues()) {
 
             try {
+                ObservableList<DAO_Contacts> contacts = DAO_Contacts.getAllContacts();
+                Map<String, Integer> contactMap = new HashMap<>();
+
+                for (DAO_Contacts contact : contacts) {
+                    contactMap.put(contact.getContactName(), contact.getContactID());
+                }
+
+                // Retrieve the selected contact name from the combo box
+                String selectedContactName = updateNewApptContactComboBox.getValue();
+
+                // Find the corresponding Contact_ID for the selected contact name
+                int contactID = contactMap.get(selectedContactName);
+
+
                 // Retrieve the entered values
                 int appointmentID = Integer.parseInt(updateNewApptAutoGenApptIDTextField.getText());
                 String title = updateNewApptTitleTextField.getText();
@@ -184,7 +212,7 @@ public class UpdateAppointmentController implements Initializable {
                 String lastUpdatedBy = "admin";
                 int customerID = Integer.parseInt(updateNewApptCustomerIDComboBox.getSelectionModel().getSelectedItem().toString());
                 int userID = Integer.parseInt(updateNewApptUserIDComboBox.getSelectionModel().getSelectedItem().toString());
-                int contactID = Integer.parseInt(updateNewApptContactComboBox.getSelectionModel().getSelectedItem().toString());
+//                int contactID = Integer.parseInt(updateNewApptContactComboBox.getSelectionModel().getSelectedItem().toString());
 
                 // Create the SQL update statement
                 String sqlUpdate = "UPDATE appointments SET Title=?, Description=?, Location=?, Type=?, Start=?, End=?, Create_Date=?, Created_By=?, Last_Update=?, Last_Updated_By=?, Customer_ID=?, User_ID=?, Contact_ID=? WHERE Appointment_ID=?";
