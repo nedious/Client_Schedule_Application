@@ -9,41 +9,44 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * class: DAO_Customers. Holds methods that connect to database to retrieve data.
+ * */
 public class DAO_Customers {
     /**
-     * Method getAllCustomers. Generates customer data and displays in ObservableList
+     * Method getAllCustomers. Generates customer data and displays in ObservableList. Shows all data from customers table and Joins first_level_division ID with customers.Division_ID in order to determine country with logic.
      * @return customersObservableList
      * @throws SQLException
      */
     public static ObservableList<Customers> getAllCustomers() throws SQLException {
         String sqlSelect =
-                "SELECT customers.*, first_level_divisions.Division\n" +
-                "FROM customers\n" +
+                "SELECT customers.*, " +
+                "first_level_divisions.Division FROM customers\n" +
                 "JOIN first_level_divisions ON customers.Division_ID = first_level_divisions.Division_ID;\n";
 
         PreparedStatement preparedStatement = JDBC.getConnection().prepareStatement(sqlSelect);
         ResultSet resultSet = preparedStatement.executeQuery();
         ObservableList<Customers> customersObservableList = FXCollections.observableArrayList();
         while (resultSet.next()) {
-            int customerID = resultSet.getInt("Customer_ID");       // in SQL query, 'Customer_ID' is the name of the column you want to assign to 'customerID'
-            String customerName = resultSet.getString("Customer_Name");
-            String customerAddress = resultSet.getString("Address");
-            String customerPostalCode = resultSet.getString("Postal_Code");
+            int customerID = resultSet.getInt("Customer_ID");               // customer_ID. In SQL query, 'Customer_ID' is the name of the column you want to assign to 'customerID'
+            String customerName = resultSet.getString("Customer_Name");     // Customer_Name
+            String customerAddress = resultSet.getString("Address");        // Address
+            String customerPostalCode = resultSet.getString("Postal_Code"); // Postal_Code
 
-            String customerCountry = resultSet.getString("Division_ID");     // this is a string that needs to be converted to an int
-                String countryNumberCode = customerCountry;                             // convert customerCountry string number to variable for converting into integer
-                    int countryInteger = Integer.parseInt(countryNumberCode);           // convert the countryNumberCode string to an integer
-                        if (countryInteger <= 54 ){
+            String customerCountry = resultSet.getString("Division_ID");     // Division_ID. This is a string that will be converted to an int
+                String countryNumberCode = customerCountry;                                 // convert customerCountry string number to variable for converting into integer
+                    int countryInteger = Integer.parseInt(countryNumberCode);               // convert the countryNumberCode string to an integer
+                        if (countryInteger <= 54 ){             // USA state ID 1-54
                             customerCountry = "USA";
-                        } else if (countryInteger <= 72){
+                        } else if (countryInteger <= 72){       // Canada province ID 60-72
                             customerCountry = "Canada";
                         } else {
-                            customerCountry = "UK";
+                            customerCountry = "UK";             // UK division ID 101-104
                         }
 
-            String stateProvinceDivisionID = resultSet.getString("Division");          // in the String sqlSelect statement, Division name is gathered by:  'first_level_divisions.Division'
+            String stateProvinceDivisionID = resultSet.getString("Division");  // Division *NAME*. In the String sqlSelect statement, Division name is gathered by:  'first_level_divisions.Division' the SQL bit: "first_level_divisions.Division FROM customers JOIN first_level_divisions ON customers.Division_ID = first_level_divisions.Division_ID;";
 
-            String customerPhoneNumber = resultSet.getString("Phone");
+            String customerPhoneNumber = resultSet.getString("Phone");         // Phone
 
             Customers allCustomersListObject = new Customers(customerID, customerName, customerAddress, customerPostalCode, customerCountry, stateProvinceDivisionID, customerPhoneNumber);       // this creates the customer object
             customersObservableList.add(allCustomersListObject);
@@ -52,7 +55,7 @@ public class DAO_Customers {
     }
 
     /**
-     * Method: maxID. identifies max value from Customer_ID column, this is then used when generating a new customer ID
+     * Method: maxID. identifies max value from Customer_ID column, this is then used when autogenerating a new customer ID
      * @return maxValue. max value from column Customer_ID in customers table
      * */
     public static int maxID() throws SQLException {

@@ -1,5 +1,8 @@
 package Model;
 
+/**
+ * class: Customers. Encapsulates information about a Customers, identified by their customerID, customerName, address, postal code, country, state, and phone number.
+ * */
 public class Customers {
     private int customerID;
     private String customerName;
@@ -26,63 +29,59 @@ public class Customers {
 
 // ---------------- Getters --------------//
 
+    /**
+     * Method: getCustomerID.
+     * @return customerID
+     * */
     public int getCustomerID() {
         return customerID;
     }
 
+    /**
+     * Method: getCustomerName.
+     * @return customerName
+     * */
     public String getCustomerName() {
         return customerName;
     }
 
+    /**
+     * Method: getCustomerAddress.
+     * @return customerAddress
+     * */
     public String getCustomerAddress() {
         return customerAddress;
     }
 
+    /**
+     * Method: getCustomerPostalCode.
+     * @return customerPostalCode
+     * */
     public String getCustomerPostalCode() {
         return customerPostalCode;
     }
 
+    /**
+     * Method: getStateProvinceDivisionID.
+     * @return stateProvinceDivisionID
+     * */
     public String getStateProvinceDivisionID() {
         return stateProvinceDivisionID;
     }
 
+    /**
+     * Method: getCustomerCountry.
+     * @return customerCountry
+     * */
     public String getCustomerCountry() {
         return customerCountry;
     }
 
+    /**
+     * Method: getCustomerPhoneNumber.
+     * @return customerPhoneNumber
+     * */
     public String getCustomerPhoneNumber() {
         return customerPhoneNumber;
-    }
-
-
-// ---------------- Setters --------------//
-
-
-    public void setCustomerID(int customerID) {
-        this.customerID = customerID;
-    }
-
-    public void setCustomerName(String customerName) {
-        this.customerName = customerName;
-    }
-
-    public void setCustomerAddress(String customerAddress) {
-        this.customerAddress = customerAddress;
-    }
-
-    public void setCustomerPostalCode(String customerPostalCode) {
-        this.customerPostalCode = customerPostalCode;
-    }
-
-    public void setStateProvinceDivisionID(String stateProvinceDivisionID) {
-        this.stateProvinceDivisionID = stateProvinceDivisionID;
-    }
-
-    public void setCustomerCountry(String customerCountry) {
-        this.customerCountry = customerCountry;
-    }
-
-    public void setCustomerPhoneNumber(String customerPhoneNumber) {
-        this.customerPhoneNumber = customerPhoneNumber;
     }
 }

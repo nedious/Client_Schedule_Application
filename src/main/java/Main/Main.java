@@ -12,12 +12,11 @@ import java.sql.SQLException;
 
 
 /**
- * class Main: opens login screen, connects to database.
+ * class: Main. Opens login screen, connects to database. Extends Application.
  */
 public class Main extends Application {
 
 // -------------------- Methods -------------------- //
-
     /**
      * Method start: opens login screen
      * @param primaryStage primary window opens from fxml

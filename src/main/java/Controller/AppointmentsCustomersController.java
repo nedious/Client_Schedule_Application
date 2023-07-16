@@ -1,15 +1,13 @@
 package Controller;
 
 import DAO.DAO_Appointments;
-import DAO.DAO_Countries;
 import DAO.DAO_Customers;
-import DAO.DAO_StateProvinceDivision;
+
 import Helper.AlertDisplay;
-import Helper.JDBC;
+
 import Model.Appointments;
-import Model.Countries;
 import Model.Customers;
-import javafx.collections.FXCollections;
+
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -26,7 +24,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 
 /**
- * class: AppointmentsCustomersController: displays appointment and customer data in two tables
+ * class: AppointmentsCustomersController: displays appointment and customer data in two tables. allows appointment and customer tables to add, update, and delete. generates reports
  * */
 public class AppointmentsCustomersController {
 
@@ -79,7 +77,7 @@ public class AppointmentsCustomersController {
 // --------------- Methods -------------------- //
 
     /**
-     * Method: initialize. Generates appointment table and customer table
+     * Method: initialize. Generates appointment table and customer table. groups the radio buttons.
      * @throws SQLException
      */
     public void initialize() throws SQLException{
@@ -154,19 +152,23 @@ public class AppointmentsCustomersController {
         stage.show();
     }
 
+    /**
+     * Method: deleteSelectedCustomerButtonClick. Deletes selected customer
+     * @param event user click
+     * */
     @FXML
     void deleteSelectedCustomerButtonClick(ActionEvent event) {
 
     }
 
     /**
-     * Method: updateSelectedCustomerButtonClick. user can select customer and the data will populate in customer form in order to update customer info
+     * Method: updateSelectedCustomerButtonClick. user can select customer and the data will populate in update customer form in order to update customer info
      * @param event
      * @throws SQLException
      */
     @FXML void updateSelectedCustomerButtonClick(ActionEvent event) throws SQLException, IOException {
 
-        Customers selectedCustomer = customerMainTable.getSelectionModel().getSelectedItem();
+        Customers selectedCustomer = customerMainTable.getSelectionModel().getSelectedItem();       // selectedCustomer data to autopopulate in form
 
         if(customerMainTable.getSelectionModel().getSelectedItem() == null){
             AlertDisplay.displayAlert(9);
@@ -176,7 +178,7 @@ public class AppointmentsCustomersController {
             Stage stage = (Stage) updateSelectedCustomerButton.getScene().getWindow();
 
             UpdateCustomerController updateCustomerController = loader.getController();
-            updateCustomerController.populateFieldsWithCustomer(selectedCustomer);
+            updateCustomerController.populateFieldsWithCustomer(selectedCustomer);      // populates form with customer data from selected row
 
             // Opens the AddCustomerController form
             Scene scene = new Scene(parent);
@@ -186,13 +188,18 @@ public class AppointmentsCustomersController {
         }
     }
 
+    /**
+     * Method: updateSelectedAppointmentButtonClick. user can select appointment and the data will populate in update appointment form in order to update appointment info
+     * @param event user click
+     * @throws IOException
+     * */
     @FXML
     void updateSelectedAppointmentButtonClick(ActionEvent event) throws IOException {
 
         Appointments selectedAppointment = appointmentMainTable.getSelectionModel().getSelectedItem();
 
         if(appointmentMainTable.getSelectionModel().getSelectedItem() == null){
-            AlertDisplay.displayAlert(9);
+            AlertDisplay.displayAlert(20);
         } else if (selectedAppointment != null) {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/imhoff/dbclientappv8/ViewUpdateAppointment.fxml"));
             Parent parent = loader.load();
@@ -209,13 +216,26 @@ public class AppointmentsCustomersController {
         }
     }
 
+    /**
+     * Method: deleteSelectedAppointmentButtonClick. Deletes selected appointment
+     * @param event user click
+     * */
     @FXML void deleteSelectedAppointmentButtonClick(ActionEvent event) {
 
     }
 
+    /**
+     * Method: reportsButtonClick. Generates reports form
+     * @param event user click
+     * */
     @FXML void reportsButtonClick(ActionEvent event) {
 
     }
+
+    /**
+     * Method: selectAllAppointmentsRadio. Displays all appointments by time/date
+     * @param event user click
+     * */
     @FXML void selectAllAppointmentsRadio(ActionEvent event) {
         try {
             ObservableList<Appointments> allAppointments = DAO_Appointments.getAllAppointments();
@@ -224,6 +244,11 @@ public class AppointmentsCustomersController {
             e.printStackTrace();
         }
     }
+
+    /**
+     * Method: selectCurrentWeekRadio. Displays only appointments by current week
+     * @param event user click
+     * */
     @FXML void selectCurrentWeekRadio(ActionEvent event) {
         try {
             LocalDate startDate = LocalDate.now();
@@ -235,6 +260,11 @@ public class AppointmentsCustomersController {
             e.printStackTrace();
         }
     }
+
+    /**
+     * Method: selectCurrentMonthRadio. Displays only appointments by current month
+     * @param event user click
+     * */
     @FXML void selectCurrentMonthRadio(ActionEvent event) {
         try {
             LocalDate startDate = LocalDate.now().withDayOfMonth(1);
@@ -247,10 +277,9 @@ public class AppointmentsCustomersController {
         }
     }
 
-
-
 /**
  * Method logoutButtonClick. When user clicks logout, application closes.
+ * @param event user click
  * */
     @FXML void logoutButtonClick(ActionEvent event) {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();

@@ -26,7 +26,7 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 /**
- * class: UpdateCustomerController: allows input from user to generate new customer data
+ * class: UpdateCustomerController. Allows input from user to update customer data. Customer selected data is autopopulated when form opens
  * */
 public class UpdateCustomerController implements Initializable {
     @FXML private TextField updateCustomerAutoGenerateIDNumTextField;
@@ -40,14 +40,14 @@ public class UpdateCustomerController implements Initializable {
 // ---------- Save and Cancel buttons -------- -- //
     @FXML private Button updateCustomerSaveButton;
     @FXML private Button updateCustomerCancelButton;
-
     private static int customerID;      // customerID for UPDATE Customer form
 
 // --------------- Methods -------------- //
 
     /**
      * Method: initialize. generates customersTable values. generates appropriate customerID value. has lambda expression to populate state and country names for combo-boxes
-     * lambda expression that allows stateProvinceDivisionNames and countryNames to populate in observable list that is used in customer combo-box. Name data is gathered from first_level_divisions table and countries table.
+     *      // lambda expression that allows stateProvinceDivisionNames and countryNames to populate in observable list
+     *      that is used in customer combo-box. Name data is gathered from first_level_divisions table and countries table.
      * @param url
      * @param resourceBundle
      */
@@ -80,7 +80,7 @@ public class UpdateCustomerController implements Initializable {
     }
 
     /**
-     * Method: populateFieldsWithCustomer. when user clicks update customer in appointmentsCustomerController, this method populates the values of the UPDATE customer form
+     * Method: populateFieldsWithCustomer. When user clicks update customer in appointmentsCustomerController, this method populates the values of the UPDATE customer form
      * @param customer
      * */
     public void populateFieldsWithCustomer(Customers customer) {
@@ -95,8 +95,8 @@ public class UpdateCustomerController implements Initializable {
 
     /**
      * Method: updateCustomerCountryComboBoxSelectionChange. Creates  observable list of division names, makes sub observable lists for US,UK, and Canada, those are assigned per the country code
-     * reusing lambda expression from initializable() method to generate observable list of division names
-     * lambda expression assigns division names to specific observale lists per matching country ID and the list is refined to display in combo box drop down, ex: US country = states displayed.
+     *      //reusing lambda expression from initializable() method to generate observable list of division names
+     *      //lambda expression assigns division names to specific observale lists per matching country ID and the list is refined to display in combo box drop down, ex: US country = states displayed.
      * @param event
      * @throws SQLException
      */
@@ -104,7 +104,7 @@ public class UpdateCustomerController implements Initializable {
         try {
             JDBC.getConnection();
 
-            // --------- STATE/PROVINCE table to observable List ------- //
+        // --------- STATE/PROVINCE table to observable List ------- //
             ObservableList<DAO_StateProvinceDivision> allDivisionsList = DAO_StateProvinceDivision.getAllStateProvinceDivision();
             ObservableList<String> allStateProvinceDivisionsNames = FXCollections.observableArrayList();
 
@@ -112,12 +112,12 @@ public class UpdateCustomerController implements Initializable {
 
             updateCustomerStateProvinceComboBox.setItems(allStateProvinceDivisionsNames);
 
-            // ------------ individual observable Lists for US, UK, and Canada  -------- //
+        // ------------ individual observable Lists for US, UK, and Canada  -------- //
             ObservableList<String> stateUS = FXCollections.observableArrayList();
             ObservableList<String> divisionUK = FXCollections.observableArrayList();
             ObservableList<String> provinceCanada = FXCollections.observableArrayList();
 
-            // ------------ lambda expression checks countryID and sets individual observable list to comboBox for state/province/division ------------ //
+// ------------ lambda expression checks countryID and sets individual observable list to comboBox for state/province/division ------------ //
             allDivisionsList.forEach(division -> {
                 if (division.getCountryID() == 1) {
                     stateUS.add(division.getStateProvinceDivisionName());
@@ -128,7 +128,7 @@ public class UpdateCustomerController implements Initializable {
                 }
             });
 
-            // ------------ when countryComboBox item is selected, the following stateProvinceComboBox is updated to match country options ------//
+        // ------------ when countryComboBox item is selected, the following stateProvinceComboBox is updated to match country options ------//
             String selectedItem = updateCustomerCountryComboBox.getSelectionModel().getSelectedItem();
 
             if (selectedItem.equals("U.S")) {
@@ -146,13 +146,13 @@ public class UpdateCustomerController implements Initializable {
 
     /**
      * Method: updateCustomerSaveButtonClick. when user clicks button the data is saved. if there are empty fields user will be notified and prompted to enter data
-     *  lambda expression that allows stateProvinceDivisionNames to populate in observable list that is used in customer combo-box
+     *      // lambda expression that allows stateProvinceDivisionNames to populate in observable list that is used in customer combo-box
+     * @param event user click
      * */
     @FXML
     void updateCustomerSaveButtonClick(ActionEvent event) {
         try {
-            // Retrieve the customer ID from the form
-            int customerID = Integer.parseInt(updateCustomerAutoGenerateIDNumTextField.getText());
+            int customerID = Integer.parseInt(updateCustomerAutoGenerateIDNumTextField.getText());            // Retrieve the customer ID from the form
 
             // Retrieve the values from the form fields
             String customerName = updateCustomerNameTextField.getText();
@@ -174,7 +174,9 @@ public class UpdateCustomerController implements Initializable {
                 }
 
                 // Create the SQL update statement with column names and preparedStatement '?' placeholders
-                String sqlUpdate = "UPDATE customers SET Customer_Name=?, Address=?, Postal_Code=?, Phone=?, Last_Update=?, Last_Updated_By=?, Division_ID=? WHERE Customer_ID=?";
+                String sqlUpdate =
+                        "UPDATE customers SET Customer_Name=?, Address=?, Postal_Code=?, Phone=?, Last_Update=?, Last_Updated_By=?, Division_ID=? " +
+                        "WHERE Customer_ID=?";
 
                 PreparedStatement preparedStatement = JDBC.getConnection().prepareStatement(sqlUpdate);
 
@@ -207,8 +209,8 @@ public class UpdateCustomerController implements Initializable {
     }
 
     /**
-     * Method: blankValues. checks user input to determine if there is a blank value.
-     * @return true. if value is blank alert will display per field that needs to be filled in
+     * Method: blankValues. Checks user input to determine if there is a blank value.
+     * @return true. If value is blank alert will display per field that needs to be filled in
      * */
     public boolean blankValues(
             String addCustomerNameTextField,
@@ -218,10 +220,10 @@ public class UpdateCustomerController implements Initializable {
             String addCustomerStateProvinceComboBox,
             String addCustomerPhoneNumberTextField
     ) {
-        if(addCustomerNameTextField.equals("")){AlertDisplay.displayAlert(3);return false;}          // name
+        if(addCustomerNameTextField.equals("")){AlertDisplay.displayAlert(3);return false;}               // name
         else if(addCustomerAddressTextField.equals("")){AlertDisplay.displayAlert(4);return false;}       // address
         else if(addCustomerPostalCodeTextField.equals("")){AlertDisplay.displayAlert(5);return false;}    // postal code
-        else if(addCustomerCountryComboBox == null){AlertDisplay.displayAlert(6);return false;}           //country combo box
+        else if(addCustomerCountryComboBox == null){AlertDisplay.displayAlert(6);return false;}           // country combo box
         else if(addCustomerStateProvinceComboBox == null){AlertDisplay.displayAlert(7);return false;}     // state combo box
         else if(addCustomerPhoneNumberTextField.equals("")){AlertDisplay.displayAlert(8);return false;}   // phone number
         return true;

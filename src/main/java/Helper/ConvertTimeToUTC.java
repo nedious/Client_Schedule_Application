@@ -6,12 +6,14 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * class: ConvertTimeToUTC. Converts local computer time to UTC
+ * */
 public class ConvertTimeToUTC {
-
     /**
-     * Converts time to UTC
+     * Method: convertUTC. Takes local computer time and converts it to UTC
      * @param storeDateTime
-     * @return
+     * @return utcTime
      */
     public static String convertUTC (String storeDateTime) {
         Timestamp timestamp = Timestamp.valueOf(String.valueOf(storeDateTime));

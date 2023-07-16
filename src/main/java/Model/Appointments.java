@@ -3,8 +3,10 @@ package Model;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+/**
+ * class: Appointments. Encapsulates information about a Appointment, identified by apptID, apptTitle, description, location, type etc.
+ * */
 public class Appointments {
-
     private int apptID;
     private String apptTitle;
     private String apptDescription;
@@ -33,91 +35,92 @@ public class Appointments {
     }
 
 // ----------------- Getters --------------- //
+    /**
+     * Method: getApptID.
+     * @return apptID
+     * */
     public int getApptID() {
         return apptID;
     }
 
+    /**
+     * Method: getApptTitle.
+     * @return apptTitle
+     * */
     public String getApptTitle() {
         return apptTitle;
     }
 
+    /**
+     * Method: getApptDescription.
+     * @return apptDescription
+     * */
     public String getApptDescription() {
         return apptDescription;
     }
 
+    /**
+     * Method: getApptLocation.
+     * @return apptLocation
+     * */
     public String getApptLocation() {
         return apptLocation;
     }
 
+    /**
+     * Method: getApptContactID.
+     * @return apptContactID
+     * */
     public int getApptContactID() {
         return apptContactID;
     }
 
+    /**
+     * Method: getApptType.
+     * @return apptType
+     * */
     public String getApptType() {
         return apptType;
     }
 
+    /**
+     * Method: getApptDayPicker.
+     * @return apptDayPicker
+     * */
     public LocalDate getApptDayPicker() {
         return apptDayPicker;
     }
 
+    /**
+     * Method: getApptStartDateTime.
+     * @return apptStartDateTime
+     * */
     public LocalDateTime getApptStartDateTime() {
         return apptStartDateTime;
     }
 
+    /**
+     * Method: getApptEndDateTime.
+     * @return apptEndDateTime
+     * */
     public LocalDateTime getApptEndDateTime() {
         return apptEndDateTime;
     }
 
+    /**
+     * Method: getApptCustomerID.
+     * @return apptCustomerID
+     * */
     public int getApptCustomerID() {
         return apptCustomerID;
     }
 
+    /**
+     * Method: getApptUserID.
+     * @return apptUserID
+     * */
     public int getApptUserID() {
         return apptUserID;
-    }
-
-// ----------------- Setters --------------- //
-
-
-    public void setApptID(int apptID) {
-        this.apptID = apptID;
-    }
-
-    public void setApptTitle(String apptTitle) {
-        this.apptTitle = apptTitle;
-    }
-
-    public void setApptDescription(String apptDescription) {
-        this.apptDescription = apptDescription;
-    }
-
-    public void setApptLocation(String apptLocation) {
-        this.apptLocation = apptLocation;
-    }
-
-    public void setApptContactID(int apptContactID) {
-        this.apptContactID = apptContactID;
-    }
-
-    public void setApptType(String apptType) {
-        this.apptType = apptType;
-    }
-
-    public void setApptStartDateTime(LocalDateTime apptStartDateTime) {
-        this.apptStartDateTime = apptStartDateTime;
-    }
-
-    public void setApptEndDateTime(LocalDateTime apptEndDateTime) {
-        this.apptEndDateTime = apptEndDateTime;
-    }
-
-    public void setApptCustomerID(int apptCustomerID) {
-        this.apptCustomerID = apptCustomerID;
-    }
-
-    public void setApptUserID(int apptUserID) {
-        this.apptUserID = apptUserID;
     }
 }
 

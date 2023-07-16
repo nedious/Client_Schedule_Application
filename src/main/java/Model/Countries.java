@@ -1,5 +1,8 @@
 package Model;
 
+/**
+ * class: Countries. Encapsulates information about a Countries, identified by their countryID and countryName.
+ * */
 public class Countries {
     private int countryID;
     private String countryName;
@@ -12,22 +15,19 @@ public class Countries {
     }
 
     // ------------ Getters ----------- //
+    /**
+     * Method: getCountryID.
+     * @return countryID
+     * */
     public int getCountryID() {
         return countryID;
     }
 
+    /**
+     * Method: getCountryName.
+     * @return countryName
+     * */
     public String getCountryName() {
         return countryName;
-    }
-
-    // ------------ Setters ----------- //
-
-
-    public void setCountryID(int countryID) {
-        this.countryID = countryID;
-    }
-
-    public void setCountryName(String countryName) {
-        this.countryName = countryName;
     }
 }

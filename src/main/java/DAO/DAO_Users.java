@@ -9,11 +9,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * class DA0_Users. Holds methods that connect to database to retrieve data. Extends Users to use Constructors and Getters.
+ * */
 public class DAO_Users extends Users {
-
-//    public DAO_Users(String userName, String userPass) {
-//
-//    }
 
     /**
      * Method: validateLogin. From login screen, take username and user password, make into string, create prepared statement, generate resultSet if prepared Statement is successful and test if true
@@ -44,7 +43,7 @@ public class DAO_Users extends Users {
 
     /**
      * Method: getAllUserIDs. gets userID from users table. used in appointments user combo box
-     * @return
+     * @return userIDs
      * @throws SQLException
      */
     public static ObservableList<Integer> getAllUserIDs() throws SQLException {

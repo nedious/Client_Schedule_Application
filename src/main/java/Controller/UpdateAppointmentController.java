@@ -1,12 +1,10 @@
 package Controller;
 
-import DAO.DAO_Appointments;
 import DAO.DAO_Contacts;
 import DAO.DAO_Customers;
 import DAO.DAO_Users;
 import Helper.AlertDisplay;
 import Helper.JDBC;
-import Model.Customers;
 import Model.Appointments;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -34,8 +32,9 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
-import static DAO.DAO_Appointments.maxApptID;
-
+/**
+ * class UpdateAppointmentController. Generates form that autopopulates data from selected row in AppointmentsCustomersController and allows user to update selected row to SQL database
+ * */
 public class UpdateAppointmentController implements Initializable {
     @FXML private TextField updateNewApptAutoGenApptIDTextField;   // apptID
     @FXML private TextField updateNewApptTitleTextField;           // title
@@ -62,20 +61,10 @@ public class UpdateAppointmentController implements Initializable {
     // ------------ generate AppointmentID -------------//
     private static int appointmentID;      // appointmentID for addAppointment form to autopopulate form with appointmentID
 
-//    static {
-//        try {
-//            appointmentID = maxApptID();       // make appointmentID
-//        } catch (SQLException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
-
 // --------------------- Methods ------------------------//
 
     /**
-     * Method initializable.
-     *      sets systemListener Label to local system time zone
-     *
+     * Method initializable. Initializes values needed for UpdateAppointment form. Sets data for use in upcoming methods. Data includes: systemListener, ApptID, contact combo box, start/end time combo box + logic
      * @param url
      * @param resourceBundle
      * */
@@ -84,72 +73,56 @@ public class UpdateAppointmentController implements Initializable {
         systemLister.setText("Times are listed in " + localSystemTimeZone + " time.");      // set systemListener to gather local computer time zone
 
         try {
-//            int nextAppointmentID = DAO_Appointments.maxApptID() + 1;
-//            int currentAppointmentID = DAO_Appointments.maxApptID();         // when updateAppt form generates, appointmentID will be auto populated in form
-
             updateNewApptAutoGenApptIDTextField.setText(String.valueOf(appointmentID));
 
-        // --------------- customerID combo box -------------//
-            // Retrieve customerID from the database
-            ObservableList<Integer> customerIDs = DAO_Customers.getAllCustomerIDs();
+            // --------------- customerID combo box -------------//
+            ObservableList<Integer> customerIDs = DAO_Customers.getAllCustomerIDs();         // Retrieve customerID from the database
 
-            // Set the retrieved customer IDs as items in the combo box
-            updateNewApptCustomerIDComboBox.setItems(customerIDs);
+            updateNewApptCustomerIDComboBox.setItems(customerIDs);                     // Set the retrieved customer IDs as items in customerID combo box
 
-        // --------------- userID combo box -------------//
-            // Retrieve userID from the database
-            ObservableList<Integer> userIDs = DAO_Users.getAllUserIDs();
+            // --------------- userID combo box -------------//
+            ObservableList<Integer> userIDs = DAO_Users.getAllUserIDs();             // Retrieve userID from the database
 
-            // Set the retrieved user IDs as items in the combo box
-            updateNewApptUserIDComboBox.setItems(userIDs);
+            updateNewApptUserIDComboBox.setItems(userIDs);            // Set the retrieved user IDs as items in the userID combo box
 
-        // --------------- contactID combo box -------------//
-//            // Retrieve contactID from the database
-//            ObservableList<Integer> contactIDs = DAO_Contacts.getAllContactIDs();
-//
-//            // Set the retrieved contact IDs as items in the combo box
-//            updateNewApptContactComboBox.setItems(contactIDs);
 
-            // Retrieve contacts from the database
-            ObservableList<DAO_Contacts> contacts = DAO_Contacts.getAllContacts();
+            // --------------- Contact_Name combo box -------------//
+            ObservableList<DAO_Contacts> contacts = DAO_Contacts.getAllContacts();            // Retrieve contacts from the database
 
-            // Create a map of contact IDs to their corresponding names
-            contactMap = contacts.stream().collect(Collectors.toMap(DAO_Contacts::getContactID, DAO_Contacts::getContactName));
+            contactMap = contacts.stream().collect(Collectors.toMap(DAO_Contacts::getContactID, DAO_Contacts::getContactName));            // Create a map of contact IDs to their corresponding names
 
-            // Set the retrieved contact names as items in the combo box
-            updateNewApptContactComboBox.setItems(FXCollections.observableArrayList(contactMap.values()));
+            updateNewApptContactComboBox.setItems(FXCollections.observableArrayList(contactMap.values()));            // Set the retrieved contact names as items in the combo box
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        // Generate start times from 7:00 AM to 4:45 PM in 15-minute increments
-        LocalTime startTime = LocalTime.of(7, 0);
+        // ------------------ appt Start / End times combo box logic ---------------//
+        LocalTime startTime = LocalTime.of(7, 0);    // Generate start times from 7:00 AM to 4:45 PM in 15-minute increments
         LocalTime endTime = LocalTime.of(16, 45);
 
-        while (!startTime.isAfter(endTime)) {
-            updateNewApptStartTimeComboBox.getItems().add(startTime);
+        while (!startTime.isAfter(endTime)) {     // while loop to iterate through and add 15 min per increment to display 7:00 AM to 4:45 PM
+            updateNewApptStartTimeComboBox.getItems().add(startTime);     // start time combo box
             startTime = startTime.plusMinutes(15);
         }
 
-        // Generate end times from 7:15 AM to 5:00 PM in 15-minute increments, excluding the start time
-        LocalTime endTimeExcludingStart = LocalTime.of(7, 15);
+        LocalTime endTimeExcludingStart = LocalTime.of(7, 15);      // Generate end times from 7:15 AM to 5:00 PM in 15-minute increments, excluding the start time
         LocalTime endEndTime = LocalTime.of(17, 0);
 
         while (!endTimeExcludingStart.isAfter(endEndTime)) {
-            updateNewApptEndTimeComboBox.getItems().add(endTimeExcludingStart);
+            updateNewApptEndTimeComboBox.getItems().add(endTimeExcludingStart);    // end time combo box
             endTimeExcludingStart = endTimeExcludingStart.plusMinutes(15);
         }
 
-        // Set the selection change listener for the start time combo box
-        updateNewApptStartTimeComboBox.valueProperty().addListener((observable, oldValue, newValue) -> {
+        // lambda expression:  observable, oldValue, and newValue. These parameters represent the previous selected value, the current selected value, and the new selected value.  dynamically populates the addNewApptEndTimeComboBox combo box based on the selected start time in the addNewApptStartTimeComboBox. It ensures that only end times that are later than the selected start time are available for selection.
+        updateNewApptStartTimeComboBox.valueProperty().addListener((observable, oldValue, newValue) -> {       // Set the selection change listener for the start time combo box
             // Update the end time combo box to only display values later than the selected start time
             if (newValue != null) {
-                updateNewApptEndTimeComboBox.getItems().clear();
-                LocalTime endTimeExclusive = newValue.plusMinutes(15);
-                while (!endTimeExclusive.isAfter(endEndTime)) {
-                    updateNewApptEndTimeComboBox.getItems().add(endTimeExclusive);
-                    endTimeExclusive = endTimeExclusive.plusMinutes(15);
+                updateNewApptEndTimeComboBox.getItems().clear();                        // clears endTime combo box
+                LocalTime endTimeExclusive = newValue.plusMinutes(15);      // sets endTimeExclusive to be 15 min greater than newValue adding 15 minutes to the selected start time
+                while (!endTimeExclusive.isAfter(endEndTime)) {                         // while loop that continues until endTimeExclusive is after the endEndTime. In each iteration, it adds endTimeExclusive to the items of the addNewApptEndTimeComboBox combo box using addNewApptEndTimeComboBox.getItems().add(endTimeExclusive).
+                    updateNewApptEndTimeComboBox.getItems().add(endTimeExclusive);      // sets endTime combo box to be endTimeExclusive
+                    endTimeExclusive = endTimeExclusive.plusMinutes(15);     // updates endTimeExclusive by adding another 15 minutes
                 }
             }
         });
@@ -170,32 +143,34 @@ public class UpdateAppointmentController implements Initializable {
         updateNewApptStartTimeComboBox.setValue(appointment.getApptStartDateTime().toLocalTime());    // start time combo box
         updateNewApptEndTimeComboBox.setValue(appointment.getApptEndDateTime().toLocalTime());        // end time combo box
 
-        updateNewApptCustomerIDComboBox.setValue(appointment.getApptCustomerID());  // customerID combo box
-        updateNewApptUserIDComboBox.setValue(appointment.getApptUserID());          // userID combo box
-        updateNewApptContactComboBox.setValue(contactMap.get(appointment.getApptContactID()));  // contact combo box
+        updateNewApptCustomerIDComboBox.setValue(appointment.getApptCustomerID());                  // customerID combo box
+        updateNewApptUserIDComboBox.setValue(appointment.getApptUserID());                          // userID combo box
+        updateNewApptContactComboBox.setValue(contactMap.get(appointment.getApptContactID()));      // contact combo box
     }
 
-
+    /**
+     * Method: updateNewApptSaveButtonClick. when user clicks save appointment form is checked to ensure all fields are filled in, then the new data is updated into the sql database
+     * @param event user click
+     * */
     @FXML void updateNewApptSaveButtonClick(ActionEvent event) {
 
         if (blankValues()) {
 
             try {
+      // -------------- Contact_ID and Contact_Name mapping -----------//
                 ObservableList<DAO_Contacts> contacts = DAO_Contacts.getAllContacts();
-                Map<String, Integer> contactMap = new HashMap<>();
 
-                for (DAO_Contacts contact : contacts) {
+                Map<String, Integer> contactMap = new HashMap<>();      // maps contact names to contact IDs.
+
+                for (DAO_Contacts contact : contacts) {          // By iterating over the contacts list and mapping each contact name to its corresponding contact ID in the contactMap, you will be able to retrieve the contact ID using the selected contact name.
                     contactMap.put(contact.getContactName(), contact.getContactID());
                 }
 
-                // Retrieve the selected contact name from the combo box
-                String selectedContactName = updateNewApptContactComboBox.getValue();
+                String selectedContactName = updateNewApptContactComboBox.getValue();                // Retrieve the selected contact name from the combo box
 
-                // Find the corresponding Contact_ID for the selected contact name
-                int contactID = contactMap.get(selectedContactName);
+                int contactID = contactMap.get(selectedContactName);                // Find the corresponding Contact_ID for the selected contact name
 
-
-                // Retrieve the entered values
+        // ---------- Retrieve user entered values -----------//
                 int appointmentID = Integer.parseInt(updateNewApptAutoGenApptIDTextField.getText());
                 String title = updateNewApptTitleTextField.getText();
                 String description = updateNewApptDescriptionTextField.getText();
@@ -212,10 +187,11 @@ public class UpdateAppointmentController implements Initializable {
                 String lastUpdatedBy = "admin";
                 int customerID = Integer.parseInt(updateNewApptCustomerIDComboBox.getSelectionModel().getSelectedItem().toString());
                 int userID = Integer.parseInt(updateNewApptUserIDComboBox.getSelectionModel().getSelectedItem().toString());
-//                int contactID = Integer.parseInt(updateNewApptContactComboBox.getSelectionModel().getSelectedItem().toString());
 
                 // Create the SQL update statement
-                String sqlUpdate = "UPDATE appointments SET Title=?, Description=?, Location=?, Type=?, Start=?, End=?, Create_Date=?, Created_By=?, Last_Update=?, Last_Updated_By=?, Customer_ID=?, User_ID=?, Contact_ID=? WHERE Appointment_ID=?";
+                String sqlUpdate =
+                        "UPDATE appointments SET Title=?, Description=?, Location=?, Type=?, Start=?, End=?, Create_Date=?, Created_By=?, Last_Update=?, Last_Updated_By=?, Customer_ID=?, User_ID=?, Contact_ID=? " +
+                        "WHERE Appointment_ID=?";
 
                 PreparedStatement preparedStatement = JDBC.getConnection().prepareStatement(sqlUpdate);
 
@@ -254,10 +230,8 @@ public class UpdateAppointmentController implements Initializable {
         }
     }
 
-
-
     /**
-     * Method: blankValues. checks user input to determine if there is a blank value.
+     * Method: blankValues. checks user input to determine if there is a blank value in the form.
      * @return true. if value is blank alert will display per field that needs to be filled in
      * */
     public boolean blankValues(){
@@ -267,7 +241,7 @@ public class UpdateAppointmentController implements Initializable {
             String description = updateNewApptDescriptionTextField.getText();   // description
             String location = updateNewApptLocationTextField.getText();         // location
 
-            LocalDate startAndEndDate = updateNewApptDayDatePicker.getValue();                                           // day date picker
+            LocalDate startAndEndDate = updateNewApptDayDatePicker.getValue();                                       // day date picker
 //            String startTime = updateNewApptStartTimeComboBox.getSelectionModel().getSelectedItem().toString();    // start time combo box
 //            String endTime = updateNewApptEndTimeComboBox.getSelectionModel().getSelectedItem().toString();        // end time combo box
 
@@ -292,7 +266,7 @@ public class UpdateAppointmentController implements Initializable {
     }
 
     /**
-     * Method: updateNewApptCancelButtonClick. when user clicks cancel, the main appointment/customer screen is displayed again
+     * Method: updateNewApptCancelButtonClick. when user clicks cancel, data is cleared and the main appointment/customer screen is displayed again
      *  @param event user click
      *  @throws IOException
      * */
