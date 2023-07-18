@@ -165,6 +165,8 @@ public class AppointmentsCustomersController {
     @FXML void deleteSelectedCustomerButtonClick(ActionEvent event) throws SQLException {
 
         ObservableList<Appointments> allAppointments = DAO_Appointments.getAllAppointments();
+        int customerIDToDelete = customerMainTable.getSelectionModel().getSelectedItem().getCustomerID();
+
 
 //        int customerIDToDelete = customerMainTable.getSelectionModel().getSelectedItem().getCustomerID();
 //        int associatedApptID = appointmentMainTable.getSelectionModel().getSelectedItem().getApptID();
@@ -174,14 +176,14 @@ public class AppointmentsCustomersController {
         Alert alertDelete = new Alert(Alert.AlertType.CONFIRMATION);
         alertDelete.setTitle("DELETING");
         alertDelete.setHeaderText("Do you want to DELETE the selected CUSTOMER and ALL APPOINTMENTS associated with this customer?");
-        alertDelete.setContentText("The selected Customer and all associated Appointment data will be DELETED");
+        alertDelete.setContentText("Customer ID:  " + customerIDToDelete + "\n\nAnd all associated Appointment data will be DELETED");
 
 //        alertDelete.setContentText("Appointment ID:  " + appointmenttIDToDelete + "\n\nType:  '" + deleteApptType + "' \n\nWill be DELETED.");
 
         Optional<ButtonType> result = alertDelete.showAndWait();
 
         if (result.isPresent() && result.get() == ButtonType.OK) {
-            int customerIDToDelete = customerMainTable.getSelectionModel().getSelectedItem().getCustomerID();
+            customerIDToDelete = customerMainTable.getSelectionModel().getSelectedItem().getCustomerID();
             DAO_Appointments.deleteAppointment(customerIDToDelete);
 
             String sqlDelete = "DELETE FROM customers WHERE Customer_ID = ?";
