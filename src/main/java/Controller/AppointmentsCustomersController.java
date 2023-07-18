@@ -4,6 +4,7 @@ import DAO.DAO_Appointments;
 import DAO.DAO_Customers;
 
 import Helper.AlertDisplay;
+import Helper.JDBC;
 
 import Model.Appointments;
 import Model.Customers;
@@ -20,8 +21,11 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.Optional;
+
 
 /**
  * class: AppointmentsCustomersController: displays appointment and customer data in two tables. allows appointment and customer tables to add, update, and delete. generates reports
@@ -153,12 +157,45 @@ public class AppointmentsCustomersController {
     }
 
     /**
-     * Method: deleteSelectedCustomerButtonClick. Deletes selected customer
+     * Method: deleteSelectedCustomerButtonClick. Deletes selected customer and associated appointment times. Display alert asking user if they want the delete the customer and appointments. **Due to primary key constraints in database, appointments with associated Customer_ID are deleted first, then customer is deleted.
      * @param event user click
+     * @throws IOException
      * */
-    @FXML
-    void deleteSelectedCustomerButtonClick(ActionEvent event) {
+    @FXML void deleteSelectedCustomerButtonClick(ActionEvent event) throws SQLException {
 
+        ObservableList<Appointments> allAppointments = DAO_Appointments.getAllAppointments();
+
+        Alert alertDelete = new Alert(Alert.AlertType.CONFIRMATION);
+        alertDelete.setTitle("DELETING");
+        alertDelete.setHeaderText("Do you want to DELETE the selected CUSTOMER and ALL APPOINTMENTS associated with this customer?");
+        alertDelete.setContentText("The selected Customer and all associated Appointment data will be DELETED");
+        Optional<ButtonType> result = alertDelete.showAndWait();
+
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            int customerIDToDelete = customerMainTable.getSelectionModel().getSelectedItem().getCustomerID();
+            DAO_Appointments.deleteAppointment(customerIDToDelete);
+
+            String sqlDelete = "DELETE FROM customers WHERE Customer_ID = ?";
+            PreparedStatement preparedStatement = JDBC.getConnection().prepareStatement(sqlDelete);
+
+            int selectedCustomer = customerMainTable.getSelectionModel().getSelectedItem().getCustomerID();
+
+            for (Appointments appointment: allAppointments) {
+                int selectedCustAppt = appointment.getApptCustomerID();
+                if (selectedCustomer == selectedCustAppt) {
+                    String sqlDeleteAppointment =  "DELETE FROM appointments WHERE Appointment_ID = ?";
+                    JDBC.getConnection().prepareStatement(sqlDeleteAppointment);
+                }
+            }
+            preparedStatement.setInt(1, selectedCustomer);
+            preparedStatement.execute();
+
+            ObservableList<Customers> refreshCustomerList = DAO_Customers.getAllCustomers();
+            customerMainTable.setItems(refreshCustomerList);
+
+            ObservableList<Appointments> refreshAppointmentList = DAO_Appointments.getAllAppointments();
+            appointmentMainTable.setItems(refreshAppointmentList);
+        }
     }
 
     /**
@@ -221,6 +258,8 @@ public class AppointmentsCustomersController {
      * @param event user click
      * */
     @FXML void deleteSelectedAppointmentButtonClick(ActionEvent event) {
+
+
 
     }
 
