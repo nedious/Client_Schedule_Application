@@ -5,6 +5,7 @@ import Model.Appointments;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -95,5 +96,20 @@ public class DAO_Appointments {
         }
 
         return appointmentsObservableList;
+    }
+
+    /**
+     * Method: deleteAppointment. Appointment with the appropriate Appointment_ID is deleted
+     * @param customer
+     * @return deleteResult
+     * @throws SQLException
+     */
+    public static int deleteAppointment(int customer) throws SQLException{
+        String sqlDelete = "DELETE FROM appointments WHERE Appointment_ID=?";
+        PreparedStatement preparedStatement = JDBC.getConnection().prepareStatement(sqlDelete);
+        preparedStatement.setInt(1, customer);
+        int deleteResult = preparedStatement.executeUpdate();
+        preparedStatement.close();
+        return deleteResult;
     }
 }

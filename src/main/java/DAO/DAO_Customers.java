@@ -1,13 +1,20 @@
 package DAO;
 
 import Helper.JDBC;
+import Model.Appointments;
 import Model.Customers;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Optional;
 
 /**
  * class: DAO_Customers. Holds methods that connect to database to retrieve data.
@@ -87,6 +94,8 @@ public class DAO_Customers {
         }
         return customerIDs;
     }
+
+
 }
 
 
