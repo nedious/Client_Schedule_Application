@@ -12,6 +12,9 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.Optional;
 
+/**
+ * class: AlertDisplay. Displays alerts throughout application
+ * */
 public class AlertDisplay {
 
     /**
@@ -36,7 +39,7 @@ public class AlertDisplay {
                 alertError.showAndWait();
                 break;
 
-// --------------------- addCustomer errors --------------------- //
+// --------------------- add/update Customer errors --------------------- //
             case 2:
                 alertError.setTitle("Canceling");
                 alertError.setHeaderText("Do you want to Cancel?");
@@ -85,7 +88,7 @@ public class AlertDisplay {
                 alertError.setContentText("Select customer to update");
                 alertError.showAndWait();
                 break;
-// --------------------- add appointment errors --------------------- //
+// --------------------- add/update appointment errors --------------------- //
             case 10:
                 alertError.setTitle("Error");
                 alertError.setHeaderText("Missing Title");
@@ -146,6 +149,13 @@ public class AlertDisplay {
                 alertError.setContentText("Enter appointment Contact ID");
                 alertError.showAndWait();
                 break;
+// --------------------- other errors --------------------- //
+            case 20:
+                alertError.setTitle("Error");
+                alertError.setHeaderText("No appointment selected");
+                alertError.setContentText("Select appointment to update");
+                alertError.showAndWait();
+                break;
         }
     }
 
@@ -163,20 +173,15 @@ public class AlertDisplay {
  * */
 
 
-//    /**
-//     * Method addCustomerCancelButtonClick. When user clicks, they are prompted by alert if they wish to discard entered data. If yes, they are redirected to Appt and customer table screen
-//     * @param event user click
-//     * @throws IOException
-//     * */
-//    @FXML
-//    void addCustomerCancelButtonClick(ActionEvent event) throws IOException {
+//    @FXML void addCustomerCancelButtonClick(ActionEvent event) throws IOException {
 //        Alert alertCancel = new Alert(Alert.AlertType.CONFIRMATION);
 //        alertCancel.setTitle("Canceling");
 //        alertCancel.setHeaderText("Do you want to Cancel?");
 //        alertCancel.setContentText("Customer data will not be saved");
 //        Optional<ButtonType> result = alertCancel.showAndWait();
 //
-//        if(result.get() == ButtonType.OK){            FXMLLoader loader = new FXMLLoader();
+//        if(result.get() == ButtonType.OK){
+//            FXMLLoader loader = new FXMLLoader();
 //            loader.setLocation(getClass().getResource("/imhoff/dbclientappv8/ViewAppointmentsCustomers.fxml"));
 //            Parent parent = loader.load();
 //            Stage stage = (Stage) addCustomerCancelButton.getScene().getWindow();
@@ -184,6 +189,6 @@ public class AlertDisplay {
 //            stage.setScene(scene);
 //            stage.show();
 //        }
-//    }
+//   }
 
 

@@ -4,7 +4,6 @@ import DAO.DAO_Countries;
 import DAO.DAO_StateProvinceDivision;
 import Helper.AlertDisplay;
 import Helper.JDBC;
-import Model.Customers;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -26,7 +25,7 @@ import java.util.ResourceBundle;
 import static DAO.DAO_Customers.maxID;
 
 /**
- * class: AddCustomerController: allows input from user to generate new customer data
+ * class: AddCustomerController: allows input from user to generate new customer data and save to SQL database
  * */
 public class AddCustomerController implements Initializable {
     @FXML private TextField addCustomerAutoGenerateIDNumTextField;
@@ -46,7 +45,7 @@ public class AddCustomerController implements Initializable {
 
     static {
         try {
-            customerID = maxID();       // make customerID
+            customerID = maxID();       // set customerID to maxID()
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -57,13 +56,14 @@ public class AddCustomerController implements Initializable {
     /**
      * /**
      * Method: initialize. generates customersTable values. generates appropriate customerID value. has lambda expression to populate state and country names for combo-boxes
-     * lambda expression that allows stateProvinceDivisionNames and countryNames to populate in observable list that is used in customer combo-box. Name data is gathered from first_level_divisions table and countries table.
+     *      // lambda expression that allows stateProvinceDivisionNames and countryNames to populate in observable list
+     *      that is used in customer combo-box. Name data is gathered from first_level_divisions table and countries table.
      * @param url
      * @param resourceBundle
      */
     @Override public void initialize(URL url, ResourceBundle resourceBundle) {
 
-        addCustomerAutoGenerateIDNumTextField.setText(String.valueOf(customerID));
+        addCustomerAutoGenerateIDNumTextField.setText(String.valueOf(customerID));      // sets customerID field
 
         try {
             JDBC.getConnection();
@@ -74,7 +74,7 @@ public class AddCustomerController implements Initializable {
 
             allDivisionsList.forEach(division -> allStateProvinceDivisionsNames.add(division.getStateProvinceDivisionName()));       // lambda expression that allows stateProvinceDivisionNames to populate in observable list that is used in customer combo-box
 
-            addCustomerStateProvinceComboBox.setItems(allStateProvinceDivisionsNames);
+            addCustomerStateProvinceComboBox.setItems(allStateProvinceDivisionsNames);      // sets state combo box with values from allStateProvinceDivisionsNames observableList
 
         // --------- COUNTRIES table to observable List ------- //
             ObservableList<DAO_Countries> allCountriesList = DAO_Countries.getAllCountries();
@@ -91,8 +91,9 @@ public class AddCustomerController implements Initializable {
 
     /**
      * Method: addCustomerCountryComboBoxSelectionChange. Creates  observable list of division names, makes sub observable lists for US,UK, and Canada, those are assigned per the country code
-     * reusing lambda expression from initializable() method to generate observable list of division names
-     * lambda expression assigns division names to specific observale lists per matching country ID and the list is refined to display in combo box drop down, ex: US country = states displayed.
+     *      // reusing lambda expression from initializable() method to generate observable list of division names
+     *      // lambda expression assigns division names to specific observale lists per matching country ID and the list
+     *      is refined to display in combo box drop down, ex: US country = states displayed.
      * @param event
      * @throws SQLException
      */
@@ -113,7 +114,7 @@ public class AddCustomerController implements Initializable {
             ObservableList<String> divisionUK = FXCollections.observableArrayList();
             ObservableList<String> provinceCanada = FXCollections.observableArrayList();
 
-            // ------------ lambda expression -
+            // ------------ lambda expression --------------//
             allDivisionsList.forEach(division -> {
                 if (division.getCountryID() == 1) {
                     stateUS.add(division.getStateProvinceDivisionName());
@@ -124,7 +125,7 @@ public class AddCustomerController implements Initializable {
                 }
             });
 
-            // ------------ when countryComboBox item is selected, the following stateProvinceComboBox is updated to match country options ------//
+// ------------ when countryComboBox item is selected, the following stateProvinceComboBox is updated to match country options ------//
             String selectedItem = addCustomerCountryComboBox.getSelectionModel().getSelectedItem();
 
             if (selectedItem.equals("U.S")) {
@@ -142,7 +143,8 @@ public class AddCustomerController implements Initializable {
 
     /**
      * Method: addCustomerSaveButtonClick. when user clicks button the data is saved. if there are empty fields user will be notified and prompted to enter data
-     *  lambda expression that allows stateProvinceDivisionNames to populate in observable list that is used in customer combo-box
+     *      //lambda expression that allows stateProvinceDivisionNames to populate in observable list that is used in customer combo-box
+     * @param event
      * */
     @FXML void addCustomerSaveButtonClick(ActionEvent event) {
         try {
@@ -182,7 +184,9 @@ public class AddCustomerController implements Initializable {
                 }
             }
 
-            String sqlInsert = "INSERT INTO customers (Customer_ID, Customer_Name, Address, Postal_Code, Phone, Create_Date, Created_By, Last_Update, Last_Updated_By, Division_ID) VALUES (?,?,?,?,?,?,?,?,?,?)";
+            String sqlInsert =
+                    "INSERT INTO customers (Customer_ID, Customer_Name, Address, Postal_Code, Phone, Create_Date, Created_By, Last_Update, Last_Updated_By, Division_ID) " +
+                    "VALUES (?,?,?,?,?,?,?,?,?,?)";
 
             Integer customerIDInt = maxID() + 1;       // maxID() pulls from DAO_Customers and finds max value in Customer_ID column
 //            System.out.println("customerIDInt: " + maxID());

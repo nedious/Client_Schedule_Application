@@ -11,6 +11,9 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+/**
+ * class: DAO_Appointments. Holds methods that connect to database to retrieve data.
+ * */
 public class DAO_Appointments {
 
     /**
@@ -31,8 +34,10 @@ public class DAO_Appointments {
             String apptLocation = resultSet.getString("Location");
             int apptContactID = resultSet.getInt("Contact_ID");
             String apptType = resultSet.getString("Type");
-            LocalDateTime apptStartDateTime = resultSet.getTimestamp("Start").toLocalDateTime();
+
+            LocalDateTime apptStartDateTime = resultSet.getTimestamp("Start").toLocalDateTime();    // displays table contense in system time
             LocalDateTime apptEndDateTime = resultSet.getTimestamp("End").toLocalDateTime();
+
             int apptCustomerID = resultSet.getInt("Customer_ID");
             int apptUserID = resultSet.getInt("User_ID");
 
@@ -59,6 +64,11 @@ public class DAO_Appointments {
         return maxValue;
     }
 
+    /**
+     * Method: getAppointmentsForDateRange. Gathers data from database that matches logic of start and end times to sort appointments by week and month
+     * @return appointmentsObservableList.
+     * @throws SQLException
+     * */
     public static ObservableList<Appointments> getAppointmentsForDateRange(LocalDate startDate, LocalDate endDate) throws SQLException {
         ObservableList<Appointments> appointmentsObservableList = FXCollections.observableArrayList();
 

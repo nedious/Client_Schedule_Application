@@ -17,12 +17,12 @@ public abstract class JDBC {
     private static final String databaseName = "client_schedule";
     private static final String jdbcUrl = protocol + vendor + location + databaseName + "?connectionTimeZone = UTC"; // LOCAL  // points to database
     private static final String driver = "com.mysql.cj.jdbc.Driver"; // Driver reference
-    private static final String userName = "sqlUser"; // MySQL database Username
-    private static String password = "Passw0rd!"; // MySQL database Password
-    public static Connection connection;  // Connection Interface
+    private static final String userName = "sqlUser";                // MySQL database Username
+    private static String password = "Passw0rd!";                    // MySQL database Password
+    public static Connection connection;                             // Connection Interface
 
     /**
-     * Method openConnection: opens connection to database
+     * Method: openConnection. Opens connection to database
      * */
     public static void openConnection()
     {
@@ -39,9 +39,10 @@ public abstract class JDBC {
     }
 
     /**
-     * Method getConnection:
-     * A connection (session) with a specific database. SQL statements are executed and results are returned within the context of a connection.
-     * A Connection object's database is able to provide information describing its tables, its supported SQL grammar, its stored procedures, the capabilities of this connection, and so on. This information is obtained with the getMetaData method.
+     * Method: getConnection.
+     *      A connection (session) with a specific database. SQL statements are executed and results are returned within the context of a connection.
+     *      A Connection object's database is able to provide information describing its tables, its supported SQL grammar, its stored procedures, the capabilities of this connection, and so on. This information is obtained with the getMetaData method.
+     * @return connection
      * */
     public static Connection getConnection() {
         return connection;

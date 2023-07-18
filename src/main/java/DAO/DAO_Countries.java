@@ -9,14 +9,22 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * class: DAO_Countries. Holds methods that connect to database to retrieve data. Extends Countries to use Constructors and Getters.
+ * */
 public class DAO_Countries extends Countries {
 
-        public DAO_Countries(int countryID, String countryName) {
-            super(countryID, countryName);
-        }
+    /**
+     * Method: DAO_Countries. Constructor for DAO_Countries to initialize the DAO_Countries object
+     * @param countryID
+     * @param countryName
+     */
+    public DAO_Countries(int countryID, String countryName) {
+        super(countryID, countryName);      // super statement is used to invoke the constructor of the superclass
+    }
 
     /**
-     * Method getAllCountries. Generates country data and stores in ObservableList DAO_Countries
+     * Method getAllCountries. Generates country data from sql database and stores in ObservableList DAO_Countries
      * @return countriesObservableList. List of countries
      * @throws SQLException
      */
@@ -28,7 +36,7 @@ public class DAO_Countries extends Countries {
         while (resultSet.next()) {
             int countryID = resultSet.getInt("Country_ID");
             String countryName = resultSet.getString("Country");
-            DAO_Countries countries = new DAO_Countries(countryID, countryName);
+            DAO_Countries countries = new DAO_Countries(countryID, countryName);        // DAO_Countries(countryID, countryName) invokes constructor
             countriesObservableList.add(countries);
         }
         return countriesObservableList;

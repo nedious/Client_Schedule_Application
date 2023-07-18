@@ -9,15 +9,24 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * class DAO_StateProvinceDivision. Holds methods that connect to database to retrieve data. Extends StateProvinceDivision to use Constructors and Getters.
+ * */
 public class DAO_StateProvinceDivision extends StateProvinceDivision {
 
+    /**
+     * Method: DAO_StateProvinceDivision. Constructor for DAO_Countries to initialize the DAO_Countries object
+     * @param stateProvinceDivisionID
+     * @param stateProvinceDivisionName
+     * @param countryID
+     */
     public DAO_StateProvinceDivision(int stateProvinceDivisionID, String stateProvinceDivisionName, int countryID) {
-        super(stateProvinceDivisionID, stateProvinceDivisionName, countryID);
+        super(stateProvinceDivisionID, stateProvinceDivisionName, countryID);        // super statement is used to invoke the constructor of the superclass
     }
 
     /**
-     * Selects every entry from first_level_divisions table
-     * @return
+     * Method: getAllStateProvinceDivision. Gathers all data from first_level_divisions table
+     * @return stateProvinceDivisionObservableList
      * @throws SQLException
      */
     public static ObservableList<DAO_StateProvinceDivision> getAllStateProvinceDivision() throws SQLException {

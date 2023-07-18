@@ -30,12 +30,14 @@ import java.util.ResourceBundle;
 
 /**
  * class: LoginController: validates user login credentials, tracks login's to "login_activity.txt",
- *  TODO: ... changes locale/language based on OS settings... disables on current system. See if it works with VM. Add note then on first line.
- * class serves as the controller for a specific view in JavaFX app. Controllers are responsible for handling user interactions, updating the view, and performing any necessary business logic.
  *
- * The Initializable interface is part of the JavaFX framework and provides a method called initialize() that is automatically invoked after the FXML file has been loaded and all the associated UI elements have been instantiated.
- * This method is typically used to perform initialization tasks for the controller.
- * By implementing the Initializable interface, the LoginController class is required to provide an implementation for the initialize() method.
+ * TODO: ... changes locale/language based on OS settings... disables on current system. See if it works with VM. Add note then on first line.
+ *
+ *      class serves as the controller for a specific view in JavaFX app. Controllers are responsible for handling user interactions, updating the view, and performing any necessary business logic.
+ *
+ *      The Initializable interface is part of the JavaFX framework and provides a method called initialize() that is automatically invoked after the FXML file has been loaded and all the associated UI elements have been instantiated.
+ *      This method is typically used to perform initialization tasks for the controller.
+ *      By implementing the Initializable interface, the LoginController class is required to provide an implementation for the initialize() method.
  */
 public class LoginController implements Initializable {
 
@@ -54,9 +56,9 @@ public class LoginController implements Initializable {
     @FXML private Label loginTimeZoneDynamicUpdate; // dynamic local time zone
     // ----------- //
 
-
+// ------------ Methods -------------//
     /**
-     * Method: loginButtonOnActionLogin. Validates user and opens appointment screen
+     * Method: loginButtonOnActionLogin. Validates user and opens appointment/customer display screen
      * @param event user click button
      * @throws SQLException
      * @throws IOException
@@ -87,23 +89,14 @@ public class LoginController implements Initializable {
 
                 printOutput.print("Valid login for: '" + username + "' at: " + Timestamp.valueOf(LocalDateTime.now()) + "\n"); // write to loginReport object
 
-//                ObservableList<Appointments> appointmentsObservableList = DAO_Appointments.getAllAppointments();      // loads database scheduled appointments into observable list
-
             } else  {
                 AlertDisplay.displayAlert(1);       // Alert: Invalid Values. Inherited from helper.AlertDisplay.
 
-//                Alert alert = new Alert(Alert.AlertType.ERROR);
-//                alert.setTitle(resourceBundle.getString("errorTitle"));
-//                alert.setContentText(resourceBundle.getString("errorText"));
-//                alert.show();
-
                 printOutput.print("Invalid login for: '" + username + "' at: " + Timestamp.valueOf(LocalDateTime.now()) + "\n");  // write to loginReport object
-
-//                printOutput.print("User: " + userInput + " login attempt failed at: " + Timestamp.valueOf(LocalDateTime.now()) + "\n");
-
             }
 
             printOutput.close();
+
         } catch (IOException ioException) {
             ioException.printStackTrace();
         }
@@ -119,7 +112,7 @@ public class LoginController implements Initializable {
     }
 
     /**
-     * Initialize login screen
+     * Method: initialize. generates data for login screen. Allows text to be translated to french via resource bundle. Genarates user location and time zone.
      * @param url
      * @param resourceBundle
      */
@@ -144,6 +137,5 @@ public class LoginController implements Initializable {
         } catch (Exception e) {
             System.out.println(e);
         }
-
     }
 }
