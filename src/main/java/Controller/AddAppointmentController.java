@@ -20,10 +20,8 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.*;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.ResourceBundle;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static DAO.DAO_Appointments.maxApptID;
@@ -38,20 +36,26 @@ public class AddAppointmentController implements Initializable {
     @FXML private TextField addNewApptDescriptionTextField;     // description
     @FXML private TextField addNewApptLocationTextField;        // location
 
-    @FXML private DatePicker addNewApptDayDatePicker;                    // start date picker
-    @FXML private ComboBox<LocalTime> addNewApptStartTimeComboBox;       // start time combo box
-    @FXML private ComboBox<LocalTime> addNewApptEndTimeComboBox;         // end time combo box
+    @FXML private DatePicker addNewApptDayDatePicker;                 // start date picker
+    @FXML private ComboBox<LocalTime> addNewApptStartTimeComboBox;    // start time combo box
+    @FXML private ComboBox<LocalTime> addNewApptEndTimeComboBox;      // end time combo box
 
     @FXML private ComboBox<Integer> addNewApptCustomerIDComboBox;     // customerID combo box
     @FXML private ComboBox<Integer> addNewApptUserIDComboBox;         // userID combo box
-    @FXML private ComboBox<String> addNewApptContactComboBox;        // contact combo box
 
-    @FXML private Label systemLister;                           // local computer time dynamic
+    @FXML private ComboBox<String> addNewApptContactComboBox;         // contact combo box
 
-// ------------ buttons ----------//
+    @FXML private Label currentSystemTimeZone;                           // local computer time dynamic
+    @FXML private Label eastCoastTimeZone;
+
+
+    // ------------ buttons ----------//
     @FXML private Button addNewApptSaveButton;      // save
     @FXML private Button addNewApptCancelButton;    // cancel
-    ZoneId localSystemTimeZone = ZoneId.systemDefault();        // sets ZoneID to local System time zone
+
+    ZoneId localSystemTimeZone = ZoneId.systemDefault();        // Defines ZoneID of local System time zone
+    ZoneId utcTimeZone = ZoneId.of("UTC");              // Defines UTC time zone for combo boxes start/end time
+
 
     // ------------ generate AppointmentID -------------//
     private static int appointmentID;      // appointmentID for addAppointment form to autopopulate form with appointmentID
@@ -77,7 +81,122 @@ public class AddAppointmentController implements Initializable {
      * */
     @Override public void initialize(URL url, ResourceBundle resourceBundle) {
 
-        systemLister.setText("Times are listed in " + localSystemTimeZone + " time.");      // set systemListener to gather local computer time zone
+//        systemLister.setText("Current local time zone: " + localSystemTimeZone + " time.");      // set systemListener to gather local computer time zone
+
+// ---------- set CURRENT time zone for user to reference -------- //
+        ZoneId systemTimeZone = ZoneId.systemDefault();        // Get the default time zone of the system
+//        System.out.println("systemTimeZone:: " + systemTimeZone);
+        ZonedDateTime currentTimeZone = ZonedDateTime.now(systemTimeZone);        // Get the current time in the system time zone
+//        System.out.println("currentTimeZone:: " + currentTimeZone);
+
+        String formattedTimeCurrentZone = currentTimeZone.format(DateTimeFormatter.ofPattern("HH:mm"));        // Format the time as Hour:Minute
+
+        String timeZoneID = systemTimeZone.getId();        // Get the time zone ID of the system
+
+        currentSystemTimeZone.setText("Current Time: " + formattedTimeCurrentZone + ", Time Zone: " + timeZoneID);        // Set the formatted time and time zone ID in the systemLister label
+
+// ---------- set EAST coast time for user to reference -------- //
+        LocalTime eastCoastTime = LocalTime.now(ZoneId.of("America/New_York"));        // Get the current time in the East Coast time zone
+
+        String formattedTimeEastCoast = eastCoastTime.format(DateTimeFormatter.ofPattern("HH:mm"));        // Format the time as Hour:Minute
+
+        eastCoastTimeZone.setText("Global Consulting in East Coast Time: " + formattedTimeEastCoast);        // Set the formatted time in the eastCoastTimeZone label
+
+// ---------- set date to current date -------- //
+        LocalDate currentDate = LocalDate.now(localSystemTimeZone);        // Get the current date in the user's local time zone
+
+        addNewApptDayDatePicker.setValue(currentDate);        // Set the current date in the DatePicker
+
+        // ------------------ appt Start / End times combo box logic ---------------//
+
+// Establish East Coast Time Zone -----------//
+
+        ZoneId eastCoastTimeZone = ZoneId.of("America/New_York");  // East Coast time zone
+
+        ZonedDateTime eastCoastDateTime = ZonedDateTime.now(eastCoastTimeZone);  // Current date and time in the East Coast time zone
+        LocalDateTime eastCoastLocalDateTime = eastCoastDateTime.toLocalDateTime();  // Convert to LocalDateTime
+        System.out.println("East Coast LocalDateTime: " + eastCoastLocalDateTime);
+
+        int yearEast = eastCoastLocalDateTime.getYear();          // Get the year component
+        int monthEast = eastCoastLocalDateTime.getMonthValue();     // Get the month component as int
+        int dayEast = eastCoastLocalDateTime.getDayOfMonth();     // Get the day of the month component
+        int hourEast = eastCoastLocalDateTime.getHour();
+        int minuteEast = eastCoastLocalDateTime.getMinute();      // Get the minute component
+
+// Establish Local System Time Zone -----------//
+
+        LocalDateTime localDateTime = LocalDateTime.now();  // Current date and time in the local system time zone
+//        System.out.println("Local System LocalDateTime: " + localDateTime);
+
+        int yearLocal = localDateTime.getYear();
+        int monthLocal = localDateTime.getMonthValue();
+        int dayLocal = localDateTime.getDayOfMonth();
+        int hourLocal = localDateTime.getHour();
+        int minuteLocal = localDateTime.getMinute();
+
+// Begin logic for combo box start appt times ---------------//
+
+        LocalDateTime timeEast = LocalDateTime.of(yearEast, monthEast, dayEast, hourEast, minuteEast);  // First EastCoastDateTime
+        LocalDateTime timeLocal = LocalDateTime.of(yearLocal, monthLocal, dayLocal, hourLocal, minuteLocal); // Second LocalDateTime
+
+        Duration duration = Duration.between(timeEast, timeLocal);  // Calculate the duration between the two LocalDateTime objects
+
+        long hoursDiffEastToLocal = duration.toHours();      // Get the number of hours in the duration
+//             System.out.println("****hoursDiffEastToLocal timeEast to timeLocal: " + hoursDiffEastToLocal);
+
+        LocalDateTime updateLocalTimeToEasternTime = timeLocal.plusHours(hoursDiffEastToLocal);
+//            System.out.println("****updateLocalTimeToEasternTime: " + updateLocalTimeToEasternTime);
+
+        int amStartLocal = 8 + (int) hoursDiffEastToLocal;
+//             System.out.println("amStartLocal: " + amStartLocal);
+        int pmEndLocal = 22 + (int) hoursDiffEastToLocal;
+//             System.out.println("pmEndLocal: " + pmEndLocal);
+
+        if (pmEndLocal >= 24){
+            pmEndLocal = pmEndLocal % 24;
+        }
+
+        LocalTime startTime = LocalTime.of(amStartLocal, 00);        // Generate start times from 8:00 AM to 9:45 PM Eastern time in 15-minute increments
+//            System.out.println("startTime: " + startTime);
+        LocalTime endTime = LocalTime.of((pmEndLocal - 1) , 45);          // last possible appointment meeting is 9:45PM eastern
+//            System.out.println("endTime: " + endTime);
+
+        while (!startTime.isAfter(endTime)) {
+            addNewApptStartTimeComboBox.getItems().add(startTime);
+            startTime = startTime.plusMinutes(15);
+        }
+
+        LocalTime endTimeExcludingStart = LocalTime.of(amStartLocal, 15);   // Generate start times from 8:15 AM to 10:00 PM Eastern time in 15-minute increments
+        LocalTime endEndTime = LocalTime.of(pmEndLocal, 0);              // last possible appointment meeting is 10:00PM eastern
+
+        while (!endTimeExcludingStart.isAfter(endEndTime)) {
+            addNewApptEndTimeComboBox.getItems().add(endTimeExcludingStart);
+            endTimeExcludingStart = endTimeExcludingStart.plusMinutes(15);
+        }
+
+
+      /**
+       * lambda expression: addNewApptStartTimeComboBox.  observable, oldValue, and newValue. These parameters represent the previous selected value, the current selected value, and the new selected value.
+       *        It Sets the selection change listener for the start time combo box
+       *        It dynamically populates the addNewApptEndTimeComboBox combo box based on the selected start time in the addNewApptStartTimeComboBox.
+       *        It ensures that only end times that are later than the selected start time are available for selection.
+       * @param observable previous selected value,
+       * @param oldValue the current selected value,
+       * @param newValue and the new selected value.
+       *  */
+        addNewApptStartTimeComboBox.valueProperty().addListener((observable, oldValue, newValue) -> {
+            // Update the end time combo box to only display values later than the selected start time
+            if (newValue != null) {
+                addNewApptEndTimeComboBox.getItems().clear();
+                LocalTime endTimeExclusive = newValue.plusMinutes(15);
+                while (!endTimeExclusive.isAfter(endEndTime)) {
+                    addNewApptEndTimeComboBox.getItems().add(endTimeExclusive);
+                    endTimeExclusive = endTimeExclusive.plusMinutes(15);
+                }
+            }
+        });
+
+// -------------------------//
 
         try {
             // --------------- apptID auto generated value -------------//
@@ -112,36 +231,6 @@ public class AddAppointmentController implements Initializable {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-// ------------------ appt Start / End times combo box logic ---------------//
-        LocalTime startTime = LocalTime.of(7, 0);        // Generate start times from 7:00 AM to 4:45 PM in 15-minute increments
-        LocalTime endTime = LocalTime.of(16, 45);
-
-        while (!startTime.isAfter(endTime)) {           // while loop to iterate through and add 15 min per increment to display 7:00 AM to 4:45 PM
-            addNewApptStartTimeComboBox.getItems().add(startTime);      // start time combo box
-            startTime = startTime.plusMinutes(15);
-        }
-
-        LocalTime endTimeExcludingStart = LocalTime.of(7, 15);        // Generate end times from 7:15 AM to 5:00 PM in 15-minute increments, excluding the start time
-        LocalTime endEndTime = LocalTime.of(17, 0);
-
-        while (!endTimeExcludingStart.isAfter(endEndTime)) {
-            addNewApptEndTimeComboBox.getItems().add(endTimeExcludingStart);        // end time combo box
-            endTimeExcludingStart = endTimeExcludingStart.plusMinutes(15);
-        }
-
-        // lambda expression:  observable, oldValue, and newValue. These parameters represent the previous selected value, the current selected value, and the new selected value.  dynamically populates the addNewApptEndTimeComboBox combo box based on the selected start time in the addNewApptStartTimeComboBox. It ensures that only end times that are later than the selected start time are available for selection.
-        addNewApptStartTimeComboBox.valueProperty().addListener((observable, oldValue, newValue) -> {            // Set the selection change listener for the start time combo box
-            // Update the end time combo box to only display values later than the selected start time
-            if (newValue != null) {
-                addNewApptEndTimeComboBox.getItems().clear();                           // clears endTime combo box
-                LocalTime endTimeExclusive = newValue.plusMinutes(15);      // sets endTimeExclusive to be 15 min greater than newValue adding 15 minutes to the selected start time
-                while (!endTimeExclusive.isAfter(endEndTime)) {                         // while loop that continues until endTimeExclusive is after the endEndTime. In each iteration, it adds endTimeExclusive to the items of the addNewApptEndTimeComboBox combo box using addNewApptEndTimeComboBox.getItems().add(endTimeExclusive).
-                    addNewApptEndTimeComboBox.getItems().add(endTimeExclusive);         // sets endTime combo box to be endTimeExclusive
-                    endTimeExclusive = endTimeExclusive.plusMinutes(15);    // updates endTimeExclusive by adding another 15 minutes
-                }
-            }
-        });
     }
 
     /**
@@ -165,6 +254,7 @@ public class AddAppointmentController implements Initializable {
 
                 int contactID = contactMap.get(selectedContactName);                // Find the corresponding Contact_ID for the selected contact name
 
+
         // ---------- Retrieve user entered values -----------//
                 int appointmentID = Integer.parseInt(addNewApptAutoGenApptIDTextField.getText());
                 String title = addNewApptTitleTextField.getText();
@@ -172,10 +262,13 @@ public class AddAppointmentController implements Initializable {
                 String location = addNewApptLocationTextField.getText();
                 String type = addNewApptTypeTextField.getText();
                 LocalDate startDate = addNewApptDayDatePicker.getValue();
+
                 LocalTime startTime = LocalTime.parse(addNewApptStartTimeComboBox.getValue().toString());
                 LocalTime endTime = LocalTime.parse(addNewApptEndTimeComboBox.getValue().toString());
                 LocalDateTime startDateTime = LocalDateTime.of(startDate, startTime);
                 LocalDateTime endDateTime = LocalDateTime.of(startDate, endTime);
+//                    System.out.println("startDateTime:  " + startDateTime);
+
                 Timestamp createDateTime = Timestamp.valueOf(LocalDateTime.now());
                 String createdBy = "admin";
                 Timestamp lastUpdateDateTime = Timestamp.valueOf(LocalDateTime.now());

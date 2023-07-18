@@ -1,7 +1,6 @@
 package Model;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.*;
 
 /**
  * class: Appointments. Encapsulates information about a Appointment, identified by apptID, apptTitle, description, location, type etc.

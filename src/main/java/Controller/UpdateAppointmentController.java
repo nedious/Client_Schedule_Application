@@ -20,12 +20,11 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.ZoneId;
+import java.time.*;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -42,21 +41,22 @@ public class UpdateAppointmentController implements Initializable {
     @FXML private TextField updateNewApptDescriptionTextField;     // description
     @FXML private TextField updateNewApptLocationTextField;        // location
 
-    @FXML private DatePicker updateNewApptDayDatePicker;           // start date picker
+    @FXML private DatePicker updateNewApptDayDatePicker;                   // start date picker
     @FXML private ComboBox<LocalTime> updateNewApptStartTimeComboBox;      // start time combo box
     @FXML private ComboBox<LocalTime> updateNewApptEndTimeComboBox;        // end time combo box
 
     @FXML private ComboBox<Integer> updateNewApptCustomerIDComboBox;     // customerID combo box
     @FXML private ComboBox<Integer> updateNewApptUserIDComboBox;         // userID combo box
-    @FXML private ComboBox<String> updateNewApptContactComboBox;        // contact combo box
+    @FXML private ComboBox<String> updateNewApptContactComboBox;         // contact combo box
     private Map<Integer, String> contactMap;        // Declare the contactMap as a field of the class
 
-    @FXML private Label systemLister;                           // local computer time dynamic
+    @FXML private Label currentSystemTimeZone;                           // local computer time dynamic
+    @FXML private Label eastCoastTimeZone;
 
 // ------------ buttons ----------//
     @FXML private Button updateNewApptSaveButton;
     @FXML private Button updateNewApptCancelButton;
-    ZoneId localSystemTimeZone = ZoneId.systemDefault();        // sets ZoneID to local System time zone
+    ZoneId localSystemTimeZone = ZoneId.systemDefault();       // Defines ZoneID of local System time zone
 
     // ------------ generate AppointmentID -------------//
     private static int appointmentID;      // appointmentID for addAppointment form to autopopulate form with appointmentID
@@ -70,7 +70,27 @@ public class UpdateAppointmentController implements Initializable {
      * */
     @Override public void initialize(URL url, ResourceBundle resourceBundle) {
 
-        systemLister.setText("Times are listed in " + localSystemTimeZone + " time.");      // set systemListener to gather local computer time zone
+//        systemLister.setText("Current local time zone: " + localSystemTimeZone + " time.");      // set systemListener to gather local computer time zone
+
+// ---------- set current time zone for user to reference -------- //
+        ZoneId systemTimeZone = ZoneId.systemDefault();        // Get the default time zone of the system
+
+        ZonedDateTime currentTimeZone = ZonedDateTime.now(systemTimeZone);        // Get the current time in the system time zone
+
+        String formattedTimeCurrentZone = currentTimeZone.format(DateTimeFormatter.ofPattern("HH:mm"));        // Format the time as Hour:Minute
+
+        String timeZoneID = systemTimeZone.getId();        // Get the time zone ID of the system
+
+        currentSystemTimeZone.setText("Current Time: " + formattedTimeCurrentZone + ", Time Zone: " + timeZoneID);        // Set the formatted time and time zone ID in the systemLister label
+
+// ---------- set east coast time for user to reference -------- //
+        LocalTime eastCoastTime = LocalTime.now(ZoneId.of("America/New_York"));        // Get the current time in the East Coast time zone
+
+        String formattedTimeEastCoast = eastCoastTime.format(DateTimeFormatter.ofPattern("HH:mm"));        // Format the time as Hour:Minute
+
+        eastCoastTimeZone.setText("Global Consulting in East Coast Time: " + formattedTimeEastCoast);        // Set the formatted time in the eastCoastTimeZone label
+
+// ------//
 
         try {
             updateNewApptAutoGenApptIDTextField.setText(String.valueOf(appointmentID));
@@ -85,7 +105,6 @@ public class UpdateAppointmentController implements Initializable {
 
             updateNewApptUserIDComboBox.setItems(userIDs);            // Set the retrieved user IDs as items in the userID combo box
 
-
             // --------------- Contact_Name combo box -------------//
             ObservableList<DAO_Contacts> contacts = DAO_Contacts.getAllContacts();            // Retrieve contacts from the database
 
@@ -98,31 +117,89 @@ public class UpdateAppointmentController implements Initializable {
         }
 
         // ------------------ appt Start / End times combo box logic ---------------//
-        LocalTime startTime = LocalTime.of(7, 0);    // Generate start times from 7:00 AM to 4:45 PM in 15-minute increments
-        LocalTime endTime = LocalTime.of(16, 45);
 
-        while (!startTime.isAfter(endTime)) {     // while loop to iterate through and add 15 min per increment to display 7:00 AM to 4:45 PM
-            updateNewApptStartTimeComboBox.getItems().add(startTime);     // start time combo box
+// Establish East Coast Time Zone -----------//
+
+        ZoneId eastCoastTimeZone = ZoneId.of("America/New_York");  // East Coast time zone
+
+        ZonedDateTime eastCoastDateTime = ZonedDateTime.now(eastCoastTimeZone);  // Current date and time in the East Coast time zone
+        LocalDateTime eastCoastLocalDateTime = eastCoastDateTime.toLocalDateTime();  // Convert to LocalDateTime
+//        System.out.println("East Coast LocalDateTime: " + eastCoastLocalDateTime);
+
+        int yearEast = eastCoastLocalDateTime.getYear();          // Get the year component
+        int monthEast = eastCoastLocalDateTime.getMonthValue();     // Get the month component as int
+        int dayEast = eastCoastLocalDateTime.getDayOfMonth();     // Get the day of the month component
+        int hourEast = eastCoastLocalDateTime.getHour();
+        int minuteEast = eastCoastLocalDateTime.getMinute();      // Get the minute component
+
+// Establish Local System Time Zone -----------//
+
+        LocalDateTime localDateTime = LocalDateTime.now();  // Current date and time in the local system time zone
+//        System.out.println("Local System LocalDateTime: " + localDateTime);
+
+        int yearLocal = localDateTime.getYear();
+        int monthLocal = localDateTime.getMonthValue();
+        int dayLocal = localDateTime.getDayOfMonth();
+        int hourLocal = localDateTime.getHour();
+        int minuteLocal = localDateTime.getMinute();
+
+// Begin logic for combo box start appt times ---------------//
+
+        LocalDateTime timeEast = LocalDateTime.of(yearEast, monthEast, dayEast, hourEast, minuteEast);  // First EastCoastDateTime
+        LocalDateTime timeLocal = LocalDateTime.of(yearLocal, monthLocal, dayLocal, hourLocal, minuteLocal); // Second LocalDateTime
+
+        Duration duration = Duration.between(timeEast, timeLocal);  // Calculate the duration between the two LocalDateTime objects
+
+        long hoursDiffEastToLocal = duration.toHours();      // Get the number of hours in the duration
+//        System.out.println("****hoursDiffEastToLocal timeEast to timeLocal: " + hoursDiffEastToLocal);
+
+        LocalDateTime updateLocalTimeToEasternTime = timeLocal.plusHours(hoursDiffEastToLocal);
+//        System.out.println("****updateLocalTimeToEasternTime: " + updateLocalTimeToEasternTime);
+
+        int amStartLocal = 8 + (int) hoursDiffEastToLocal;
+//        System.out.println("amStartLocal: " + amStartLocal);
+        int pmEndLocal = 22 + (int) hoursDiffEastToLocal;
+//        System.out.println("pmEndLocal: " + pmEndLocal);
+
+        if (pmEndLocal >= 24){
+            pmEndLocal = pmEndLocal % 24;
+        }
+
+        LocalTime startTime = LocalTime.of(amStartLocal, 00);        // Generate start times from 8:00 AM to 9:45 PM Eastern time in 15-minute increments
+//        System.out.println("startTime: " + startTime);
+        LocalTime endTime = LocalTime.of((pmEndLocal - 1) , 45);          // last possible appointment meeting is 9:45PM eastern
+//        System.out.println("endTime: " + endTime);
+
+        while (!startTime.isAfter(endTime)) {
+            updateNewApptStartTimeComboBox.getItems().add(startTime);
             startTime = startTime.plusMinutes(15);
         }
 
-        LocalTime endTimeExcludingStart = LocalTime.of(7, 15);      // Generate end times from 7:15 AM to 5:00 PM in 15-minute increments, excluding the start time
-        LocalTime endEndTime = LocalTime.of(17, 0);
+        LocalTime endTimeExcludingStart = LocalTime.of(amStartLocal, 15);   // Generate start times from 8:15 AM to 10:00 PM Eastern time in 15-minute increments
+        LocalTime endEndTime = LocalTime.of(pmEndLocal, 0);              // last possible appointment meeting is 10:00PM eastern
 
         while (!endTimeExcludingStart.isAfter(endEndTime)) {
-            updateNewApptEndTimeComboBox.getItems().add(endTimeExcludingStart);    // end time combo box
+            updateNewApptEndTimeComboBox.getItems().add(endTimeExcludingStart);
             endTimeExcludingStart = endTimeExcludingStart.plusMinutes(15);
         }
 
-        // lambda expression:  observable, oldValue, and newValue. These parameters represent the previous selected value, the current selected value, and the new selected value.  dynamically populates the addNewApptEndTimeComboBox combo box based on the selected start time in the addNewApptStartTimeComboBox. It ensures that only end times that are later than the selected start time are available for selection.
-        updateNewApptStartTimeComboBox.valueProperty().addListener((observable, oldValue, newValue) -> {       // Set the selection change listener for the start time combo box
+        /**
+         * lambda expression: updateNewApptStartTimeComboBox.  observable, oldValue, and newValue. These parameters represent the previous selected value, the current selected value, and the new selected value.
+         *        It Sets the selection change listener for the start time combo box
+         *        It dynamically populates the updateNewApptEndTimeComboBox combo box based on the selected start time in the updateNewApptStartTimeComboBox.
+         *        It ensures that only end times that are later than the selected start time are available for selection.
+         * @param observable previous selected value,
+         * @param oldValue the current selected value,
+         * @param newValue and the new selected value.
+         *  */
+        updateNewApptStartTimeComboBox.valueProperty().addListener((observable, oldValue, newValue) -> {
             // Update the end time combo box to only display values later than the selected start time
             if (newValue != null) {
-                updateNewApptEndTimeComboBox.getItems().clear();                        // clears endTime combo box
-                LocalTime endTimeExclusive = newValue.plusMinutes(15);      // sets endTimeExclusive to be 15 min greater than newValue adding 15 minutes to the selected start time
-                while (!endTimeExclusive.isAfter(endEndTime)) {                         // while loop that continues until endTimeExclusive is after the endEndTime. In each iteration, it adds endTimeExclusive to the items of the addNewApptEndTimeComboBox combo box using addNewApptEndTimeComboBox.getItems().add(endTimeExclusive).
-                    updateNewApptEndTimeComboBox.getItems().add(endTimeExclusive);      // sets endTime combo box to be endTimeExclusive
-                    endTimeExclusive = endTimeExclusive.plusMinutes(15);     // updates endTimeExclusive by adding another 15 minutes
+                updateNewApptEndTimeComboBox.getItems().clear();
+                LocalTime endTimeExclusive = newValue.plusMinutes(15);
+                while (!endTimeExclusive.isAfter(endEndTime)) {
+                    updateNewApptEndTimeComboBox.getItems().add(endTimeExclusive);
+                    endTimeExclusive = endTimeExclusive.plusMinutes(15);
                 }
             }
         });
@@ -139,7 +216,9 @@ public class UpdateAppointmentController implements Initializable {
         updateNewApptDescriptionTextField.setText(appointment.getApptDescription());            // description
         updateNewApptLocationTextField.setText(appointment.getApptLocation());                  // location
 
-        updateNewApptDayDatePicker.setValue(appointment.getApptDayPicker());                          // appointment date picker
+        LocalDate appointmentDate = appointment.getApptStartDateTime().toLocalDate();      // Convert LocalDateTime to LocalDate for the DatePicker
+        updateNewApptDayDatePicker.setValue(appointmentDate);                              // appointment date picker
+
         updateNewApptStartTimeComboBox.setValue(appointment.getApptStartDateTime().toLocalTime());    // start time combo box
         updateNewApptEndTimeComboBox.setValue(appointment.getApptEndDateTime().toLocalTime());        // end time combo box
 
@@ -177,11 +256,14 @@ public class UpdateAppointmentController implements Initializable {
                 String location = updateNewApptLocationTextField.getText();
                 String type = updateNewApptTypeTextField.getText();
                 LocalDate startDate = updateNewApptDayDatePicker.getValue();
+
                 LocalTime startTime = LocalTime.parse(updateNewApptStartTimeComboBox.getValue().toString());
                 LocalTime endTime = LocalTime.parse(updateNewApptEndTimeComboBox.getValue().toString());
                 LocalDateTime startDateTime = LocalDateTime.of(startDate, startTime);
                 LocalDateTime endDateTime = LocalDateTime.of(startDate, endTime);
+
                 Timestamp createDateTime = Timestamp.valueOf(LocalDateTime.now());
+
                 String createdBy = "admin";
                 Timestamp lastUpdateDateTime = Timestamp.valueOf(LocalDateTime.now());
                 String lastUpdatedBy = "admin";
@@ -190,7 +272,7 @@ public class UpdateAppointmentController implements Initializable {
 
                 // Create the SQL update statement
                 String sqlUpdate =
-                        "UPDATE appointments SET Title=?, Description=?, Location=?, Type=?, Start=?, End=?, Create_Date=?, Created_By=?, Last_Update=?, Last_Updated_By=?, Customer_ID=?, User_ID=?, Contact_ID=? " +
+                        "UPDATE appointments SET Title=?, Description=?, Location=?, Type=?, Start=?, End=?, Created_By=?, Last_Update=?, Last_Updated_By=?, Customer_ID=?, User_ID=?, Contact_ID=? " +
                         "WHERE Appointment_ID=?";
 
                 PreparedStatement preparedStatement = JDBC.getConnection().prepareStatement(sqlUpdate);
@@ -201,18 +283,25 @@ public class UpdateAppointmentController implements Initializable {
                 preparedStatement.setString(4, type);
                 preparedStatement.setTimestamp(5, Timestamp.valueOf(startDateTime));
                 preparedStatement.setTimestamp(6, Timestamp.valueOf(endDateTime));
-                preparedStatement.setTimestamp(7, createDateTime);
-                preparedStatement.setString(8, createdBy);
-                preparedStatement.setTimestamp(9, lastUpdateDateTime);
-                preparedStatement.setString(10, lastUpdatedBy);
-                preparedStatement.setInt(11, customerID);
-                preparedStatement.setInt(12, userID);
-                preparedStatement.setInt(13, contactID);
-                preparedStatement.setInt(14, appointmentID);
+//                preparedStatement.setTimestamp(7, createDateTime);
+                preparedStatement.setString(7, createdBy);
+                preparedStatement.setTimestamp(8, lastUpdateDateTime);
+                preparedStatement.setString(9, lastUpdatedBy);
+                preparedStatement.setInt(10, customerID);
+                preparedStatement.setInt(11, userID);
+                preparedStatement.setInt(12, contactID);
+                preparedStatement.setInt(13, appointmentID);
 
 
                 int rowsAffected = preparedStatement.executeUpdate();
                 System.out.println(rowsAffected + " row inserted successfully. (Expecting 1 row inserted)");
+
+                // alert for change/update to appointment.
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Appointment Change");
+                alert.setHeaderText(null);
+                alert.setContentText("Appointment ID:  " + appointmentID + "\n\nType:  '" + type + "' \n\nHas been updated.");
+                alert.showAndWait();
 
                 FXMLLoader loader = new FXMLLoader();
                 loader.setLocation(getClass().getResource("/imhoff/dbclientappv8/ViewAppointmentsCustomers.fxml"));

@@ -75,7 +75,7 @@
         <ComboBox fx:id="addNewApptCustomerIDComboBox" layoutX="210.0" layoutY="487.0" prefWidth="300.0" />
         <ComboBox fx:id="addNewApptUserIDComboBox" layoutX="210.0" layoutY="537.0" prefWidth="300.0" />
         <ComboBox fx:id="addNewApptContactComboBox" layoutX="210.0" layoutY="587.0" prefWidth="300.0" />
-        <Label fx:id="systemLister" alignment="CENTER" contentDisplay="CENTER" layoutX="117.0" layoutY="648.0" prefHeight="30.0" prefWidth="350.0" text="Time listed in:" textFill="#190aff">
+        <Label fx:id="currentSystemTimeZone" alignment="CENTER" contentDisplay="CENTER" layoutX="68.0" layoutY="631.0" prefHeight="30.0" prefWidth="442.0" text="Local time zone" textFill="#190aff">
             <font>
                 <Font size="18.0" />
             </font>
@@ -90,5 +90,10 @@
             <Font size="18.0" />
          </font>
       </Button>
+      <Label fx:id="eastCoastTimeZone" alignment="CENTER" contentDisplay="CENTER" layoutX="117.0" layoutY="664.0" prefHeight="30.0" prefWidth="350.0" text="eastCoastTimeZone" textFill="#190aff">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
     </children>
 </Pane>
