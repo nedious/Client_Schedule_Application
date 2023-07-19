@@ -177,7 +177,7 @@ public class AppointmentsCustomersController {
 
             int customerIDToDelete = customerMainTable.getSelectionModel().getSelectedItem().getCustomerID();
 
-        Alert alertDelete = new Alert(Alert.AlertType.CONFIRMATION);
+        Alert alertDelete = new Alert(Alert.AlertType.WARNING);
         alertDelete.setTitle("DELETING");
         alertDelete.setHeaderText("Do you want to DELETE the selected CUSTOMER and ALL APPOINTMENTS associated with this customer?");
         alertDelete.setContentText("Customer ID:  " + customerIDToDelete + "\n\nAnd all associated Appointment data will be DELETED");
@@ -205,11 +205,10 @@ public class AppointmentsCustomersController {
 
                 if (selectedCustomer == associatedCustomerAppointments) {
 
-                    Alert alertApptDelete = new Alert(Alert.AlertType.CONFIRMATION);
+                    Alert alertApptDelete = new Alert(Alert.AlertType.WARNING);
                     alertApptDelete.setTitle("Attention");
                     alertApptDelete.setHeaderText("The following Appointment has been deleted:");
                     alertApptDelete.setContentText("Appointment ID:  " + appointmentID + "\n\nType:  '" + appointmentType + "'\n\nTime:  " + apptHourMinTime);
-                    Optional<ButtonType> confirm = alertApptDelete.showAndWait();
 
                     String sqlDeleteAppointment =  "DELETE FROM appointments WHERE Appointment_ID = ?";
                     JDBC.getConnection().prepareStatement(sqlDeleteAppointment);
@@ -244,7 +243,7 @@ public class AppointmentsCustomersController {
             int appointmenttIDToDelete = appointmentMainTable.getSelectionModel().getSelectedItem().getApptID();
             String deleteApptType = appointmentMainTable.getSelectionModel().getSelectedItem().getApptType();
 
-            Alert alertDelete = new Alert(Alert.AlertType.CONFIRMATION);
+            Alert alertDelete = new Alert(Alert.AlertType.WARNING);
             alertDelete.setTitle("DELETING");
             alertDelete.setHeaderText("Do you want to DELETE the selected APPOINTMENT?");
             alertDelete.setContentText("Appointment ID:  " + appointmenttIDToDelete + "\n\nType:  '" + deleteApptType + "' \n\nWill be DELETED.");

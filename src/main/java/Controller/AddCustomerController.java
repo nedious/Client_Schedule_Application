@@ -63,11 +63,9 @@ public class AddCustomerController implements Initializable {
      */
     @Override public void initialize(URL url, ResourceBundle resourceBundle) {
 
-        addCustomerAutoGenerateIDNumTextField.setText(String.valueOf(customerID));      // sets customerID field
+        addCustomerAutoGenerateIDNumTextField.setText(String.valueOf(customerID + 1));      // sets customerID field
 
         try {
-            JDBC.getConnection();
-
         // --------- STATE/PROVINCE table to observable List ------- //
             ObservableList<DAO_StateProvinceDivision> allDivisionsList = DAO_StateProvinceDivision.getAllStateProvinceDivision();
             ObservableList<String> allStateProvinceDivisionsNames = FXCollections.observableArrayList();
@@ -99,8 +97,6 @@ public class AddCustomerController implements Initializable {
      */
     @FXML public void addCustomerCountryComboBoxSelectionChange(ActionEvent event) throws SQLException {
         try {
-            JDBC.getConnection();
-
             // --------- STATE/PROVINCE table to observable List ------- //
             ObservableList<DAO_StateProvinceDivision> allDivisionsList = DAO_StateProvinceDivision.getAllStateProvinceDivision();
             ObservableList<String> allStateProvinceDivisionsNames = FXCollections.observableArrayList();
