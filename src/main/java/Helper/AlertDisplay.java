@@ -85,7 +85,7 @@ public class AlertDisplay {
             case 9:
                 alertError.setTitle("Error");
                 alertError.setHeaderText("No customer selected");
-                alertError.setContentText("Select customer to update");
+                alertError.setContentText("Select a customer");
                 alertError.showAndWait();
                 break;
 // --------------------- add/update appointment errors --------------------- //
@@ -153,8 +153,13 @@ public class AlertDisplay {
             case 20:
                 alertError.setTitle("Error");
                 alertError.setHeaderText("No appointment selected");
-                alertError.setContentText("Select appointment to update");
+                alertError.setContentText("Select appointment");
                 alertError.showAndWait();
+                break;
+            case 21:
+                alertConfirmation.setTitle("No Upcoming Appointments");
+                alertConfirmation.setHeaderText("No Upcoming Appointments");
+                alertConfirmation.showAndWait();
                 break;
         }
     }

@@ -25,6 +25,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 
@@ -165,20 +168,19 @@ public class AppointmentsCustomersController {
     @FXML void deleteSelectedCustomerButtonClick(ActionEvent event) throws SQLException {
 
         ObservableList<Appointments> allAppointments = DAO_Appointments.getAllAppointments();
-        int customerIDToDelete = customerMainTable.getSelectionModel().getSelectedItem().getCustomerID();
 
+        Customers selectedCustomerToDelete = customerMainTable.getSelectionModel().getSelectedItem();       // selectedCustomer data to autopopulate in form
 
-//        int customerIDToDelete = customerMainTable.getSelectionModel().getSelectedItem().getCustomerID();
-//        int associatedApptID = appointmentMainTable.getSelectionModel().getSelectedItem().getApptID();
-//        String associatedApptType = appointmentMainTable.getSelectionModel().getSelectedItem().getApptType();
-//        add a try catch block?
+        if(selectedCustomerToDelete == null){
+            AlertDisplay.displayAlert(9);
+        } else if (selectedCustomerToDelete != null) {
+
+            int customerIDToDelete = customerMainTable.getSelectionModel().getSelectedItem().getCustomerID();
 
         Alert alertDelete = new Alert(Alert.AlertType.CONFIRMATION);
         alertDelete.setTitle("DELETING");
         alertDelete.setHeaderText("Do you want to DELETE the selected CUSTOMER and ALL APPOINTMENTS associated with this customer?");
         alertDelete.setContentText("Customer ID:  " + customerIDToDelete + "\n\nAnd all associated Appointment data will be DELETED");
-
-//        alertDelete.setContentText("Appointment ID:  " + appointmenttIDToDelete + "\n\nType:  '" + deleteApptType + "' \n\nWill be DELETED.");
 
         Optional<ButtonType> result = alertDelete.showAndWait();
 
@@ -193,7 +195,22 @@ public class AppointmentsCustomersController {
 
             for (Appointments appointment: allAppointments) {
                 int associatedCustomerAppointments = appointment.getApptCustomerID();
+                int appointmentID = appointment.getApptID();
+                String appointmentType = appointment.getApptType();
+
+                LocalDateTime appointmentStartTime = appointment.getApptStartDateTime();
+
+                DateTimeFormatter hourMinuteTime = DateTimeFormatter.ofPattern("HH:mm");
+                String apptHourMinTime = appointmentStartTime.format(hourMinuteTime);
+
                 if (selectedCustomer == associatedCustomerAppointments) {
+
+                    Alert alertApptDelete = new Alert(Alert.AlertType.CONFIRMATION);
+                    alertApptDelete.setTitle("Attention");
+                    alertApptDelete.setHeaderText("The following Appointment has been deleted:");
+                    alertApptDelete.setContentText("Appointment ID:  " + appointmentID + "\n\nType:  '" + appointmentType + "'\n\nTime:  " + apptHourMinTime);
+                    Optional<ButtonType> confirm = alertApptDelete.showAndWait();
+
                     String sqlDeleteAppointment =  "DELETE FROM appointments WHERE Appointment_ID = ?";
                     JDBC.getConnection().prepareStatement(sqlDeleteAppointment);
                 }
@@ -207,6 +224,42 @@ public class AppointmentsCustomersController {
             ObservableList<Appointments> refreshAppointmentList = DAO_Appointments.getAllAppointments();
             appointmentMainTable.setItems(refreshAppointmentList);
         }
+        }
+    }
+
+    /**
+     * Method: deleteSelectedAppointmentButtonClick. Deletes selected appointment
+     * @param event user click
+     * @throws IOException
+     * */
+    @FXML void deleteSelectedAppointmentButtonClick(ActionEvent event) {
+
+        Appointments selectedAppointmentToDelete = appointmentMainTable.getSelectionModel().getSelectedItem();       // selectedCustomer data to autopopulate in form
+
+        if(selectedAppointmentToDelete == null){
+            AlertDisplay.displayAlert(20);
+        } else if (selectedAppointmentToDelete != null) {
+
+        try {
+            int appointmenttIDToDelete = appointmentMainTable.getSelectionModel().getSelectedItem().getApptID();
+            String deleteApptType = appointmentMainTable.getSelectionModel().getSelectedItem().getApptType();
+
+            Alert alertDelete = new Alert(Alert.AlertType.CONFIRMATION);
+            alertDelete.setTitle("DELETING");
+            alertDelete.setHeaderText("Do you want to DELETE the selected APPOINTMENT?");
+            alertDelete.setContentText("Appointment ID:  " + appointmenttIDToDelete + "\n\nType:  '" + deleteApptType + "' \n\nWill be DELETED.");
+            Optional<ButtonType> result = alertDelete.showAndWait();
+
+            if (result.isPresent() && result.get() == ButtonType.OK) {
+                DAO_Appointments.deleteAppointment(appointmenttIDToDelete);
+
+                ObservableList<Appointments> allAppointments = DAO_Appointments.getAllAppointments();
+                appointmentMainTable.setItems(allAppointments);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        }
     }
 
     /**
@@ -218,7 +271,7 @@ public class AppointmentsCustomersController {
 
         Customers selectedCustomer = customerMainTable.getSelectionModel().getSelectedItem();       // selectedCustomer data to autopopulate in form
 
-        if(customerMainTable.getSelectionModel().getSelectedItem() == null){
+        if(selectedCustomer == null){
             AlertDisplay.displayAlert(9);
         } else if (selectedCustomer != null) {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/imhoff/dbclientappv8/ViewUpdateCustomer.fxml"));
@@ -265,38 +318,15 @@ public class AppointmentsCustomersController {
     }
 
     /**
-     * Method: deleteSelectedAppointmentButtonClick. Deletes selected appointment
-     * @param event user click
-     * @throws IOException
-     * */
-    @FXML void deleteSelectedAppointmentButtonClick(ActionEvent event) {
-
-            try {
-                int appointmenttIDToDelete = appointmentMainTable.getSelectionModel().getSelectedItem().getApptID();
-                String deleteApptType = appointmentMainTable.getSelectionModel().getSelectedItem().getApptType();
-
-                Alert alertDelete = new Alert(Alert.AlertType.CONFIRMATION);
-                alertDelete.setTitle("DELETING");
-                alertDelete.setHeaderText("Do you want to DELETE the selected APPOINTMENT?");
-                alertDelete.setContentText("Appointment ID:  " + appointmenttIDToDelete + "\n\nType:  '" + deleteApptType + "' \n\nWill be DELETED.");
-                Optional<ButtonType> result = alertDelete.showAndWait();
-
-                if (result.isPresent() && result.get() == ButtonType.OK) {
-                    DAO_Appointments.deleteAppointment(appointmenttIDToDelete);
-
-                    ObservableList<Appointments> allAppointments = DAO_Appointments.getAllAppointments();
-                    appointmentMainTable.setItems(allAppointments);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-    }
-
-    /**
      * Method: reportsButtonClick. Generates reports form
      * @param event user click
      * */
     @FXML void reportsButtonClick(ActionEvent event) {
+
+
+
+        //// START HERE
+
 
     }
 
