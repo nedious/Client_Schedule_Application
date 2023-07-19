@@ -15,6 +15,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.transform.Translate;
 import javafx.stage.Stage;
 
 import java.io.FileWriter;
@@ -69,7 +70,7 @@ public class LoginController implements Initializable {
      */
     @FXML private void loginLoginButtonClick(ActionEvent event) throws SQLException, IOException, Exception {
         try {
-//            ResourceBundle resourceBundle = ResourceBundle.getBundle("/Helper/login", Locale.getDefault());
+            ResourceBundle resourceBundle = ResourceBundle.getBundle("translation", Locale.getDefault());
 
             String username = loginUsernameTextField.getText();    // get username text from text field
             String password = loginPasswordField.getText();        // get password text from text field
@@ -129,12 +130,17 @@ public class LoginController implements Initializable {
                     AlertDisplay.displayAlert(21);
                 }
             } else  {
-                AlertDisplay.displayAlert(1);       // Alert: Invalid Values. Inherited from helper.AlertDisplay.
+//                AlertDisplay.displayAlert(1);       // Alert: Invalid Values. Inherited from helper.AlertDisplay.
 
 //                Alert alert = new Alert(Alert.AlertType.ERROR);
 //                alert.setTitle(resourceBundle.getString("errorTitle"));
 //                alert.setContentText(resourceBundle.getString("errorText"));
 //                alert.show();
+
+                Alert alertError = new Alert(Alert.AlertType.ERROR);
+                alertError.setTitle(resourceBundle.getString("errorTitle"));
+                alertError.setContentText(resourceBundle.getString("errorText"));
+                alertError.showAndWait();
 
                 printOutput.print("Invalid login for: '" + username + "' at: " + Timestamp.valueOf(LocalDateTime.now()) + "\n");  // write to loginReport object
             }
@@ -157,30 +163,25 @@ public class LoginController implements Initializable {
     /**
      * Method: initialize. generates data for login screen. Allows text to be translated to french via resource bundle. Genarates user location and time zone.
      * @param url
-     * @param resourceBundle
+     * @param rb
      */
-    @Override public void initialize(URL url, ResourceBundle resourceBundle) {
-        try {
-            Locale locale = Locale.getDefault();
-            Locale.setDefault(locale);
-            ZoneId zoneId = ZoneId.systemDefault();
-            loginTimeZoneDynamicUpdate.setText(String.valueOf(zoneId));
+    @Override public void initialize(URL url, ResourceBundle rb) {
+        // Load the appropriate resource bundle based on the user's locale
+//        Locale locale = Locale.getDefault();
+        Locale locale = Locale.getDefault();
+        Locale.setDefault(locale);
+        ZoneId zoneId = ZoneId.systemDefault();
+        loginTimeZoneDynamicUpdate.setText(String.valueOf(zoneId));
 
-            // TODO: make sure the resourceBundle key value pairs are accurate
-            resourceBundle = ResourceBundle.getBundle("Languages/login",Locale.getDefault());
-            loginSecureLoginLabel.setText(resourceBundle.getString("login"));
-            loginUsernameLabel.setText(resourceBundle.getString("username"));
-            loginPasswordLabel.setText(resourceBundle.getString("password"));
-            loginLoginButton.setText(resourceBundle.getString("loginButton"));
-            loginExitButton.setText(resourceBundle.getString("exitButton"));
-            loginTimeZoneLabel.setText(resourceBundle.getString("location"));
+        ResourceBundle resourceBundle = ResourceBundle.getBundle("translation");
 
-//            AlertDisplay.displayAlert(1); is the only alert that needs translation
-
-        }catch (MissingResourceException e) {
-            System.out.println("Resource Bundle missing: " + e);
-        } catch (Exception e) {
-            System.out.println(e);
-        }
+        // Set translations for labels and buttons
+        loginSecureLoginLabel.setText(resourceBundle.getString("loginSecureLoginLabel"));
+        loginUsernameLabel.setText(resourceBundle.getString("loginUsernameLabel"));
+        loginPasswordLabel.setText(resourceBundle.getString("loginPasswordLabel"));
+        loginLoginButton.setText(resourceBundle.getString("loginLoginButton"));
+        loginExitButton.setText(resourceBundle.getString("loginExitButton"));
+        loginTimeZoneLabel.setText(resourceBundle.getString("loginTimeZoneLabel"));
+//        loginTimeZoneDynamicUpdate.setText(resourceBundle.getString("loginTimeZoneDynamicUpdate"));
     }
     }

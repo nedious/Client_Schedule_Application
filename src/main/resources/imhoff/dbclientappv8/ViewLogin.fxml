@@ -57,22 +57,16 @@
             <PasswordField fx:id="loginPasswordField" layoutX="87.0" layoutY="158.0" promptText="Password" />
             <Button fx:id="loginLoginButton" layoutX="30.0" layoutY="215.0" mnemonicParsing="false" onAction="#loginLoginButtonClick" prefHeight="31.0" prefWidth="210.0" style="-fx-background-color: #6ba3d5;" text="Login" textFill="#f5f3f3" />
             <Button fx:id="loginExitButton" layoutX="30.0" layoutY="254.0" mnemonicParsing="false" onAction="#loginExitButtonClick" prefHeight="32.0" prefWidth="210.0" style="-fx-background-color: #6ba3d5;" text="Exit" textFill="#f5f3f3" />
-            <Label fx:id="loginTimeZoneLabel" alignment="CENTER" layoutX="18.0" layoutY="353.0" text="Time Zone">
+            <Label fx:id="loginTimeZoneLabel" alignment="CENTER" layoutX="11.0" layoutY="331.0" text="Time Zone:">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <Label fx:id="loginTimeZoneDynamicUpdate" alignment="CENTER" layoutX="119.0" layoutY="353.0" prefHeight="18.0" prefWidth="112.0" text="TImeZoneLocal">
+            <Label fx:id="loginTimeZoneDynamicUpdate" alignment="CENTER" layoutX="82.0" layoutY="331.0" prefHeight="18.0" prefWidth="173.0" text="TImeZoneLocal">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <SplitMenuButton fx:id="loginLanguageMenu" layoutX="31.0" layoutY="308.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="206.0" text="Language: English">
-              <items>
-                <MenuItem fx:id="loginLanguageEnglish" mnemonicParsing="false" text="English" />
-                <MenuItem fx:id="loginLanguageFrench" mnemonicParsing="false" text="Français" />
-              </items>
-            </SplitMenuButton>
          </children>
       </AnchorPane>
    </right>
