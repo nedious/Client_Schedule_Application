@@ -167,7 +167,6 @@ public class LoginController implements Initializable {
      */
     @Override public void initialize(URL url, ResourceBundle rb) {
         // Load the appropriate resource bundle based on the user's locale
-//        Locale locale = Locale.getDefault();
         Locale locale = Locale.getDefault();
         Locale.setDefault(locale);
         ZoneId zoneId = ZoneId.systemDefault();
