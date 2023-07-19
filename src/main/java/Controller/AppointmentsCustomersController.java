@@ -175,54 +175,52 @@ public class AppointmentsCustomersController {
             AlertDisplay.displayAlert(9);
         } else if (selectedCustomerToDelete != null) {
 
-            int customerIDToDelete = customerMainTable.getSelectionModel().getSelectedItem().getCustomerID();
+        int customerIDToDelete = customerMainTable.getSelectionModel().getSelectedItem().getCustomerID();
 
-        Alert alertDelete = new Alert(Alert.AlertType.WARNING);
+        Alert alertDelete = new Alert(Alert.AlertType.CONFIRMATION);
         alertDelete.setTitle("DELETING");
         alertDelete.setHeaderText("Do you want to DELETE the selected CUSTOMER and ALL APPOINTMENTS associated with this customer?");
         alertDelete.setContentText("Customer ID:  " + customerIDToDelete + "\n\nAnd all associated Appointment data will be DELETED");
-
         Optional<ButtonType> result = alertDelete.showAndWait();
 
+
         if (result.isPresent() && result.get() == ButtonType.OK) {
-            customerIDToDelete = customerMainTable.getSelectionModel().getSelectedItem().getCustomerID();
-            DAO_Appointments.deleteAppointment(customerIDToDelete);
+            int selectedCustomerID = customerMainTable.getSelectionModel().getSelectedItem().getCustomerID();
 
-            String sqlDelete = "DELETE FROM customers WHERE Customer_ID = ?";
-            PreparedStatement preparedStatement = JDBC.getConnection().prepareStatement(sqlDelete);
+            try {
+                for (Appointments appointment: allAppointments) {
+                    int associatedAppointmentsWithCustomerID = appointment.getApptCustomerID();
+                    int appointmentID = appointment.getApptID();
+                    String appointmentType = appointment.getApptType();
 
-            int selectedCustomer = customerMainTable.getSelectionModel().getSelectedItem().getCustomerID();
+                    LocalDateTime appointmentStartTime = appointment.getApptStartDateTime();
+                        DateTimeFormatter hourMinuteTime = DateTimeFormatter.ofPattern("HH:mm");
+                            String apptHourMinTime = appointmentStartTime.format(hourMinuteTime);
 
-            for (Appointments appointment: allAppointments) {
-                int associatedCustomerAppointments = appointment.getApptCustomerID();
-                int appointmentID = appointment.getApptID();
-                String appointmentType = appointment.getApptType();
+                        if (selectedCustomerID == associatedAppointmentsWithCustomerID) {
 
-                LocalDateTime appointmentStartTime = appointment.getApptStartDateTime();
+                            Alert alertApptDelete = new Alert(Alert.AlertType.CONFIRMATION);
+                            alertApptDelete.setTitle("Attention");
+                            alertApptDelete.setHeaderText("The following Appointment has been deleted:");
+                            alertApptDelete.setContentText("Appointment ID:  " + appointmentID + "\n\nType:  '" + appointmentType + "'\n\nTime:  " + apptHourMinTime);
+                            Optional<ButtonType> ok = alertApptDelete.showAndWait();
 
-                DateTimeFormatter hourMinuteTime = DateTimeFormatter.ofPattern("HH:mm");
-                String apptHourMinTime = appointmentStartTime.format(hourMinuteTime);
+                            DAO_Appointments.deleteAppointmentWithCustomerID(selectedCustomerID);
 
-                if (selectedCustomer == associatedCustomerAppointments) {
+                            ObservableList<Appointments> updatedAppointments = DAO_Appointments.getAllAppointments();
+                            appointmentMainTable.setItems(updatedAppointments);
+                        }
+                }
 
-                    Alert alertApptDelete = new Alert(Alert.AlertType.WARNING);
-                    alertApptDelete.setTitle("Attention");
-                    alertApptDelete.setHeaderText("The following Appointment has been deleted:");
-                    alertApptDelete.setContentText("Appointment ID:  " + appointmentID + "\n\nType:  '" + appointmentType + "'\n\nTime:  " + apptHourMinTime);
+                DAO_Customers.deleteCustomerWithCustomerID(selectedCustomerID);
 
-                    String sqlDeleteAppointment =  "DELETE FROM appointments WHERE Appointment_ID = ?";
-                    JDBC.getConnection().prepareStatement(sqlDeleteAppointment);
+                ObservableList<Customers> updatedCustomers = DAO_Customers.getAllCustomers();
+                customerMainTable.setItems(updatedCustomers);
+
+            } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
-            preparedStatement.setInt(1, selectedCustomer);
-            preparedStatement.execute();
-
-            ObservableList<Customers> refreshCustomerList = DAO_Customers.getAllCustomers();
-            customerMainTable.setItems(refreshCustomerList);
-
-            ObservableList<Appointments> refreshAppointmentList = DAO_Appointments.getAllAppointments();
-            appointmentMainTable.setItems(refreshAppointmentList);
-        }
         }
     }
 
@@ -243,7 +241,7 @@ public class AppointmentsCustomersController {
             int appointmenttIDToDelete = appointmentMainTable.getSelectionModel().getSelectedItem().getApptID();
             String deleteApptType = appointmentMainTable.getSelectionModel().getSelectedItem().getApptType();
 
-            Alert alertDelete = new Alert(Alert.AlertType.WARNING);
+            Alert alertDelete = new Alert(Alert.AlertType.CONFIRMATION);
             alertDelete.setTitle("DELETING");
             alertDelete.setHeaderText("Do you want to DELETE the selected APPOINTMENT?");
             alertDelete.setContentText("Appointment ID:  " + appointmenttIDToDelete + "\n\nType:  '" + deleteApptType + "' \n\nWill be DELETED.");

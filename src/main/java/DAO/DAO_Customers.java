@@ -95,7 +95,20 @@ public class DAO_Customers {
         return customerIDs;
     }
 
-
+    /**
+     * Method: deleteCustomerWithCustomerID. Customer with the appropriate Customer_ID is deleted
+     * @param customerID
+     * @return deleteResult
+     * @throws SQLException
+     */
+    public static int deleteCustomerWithCustomerID(int customerID) throws SQLException{
+        String sqlDelete = "DELETE FROM customers WHERE Customer_ID=?";
+        PreparedStatement preparedStatement = JDBC.getConnection().prepareStatement(sqlDelete);
+        preparedStatement.setInt(1, customerID);
+        int deleteResult = preparedStatement.executeUpdate();
+        preparedStatement.close();
+        return deleteResult;
+    }
 }
 
 

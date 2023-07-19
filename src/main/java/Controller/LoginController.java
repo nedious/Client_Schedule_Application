@@ -69,6 +69,8 @@ public class LoginController implements Initializable {
      */
     @FXML private void loginLoginButtonClick(ActionEvent event) throws SQLException, IOException, Exception {
         try {
+//            ResourceBundle resourceBundle = ResourceBundle.getBundle("/Helper/login", Locale.getDefault());
+
             String username = loginUsernameTextField.getText();    // get username text from text field
             String password = loginPasswordField.getText();        // get password text from text field
 
@@ -129,6 +131,11 @@ public class LoginController implements Initializable {
             } else  {
                 AlertDisplay.displayAlert(1);       // Alert: Invalid Values. Inherited from helper.AlertDisplay.
 
+//                Alert alert = new Alert(Alert.AlertType.ERROR);
+//                alert.setTitle(resourceBundle.getString("errorTitle"));
+//                alert.setContentText(resourceBundle.getString("errorText"));
+//                alert.show();
+
                 printOutput.print("Invalid login for: '" + username + "' at: " + Timestamp.valueOf(LocalDateTime.now()) + "\n");  // write to loginReport object
             }
             printOutput.close();
@@ -168,10 +175,12 @@ public class LoginController implements Initializable {
             loginExitButton.setText(resourceBundle.getString("exitButton"));
             loginTimeZoneLabel.setText(resourceBundle.getString("location"));
 
+//            AlertDisplay.displayAlert(1); is the only alert that needs translation
+
         }catch (MissingResourceException e) {
             System.out.println("Resource Bundle missing: " + e);
         } catch (Exception e) {
             System.out.println(e);
         }
     }
-}
+    }

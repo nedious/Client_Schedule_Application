@@ -100,14 +100,29 @@ public class DAO_Appointments {
 
     /**
      * Method: deleteAppointment. Appointment with the appropriate Appointment_ID is deleted
-     * @param customer
+     * @param appointmentNum
      * @return deleteResult
      * @throws SQLException
      */
-    public static int deleteAppointment(int customer) throws SQLException{
+    public static int deleteAppointment(int appointmentNum) throws SQLException{
         String sqlDelete = "DELETE FROM appointments WHERE Appointment_ID=?";
         PreparedStatement preparedStatement = JDBC.getConnection().prepareStatement(sqlDelete);
-        preparedStatement.setInt(1, customer);
+        preparedStatement.setInt(1, appointmentNum);
+        int deleteResult = preparedStatement.executeUpdate();
+        preparedStatement.close();
+        return deleteResult;
+    }
+
+    /**
+     * Method: deleteAppointmentWithCustomerID. Appointment with the appropriate Customer_ID is deleted
+     * @param customerID
+     * @return deleteResult
+     * @throws SQLException
+     */
+    public static int deleteAppointmentWithCustomerID(int customerID) throws SQLException{
+        String sqlDelete = "DELETE FROM appointments WHERE Customer_ID=?";
+        PreparedStatement preparedStatement = JDBC.getConnection().prepareStatement(sqlDelete);
+        preparedStatement.setInt(1, customerID);
         int deleteResult = preparedStatement.executeUpdate();
         preparedStatement.close();
         return deleteResult;
