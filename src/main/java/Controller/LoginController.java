@@ -161,7 +161,7 @@ public class LoginController implements Initializable {
     }
 
     /**
-     * Method: initialize. generates data for login screen. Allows text to be translated to french via resource bundle. Genarates user location and time zone.
+     * Method: initialize. generates data for login screen. Allows text to be translated to french via resource bundle based on the local of the user. Genarates user location and time zone.
      * @param url
      * @param rb
      */
@@ -172,15 +172,17 @@ public class LoginController implements Initializable {
         ZoneId zoneId = ZoneId.systemDefault();
         loginTimeZoneDynamicUpdate.setText(String.valueOf(zoneId));
 
-        ResourceBundle resourceBundle = ResourceBundle.getBundle("translation");
+        ResourceBundle resourceBundle = ResourceBundle.getBundle("translation", locale);
 
-        // Set translations for labels and buttons
+        if (locale.getLanguage().equals("fr")){
+            System.out.println(resourceBundle.getString("Username") + " : " + resourceBundle.getString("Nom d'utilisateur"));
+        }
+
         loginSecureLoginLabel.setText(resourceBundle.getString("loginSecureLoginLabel"));
         loginUsernameLabel.setText(resourceBundle.getString("loginUsernameLabel"));
         loginPasswordLabel.setText(resourceBundle.getString("loginPasswordLabel"));
         loginLoginButton.setText(resourceBundle.getString("loginLoginButton"));
         loginExitButton.setText(resourceBundle.getString("loginExitButton"));
         loginTimeZoneLabel.setText(resourceBundle.getString("loginTimeZoneLabel"));
-//        loginTimeZoneDynamicUpdate.setText(resourceBundle.getString("loginTimeZoneDynamicUpdate"));
     }
     }
