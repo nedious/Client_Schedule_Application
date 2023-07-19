@@ -2,8 +2,11 @@ package Controller;
 
 //import DAO.DAO_Appointments;
 
+import DAO.DAO_Appointments;
 import DAO.DAO_Users;
 import Helper.AlertDisplay;
+import Model.Appointments;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -11,9 +14,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.io.FileWriter;
@@ -24,8 +25,10 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 import java.util.MissingResourceException;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 /**
@@ -76,6 +79,17 @@ public class LoginController implements Initializable {
             FileWriter loginReport = new FileWriter("login_activity.txt", true);    // creates new FileWriter object. true = new data should be appended to existing file, NOT overwrite it
             PrintWriter printOutput = new PrintWriter(loginReport);                                 // writes output to loginReport file
 
+            ObservableList<Appointments> getAllAppointments = DAO_Appointments.getAllAppointments();
+
+            LocalDateTime timePlus15 = LocalDateTime.now().plusMinutes(15);     // bookmark for 15 min in future
+            LocalDateTime timeMinus1 = LocalDateTime.now().minusMinutes(1);     // bookmark for 1 min in past to ensure the entire current time minute is captured
+
+            LocalDateTime appointmentStartTime;
+            int upcomingApptID = 0;
+            LocalDateTime showApptStartTime = null;
+            String apptHourMinTime = "";
+            boolean validApptTime = false;
+
             if (validUser) {
                 FXMLLoader loader = new FXMLLoader();
                 loader.setLocation(getClass().getResource("/imhoff/dbclientappv8/ViewAppointmentsCustomers.fxml"));
@@ -89,12 +103,34 @@ public class LoginController implements Initializable {
 
                 printOutput.print("Valid login for: '" + username + "' at: " + Timestamp.valueOf(LocalDateTime.now()) + "\n"); // write to loginReport object
 
+                // ------------ logic to check for upcoming appointments within 15 min of logging on ---------//
+                for (Appointments appointmentWithin15Min: getAllAppointments) {
+                    appointmentStartTime = appointmentWithin15Min.getApptStartDateTime();
+                    if ((appointmentStartTime.isBefore(timePlus15) || (appointmentStartTime.isEqual(timePlus15))) && (appointmentStartTime.isAfter(timeMinus1) || appointmentStartTime.isEqual(timeMinus1))) {
+                        upcomingApptID = appointmentWithin15Min.getApptID();
+                        showApptStartTime = appointmentStartTime;
+
+                        DateTimeFormatter hourMinuteTime = DateTimeFormatter.ofPattern("HH:mm");
+                        apptHourMinTime = showApptStartTime.format(hourMinuteTime);
+
+                        validApptTime = true;
+                    }
+                }
+                if (validApptTime !=false){
+                    Alert alertUpcomingAppointment = new Alert(Alert.AlertType.CONFIRMATION);
+                    alertUpcomingAppointment.setTitle("Upcoming Appointment");
+                    alertUpcomingAppointment.setHeaderText("Upcoming Appointment within 15 minutes");
+                    alertUpcomingAppointment.setContentText("Appointment ID:  " + upcomingApptID + "\n\nScheduled for:  " + apptHourMinTime);
+                    alertUpcomingAppointment.showAndWait();
+                }
+                else {
+                    AlertDisplay.displayAlert(21);
+                }
             } else  {
                 AlertDisplay.displayAlert(1);       // Alert: Invalid Values. Inherited from helper.AlertDisplay.
 
                 printOutput.print("Invalid login for: '" + username + "' at: " + Timestamp.valueOf(LocalDateTime.now()) + "\n");  // write to loginReport object
             }
-
             printOutput.close();
 
         } catch (IOException ioException) {

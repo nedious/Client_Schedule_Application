@@ -3,6 +3,7 @@ package Controller;
 import DAO.*;
 import Helper.AlertDisplay;
 import Helper.JDBC;
+import Model.Appointments;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -254,7 +255,6 @@ public class AddAppointmentController implements Initializable {
 
                 int contactID = contactMap.get(selectedContactName);                // Find the corresponding Contact_ID for the selected contact name
 
-
         // ---------- Retrieve user entered values -----------//
                 int appointmentID = Integer.parseInt(addNewApptAutoGenApptIDTextField.getText());
                 String title = addNewApptTitleTextField.getText();
@@ -276,6 +276,33 @@ public class AddAppointmentController implements Initializable {
                 int customerID = Integer.parseInt(addNewApptCustomerIDComboBox.getSelectionModel().getSelectedItem().toString());
                 int userID = Integer.parseInt(addNewApptUserIDComboBox.getSelectionModel().getSelectedItem().toString());
 //                int contactID = Integer.parseInt(addNewApptContactComboBox.getSelectionModel().getSelectedItem().toString());
+
+
+        // ------------ logic for avoiding overlaping appt times -----------//
+                ObservableList<Appointments> allAppointments = DAO_Appointments.getAllAppointments();
+
+                for (Appointments appt : allAppointments) {
+
+                    LocalDateTime apptStartDateTime = appt.getApptStartDateTime();
+                    LocalDateTime apptEndDateTime = appt.getApptEndDateTime();
+
+                    int apptCustomerID = appt.getApptCustomerID();
+//                    System.out.println("apptCustomerID: " + apptCustomerID);
+
+                    if ((apptCustomerID == customerID) && (startDateTime.isBefore(apptEndDateTime)) && (endDateTime.isAfter(apptStartDateTime))) {
+
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Time Conflict");
+                        alert.setHeaderText(null);
+                        alert.setContentText("The selected time overlaps with an existing appointment for the same customer: Customer ID # " + apptCustomerID
+                                + "\n\nExisting Start Time: " + apptStartDateTime.format(DateTimeFormatter.ofPattern("HH:mm"))
+                                + "\n\nExisting End Time: " + apptEndDateTime.format(DateTimeFormatter.ofPattern("HH:mm"))
+                                + "\n\nPlease select a different time.");
+                        alert.showAndWait();
+
+                        return; // Exit the method without saving the data
+                    }
+                }
 
         // ------------ SQL insert statement -------------//
                 String sqlInsert = "INSERT INTO appointments (Appointment_ID, Title, Description, Location, Type, Start, End, Create_Date, Created_By, Last_Update, Last_Updated_By, Customer_ID, User_ID, Contact_ID) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";

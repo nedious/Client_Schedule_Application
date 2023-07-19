@@ -1,5 +1,6 @@
 package Controller;
 
+import DAO.DAO_Appointments;
 import DAO.DAO_Contacts;
 import DAO.DAO_Customers;
 import DAO.DAO_Users;
@@ -262,7 +263,7 @@ public class UpdateAppointmentController implements Initializable {
                 LocalDateTime startDateTime = LocalDateTime.of(startDate, startTime);
                 LocalDateTime endDateTime = LocalDateTime.of(startDate, endTime);
 
-                Timestamp createDateTime = Timestamp.valueOf(LocalDateTime.now());
+//                Timestamp createDateTime = Timestamp.valueOf(LocalDateTime.now());
 
                 String createdBy = "admin";
                 Timestamp lastUpdateDateTime = Timestamp.valueOf(LocalDateTime.now());
@@ -270,7 +271,34 @@ public class UpdateAppointmentController implements Initializable {
                 int customerID = Integer.parseInt(updateNewApptCustomerIDComboBox.getSelectionModel().getSelectedItem().toString());
                 int userID = Integer.parseInt(updateNewApptUserIDComboBox.getSelectionModel().getSelectedItem().toString());
 
-                // Create the SQL update statement
+        // ------------ logic for avoiding overlaping appt times -----------//
+                ObservableList<Appointments> allAppointments = DAO_Appointments.getAllAppointments();
+
+                for (Appointments appt : allAppointments) {
+
+                    LocalDateTime apptStartDateTime = appt.getApptStartDateTime();
+
+                    LocalDateTime apptEndDateTime = appt.getApptEndDateTime();
+
+                    int apptCustomerID = appt.getApptCustomerID();
+//                    System.out.println("apptCustomerID: " + apptCustomerID);
+
+                    if ((apptCustomerID == customerID) && (startDateTime.isBefore(apptEndDateTime)) && (endDateTime.isAfter(apptStartDateTime))) {
+
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Time Conflict");
+                        alert.setHeaderText(null);
+                        alert.setContentText("The selected time overlaps with an existing appointment for the same customer: Customer ID # " + apptCustomerID
+                                + "\n\nExisting Start Time: " + apptStartDateTime.format(DateTimeFormatter.ofPattern("HH:mm"))
+                                + "\n\nExisting End Time: " + apptEndDateTime.format(DateTimeFormatter.ofPattern("HH:mm"))
+                                + "\n\nPlease select a different time.");
+                        alert.showAndWait();
+
+                        return; // Exit the method without saving the data
+                    }
+                }
+
+        // ------------ SQL update statement -------------//
                 String sqlUpdate =
                         "UPDATE appointments SET Title=?, Description=?, Location=?, Type=?, Start=?, End=?, Created_By=?, Last_Update=?, Last_Updated_By=?, Customer_ID=?, User_ID=?, Contact_ID=? " +
                         "WHERE Appointment_ID=?";
@@ -294,7 +322,7 @@ public class UpdateAppointmentController implements Initializable {
 
 
                 int rowsAffected = preparedStatement.executeUpdate();
-                System.out.println(rowsAffected + " row inserted successfully. (Expecting 1 row inserted)");
+                System.out.println(rowsAffected + " row inserted successfully. (Expecting: 1 row inserted)");
 
                 // alert for change/update to appointment.
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
