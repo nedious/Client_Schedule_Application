@@ -289,12 +289,12 @@ public class AddAppointmentController implements Initializable {
                     int apptCustomerID = appt.getApptCustomerID();
 //                    System.out.println("apptCustomerID: " + apptCustomerID);
 
-                    if ((apptCustomerID == customerID) && (startDateTime.isBefore(apptEndDateTime)) && (endDateTime.isAfter(apptStartDateTime))) {
+                    if ((startDateTime.isBefore(apptEndDateTime)) && (endDateTime.isAfter(apptStartDateTime))) {
 
                         Alert alert = new Alert(Alert.AlertType.ERROR);
                         alert.setTitle("Time Conflict");
                         alert.setHeaderText(null);
-                        alert.setContentText("The selected time overlaps with an existing appointment for the same customer: Customer ID # " + apptCustomerID
+                        alert.setContentText("The selected time overlaps with an existing appointment for another customer: Customer ID # " + apptCustomerID
                                 + "\n\nExisting Start Time: " + apptStartDateTime.format(DateTimeFormatter.ofPattern("HH:mm"))
                                 + "\n\nExisting End Time: " + apptEndDateTime.format(DateTimeFormatter.ofPattern("HH:mm"))
                                 + "\n\nPlease select a different time.");

@@ -11,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  * class: DAO_Appointments. Holds methods that connect to database to retrieve data.
@@ -126,5 +127,53 @@ public class DAO_Appointments {
         int deleteResult = preparedStatement.executeUpdate();
         preparedStatement.close();
         return deleteResult;
+    }
+
+    /**
+     * Method getUniqueAppointmentTypes. Generates unique appointment Type data and displays in ObservableList. Used to display in combo box for appointment reports
+     * @return getAllCustomerIDs
+     * @throws SQLException
+     */
+    public static ObservableList<String> getUniqueAppointmentTypes() throws SQLException {
+        ObservableList<String> apptTypes = FXCollections.observableArrayList();
+        String sqlSelect = "SELECT Type FROM appointments";
+        PreparedStatement preparedStatement = JDBC.getConnection().prepareStatement(sqlSelect);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        while (resultSet.next()) {
+            String types = resultSet.getString("Type");
+            if (!apptTypes.contains(types)) {
+                apptTypes.add(types);
+            }
+        }
+        return apptTypes;
+    }
+
+    /**
+     * Method getApptMonth. Generates all appointment dates and displays them by month and year. Only add unique months, no duplicates.
+     * @return apptMonth
+     * @throws SQLException
+     */
+    public static ObservableList<String> getApptMonth() throws SQLException {
+        ObservableList<String> apptMonth = FXCollections.observableArrayList();
+        String sqlSelect = "SELECT Start FROM appointments";
+        PreparedStatement preparedStatement = JDBC.getConnection().prepareStatement(sqlSelect);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        while (resultSet.next()) {
+            LocalDateTime startDateTime = resultSet.getTimestamp("Start").toLocalDateTime();
+            String formattedMonthYear = formatMonthAndYear(startDateTime);
+            if (!apptMonth.contains(formattedMonthYear)) {
+                apptMonth.add(formattedMonthYear);
+            }
+        }
+        return apptMonth;
+    }
+
+    /**
+     * Method: formatMonthAndYear. Formats Start times from appointments and converts them into Month and year.
+     * */
+    public static String formatMonthAndYear(LocalDateTime dateTime) {
+        // Use DateTimeFormatter to format LocalDateTime as desired
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM yyyy");
+        return dateTime.format(formatter);
     }
 }

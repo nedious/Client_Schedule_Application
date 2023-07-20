@@ -241,7 +241,8 @@ public class UpdateCustomerController implements Initializable {
         alertCancel.setContentText("Customer data will not be saved");
         Optional<ButtonType> result = alertCancel.showAndWait();
 
-        if(result.get() == ButtonType.OK){            FXMLLoader loader = new FXMLLoader();
+        if(result.get() == ButtonType.OK){
+            FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource("/imhoff/dbclientappv8/ViewAppointmentsCustomers.fxml"));
             Parent parent = loader.load();
             Stage stage = (Stage) updateCustomerCancelButton.getScene().getWindow();
