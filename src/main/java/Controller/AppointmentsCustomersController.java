@@ -315,19 +315,6 @@ public class AppointmentsCustomersController {
     }
 
     /**
-     * Method: reportsButtonClick. Generates reports form
-     * @param event user click
-     * */
-    @FXML void reportsButtonClick(ActionEvent event) {
-
-
-
-        //// START HERE
-
-
-    }
-
-    /**
      * Method: selectAllAppointmentsRadio. Displays all appointments by time/date
      * @param event user click
      * */
@@ -370,6 +357,23 @@ public class AppointmentsCustomersController {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Method: reportsButtonClick. Generates reports form
+     * @param event user click
+     * @throws IOException
+     * */
+    @FXML void reportsButtonClick(ActionEvent event) throws IOException {
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/imhoff/dbclientappv8/ViewReports.fxml"));
+        Parent parent = loader.load();
+        Stage stage = (Stage) reportsButton.getScene().getWindow();
+
+        Scene scene = new Scene(parent);
+        stage.setTitle("Appointment Reports");
+        stage.setScene(scene);
+        stage.show();
     }
 
 /**

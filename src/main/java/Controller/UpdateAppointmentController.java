@@ -256,41 +256,81 @@ public class UpdateAppointmentController implements Initializable {
                 String description = updateNewApptDescriptionTextField.getText();
                 String location = updateNewApptLocationTextField.getText();
                 String type = updateNewApptTypeTextField.getText();
-                LocalDate startDate = updateNewApptDayDatePicker.getValue();
 
-                LocalTime startTime = LocalTime.parse(updateNewApptStartTimeComboBox.getValue().toString());
-                LocalTime endTime = LocalTime.parse(updateNewApptEndTimeComboBox.getValue().toString());
+                    LocalDate startDate = updateNewApptDayDatePicker.getValue();
+
+                    LocalTime startTime = LocalTime.parse(updateNewApptStartTimeComboBox.getValue().toString());
+                    LocalTime endTime = LocalTime.parse(updateNewApptEndTimeComboBox.getValue().toString());
+
                 LocalDateTime startDateTime = LocalDateTime.of(startDate, startTime);
                 LocalDateTime endDateTime = LocalDateTime.of(startDate, endTime);
 
 //                Timestamp createDateTime = Timestamp.valueOf(LocalDateTime.now());
 
-                String createdBy = "admin";
-                Timestamp lastUpdateDateTime = Timestamp.valueOf(LocalDateTime.now());
-                String lastUpdatedBy = "admin";
+                    String createdBy = "admin";
+                    Timestamp lastUpdateDateTime = Timestamp.valueOf(LocalDateTime.now());
+                    String lastUpdatedBy = "admin";
+
                 int customerID = Integer.parseInt(updateNewApptCustomerIDComboBox.getSelectionModel().getSelectedItem().toString());
                 int userID = Integer.parseInt(updateNewApptUserIDComboBox.getSelectionModel().getSelectedItem().toString());
 
-        // ------------ logic for avoiding overlaping appt times -----------//
+        // ------------ logic for identical appointments -----------//
                 ObservableList<Appointments> allAppointments = DAO_Appointments.getAllAppointments();
 
+                Appointments existingAppointment = null;
+                for (Appointments appt : allAppointments) {
+                    if (appt.getApptID() == appointmentID) {
+                        existingAppointment = appt;
+                        break;
+                    }
+                }
+
+                // Check if the data entered by the user matches the data of the existing appointment
+                if (existingAppointment != null) {
+                    if (title.equals(existingAppointment.getApptTitle())
+                            && description.equals(existingAppointment.getApptDescription())
+                            && location.equals(existingAppointment.getApptLocation())
+                            && type.equals(existingAppointment.getApptType())
+                            && startDateTime.equals(existingAppointment.getApptStartDateTime())
+                            && endDateTime.equals(existingAppointment.getApptEndDateTime())
+                            && customerID == existingAppointment.getApptCustomerID()
+                            && userID == existingAppointment.getApptUserID()
+                            && contactID == existingAppointment.getApptContactID()) {
+                        // No changes made to the appointment
+                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setTitle("No Change");
+                        alert.setHeaderText(null);
+                        alert.setContentText("No changes were made to:" + "\n\nAppointment ID # " + appointmentID + "\n\nType:  '" + type + "'" + "\n\nYou will be returned to the Update Appointment Main Screen.");
+                        alert.showAndWait();
+
+                        FXMLLoader loader = new FXMLLoader();
+                        loader.setLocation(getClass().getResource("/imhoff/dbclientappv8/ViewAppointmentsCustomers.fxml"));
+                        Parent parent = loader.load();
+                        Stage stage = (Stage) updateNewApptSaveButton.getScene().getWindow();
+                        Scene scene = new Scene(parent);
+                        stage.setScene(scene);
+                        stage.show();
+
+                        return; // Exit the method without saving the data
+                    }
+                }
+
+        // ------------ logic for avoiding overlaping appt times -----------//
                 for (Appointments appt : allAppointments) {
 
-                    LocalDateTime apptStartDateTime = appt.getApptStartDateTime();
+                    LocalDateTime ApptStartDateTime = appt.getApptStartDateTime();
+                    LocalDateTime ApptEndDateTime = appt.getApptEndDateTime();
 
-                    LocalDateTime apptEndDateTime = appt.getApptEndDateTime();
+                    int ApptCustomerID = appt.getApptCustomerID();
 
-                    int apptCustomerID = appt.getApptCustomerID();
-//                    System.out.println("apptCustomerID: " + apptCustomerID);
-
-                    if ((apptCustomerID == customerID) && (startDateTime.isBefore(apptEndDateTime)) && (endDateTime.isAfter(apptStartDateTime))) {
+                    if ( (startDateTime.isBefore(ApptEndDateTime)) && (endDateTime.isAfter(ApptStartDateTime))) {
 
                         Alert alert = new Alert(Alert.AlertType.ERROR);
                         alert.setTitle("Time Conflict");
                         alert.setHeaderText(null);
-                        alert.setContentText("The selected time overlaps with an existing appointment for the same customer: Customer ID # " + apptCustomerID
-                                + "\n\nExisting Start Time: " + apptStartDateTime.format(DateTimeFormatter.ofPattern("HH:mm"))
-                                + "\n\nExisting End Time: " + apptEndDateTime.format(DateTimeFormatter.ofPattern("HH:mm"))
+                        alert.setContentText("The selected time overlaps with an existing appointment for another customer: Customer ID # " + ApptCustomerID
+                                + "\n\nExisting Start Time: " + ApptStartDateTime.format(DateTimeFormatter.ofPattern("HH:mm"))
+                                + "\n\nExisting End Time: " + ApptEndDateTime.format(DateTimeFormatter.ofPattern("HH:mm"))
                                 + "\n\nPlease select a different time.");
                         alert.showAndWait();
 

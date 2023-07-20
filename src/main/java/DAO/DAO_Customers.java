@@ -80,7 +80,7 @@ public class DAO_Customers {
 
     /**
      * Method getAllCustomerIDs. Generates customerID data and displays in ObservableList. Used to display in combo box for appointments
-     * @return getAllCustomerIDs
+     * @return customerIDs
      * @throws SQLException
      */
     public static ObservableList<Integer> getAllCustomerIDs() throws SQLException {

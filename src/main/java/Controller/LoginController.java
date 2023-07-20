@@ -24,6 +24,7 @@ import java.io.PrintWriter;
 import java.net.URL;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -91,7 +92,11 @@ public class LoginController implements Initializable {
             int upcomingApptID = 0;
             LocalDateTime showApptStartTime = null;
             String apptHourMinTime = "";
+            String yearMonthDay = "";
             boolean validApptTime = false;
+
+            int userID = 0;
+            System.out.println("userID alert: " + userID);
 
             if (validUser) {
                 FXMLLoader loader = new FXMLLoader();
@@ -111,7 +116,15 @@ public class LoginController implements Initializable {
                     appointmentStartTime = appointmentWithin15Min.getApptStartDateTime();
                     if ((appointmentStartTime.isBefore(timePlus15) || (appointmentStartTime.isEqual(timePlus15))) && (appointmentStartTime.isAfter(timeMinus1) || appointmentStartTime.isEqual(timeMinus1))) {
                         upcomingApptID = appointmentWithin15Min.getApptID();
+
                         showApptStartTime = appointmentStartTime;
+
+                        DateTimeFormatter dayDate = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                        yearMonthDay = showApptStartTime.format(dayDate);                        // Format the LocalDateTime into a date string
+
+                        userID = appointmentWithin15Min.getApptUserID();
+                            System.out.println("userID alert: " + userID);
+
 
                         DateTimeFormatter hourMinuteTime = DateTimeFormatter.ofPattern("HH:mm");
                         apptHourMinTime = showApptStartTime.format(hourMinuteTime);
@@ -123,7 +136,7 @@ public class LoginController implements Initializable {
                     Alert alertUpcomingAppointment = new Alert(Alert.AlertType.CONFIRMATION);
                     alertUpcomingAppointment.setTitle("Upcoming Appointment");
                     alertUpcomingAppointment.setHeaderText("Upcoming Appointment within 15 minutes");
-                    alertUpcomingAppointment.setContentText("Appointment ID:  " + upcomingApptID + "\n\nScheduled for:  " + apptHourMinTime);
+                    alertUpcomingAppointment.setContentText("Appointment ID:  " + upcomingApptID + "\n\nScheduled for:  " + apptHourMinTime + "\n\nDate:  " + yearMonthDay + "\n\nUser ID:  " + userID);
                     alertUpcomingAppointment.showAndWait();
                 }
                 else {
