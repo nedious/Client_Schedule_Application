@@ -25,7 +25,7 @@ import java.util.ResourceBundle;
 
 /**
  * class: ReportsController Generates a GUI for the user to view reports has LAMBDA EXPRESSION. Pulls data from database to display and performs logic on data for user.
- *
+ *<p>
  * Method: filterAppointmentsByType. Has a LAMBDA EXPRESSION.
  *      LAMBDA EXPRESSION: allAppointments.filtered(appointment -> appointment.getApptType().equals(type));
  *      'appointment ->':
@@ -35,18 +35,23 @@ import java.util.ResourceBundle;
  *      '.equals(type)':
  *          checks if the appointment type obtained from getApptType() is equal to the type parameter passed to the filterAppointmentsByType method.
  *      For each Appointment object in the ObservableList<Appointments>, the lambda expression is applied, and if the appointment type matches the type parameter, that appointment is included in the filtered list.
- *
+ *</p>
+ * <p>
  * Method: filterAppointmentsByMonth. Supports MonthComboBox, creates a filtered list by checking if values in the database match the value selected in the combo box. The values are then displayed in the table.
  *      LAMBDA EXPRESSION:
  *          An individual element of the ObservableList<Appointments> is the input
  *          startDateTime is retrived, and it is formatted for readibility.
  *          then there is a comparision checking if the formattedMonthYear value is equal to the selectedMonth value from the combo box
  *          if they are equal, the value is added to the table
- *
+ *</p>
+ * <p>
  * Method: filterAppointmentsByContact. Supports Contact Combo box by creating a filtered list by checking if values in the database match the value selected in the combo box. The values are then displayed in the table.
  *      LAMBDA EXPRESSION:
  *          retrieve the contact name associated with the contactID of the appointment using the getContactNameByID method
  *          from the DAO_Contacts class, then check if the retrieved contactName matches the selected contact from the combo box.
+ *
+ * </p>
+ *
  * */
 public class ReportsController implements Initializable {
 
