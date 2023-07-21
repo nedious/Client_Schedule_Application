@@ -15,20 +15,36 @@ import java.sql.SQLException;
 public class DAO_Contacts extends Contacts {
 
     /**
-     * Method: getAllContactIDs. Gathers Contact_ID data for combo box when generating/updating new customers
-     * @return contactIDs
+     * Method: getAllContactNames. Gathers contactNames data for combo box when generating contact appointment report schedules
+     * @return contactNames
      * */
-    public static ObservableList<Integer> getAllContactIDs() throws SQLException {
-        ObservableList<Integer> contactIDs = FXCollections.observableArrayList();
-        String sqlSelect = "SELECT Contact_ID FROM contacts";
+    public static ObservableList<String> getAllContactNames() throws SQLException {
+        ObservableList<String> contactNames = FXCollections.observableArrayList();
+        String sqlSelect = "SELECT Contact_Name FROM contacts";
         PreparedStatement preparedStatement = JDBC.getConnection().prepareStatement(sqlSelect);
         ResultSet resultSet = preparedStatement.executeQuery();
         while (resultSet.next()) {
-            int contactID = resultSet.getInt("Contact_ID");
-            contactIDs.add(contactID);
+            String contactName = resultSet.getString("Contact_Name");
+            contactNames.add(contactName);
         }
-        return contactIDs;
+        return contactNames;
     }
+
+    /**
+     * Method: getContactNameByID. Gathers contact_Name with the correspoinding Contact_ID for combo box when generating contact appointment report schedules
+     * @return null
+     * */
+    public static String getContactNameByID(int contactID) throws SQLException {
+        String sqlSelect = "SELECT Contact_Name FROM contacts WHERE Contact_ID = ?";
+        PreparedStatement preparedStatement = JDBC.getConnection().prepareStatement(sqlSelect);
+        preparedStatement.setInt(1, contactID);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        if (resultSet.next()) {
+            return resultSet.getString("Contact_Name");
+        }
+        return null;
+    }
+
 
     /**
      * Method: DAO_Contacts. Constructor for DAO_Contacts to initialize the DAO_Contacts object

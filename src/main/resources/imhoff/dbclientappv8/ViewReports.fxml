@@ -35,8 +35,8 @@
                         <Label layoutX="14.0" layoutY="111.0" text="Total Appointments of Selected Appointment Type:" />
                         <Label layoutX="14.0" layoutY="259.0" text="Total Appointments of Selected Month (for all years):" />
                         <Line endX="198.5" layoutX="190.0" layoutY="164.0" startX="-174.5" />
-                        <Label fx:id="totalTypeTotal" layoutX="324.0" layoutY="111.0" text="TypeTotal" />
-                        <Label fx:id="totalMonthTotal" layoutX="324.0" layoutY="259.0" text="MonthTotal" />
+                        <Label fx:id="totalTypeTotal" layoutX="324.0" layoutY="111.0" text="0" />
+                        <Label fx:id="totalMonthTotal" layoutX="324.0" layoutY="259.0" text="0" />
                             </children></AnchorPane>
                     </content>
                 </Tab>
@@ -47,22 +47,22 @@
                                 <TableView fx:id="apptReportContactsTable" layoutX="16.0" layoutY="40.0" prefHeight="272.0" prefWidth="878.0">
                                     <columns>
                                         <TableColumn fx:id="scheduleApptIDColumn" prefWidth="94.0" text="Appointment ID" />
-                                        <TableColumn fx:id="scheduleApptTitleColumn" prefWidth="156.0" text="Title" />
-                                        <TableColumn fx:id="scheduleApptTypeColumn" prefWidth="126.0" text="Type" />
-                                        <TableColumn fx:id="scheduleApptReportDescriptionColumn" prefWidth="172.0" text="Description" />
-                                        <TableColumn fx:id="scheduleApptReportStartDateColumn" prefWidth="115.0" text="Start Date/Time" />
+                                        <TableColumn fx:id="scheduleApptTitleColumn" prefWidth="124.0" text="Title" />
+                                        <TableColumn fx:id="scheduleApptTypeColumn" prefWidth="141.0" text="Type" />
+                                        <TableColumn fx:id="scheduleApptReportDescriptionColumn" prefWidth="150.0" text="Description" />
+                                        <TableColumn fx:id="scheduleApptReportStartDateColumn" prefWidth="154.0" text="Start Date/Time" />
                                         <TableColumn fx:id="scheduleApptReportEndDateColumn" prefWidth="134.0" text="End Date/Time" />
                                         <TableColumn fx:id="scheduleApptReportCustomerIDColumn" text="Customer ID" />
                                     </columns>
                                 </TableView>
-                                <HBox layoutX="505.0" layoutY="13.0" prefHeight="25.0" prefWidth="323.0">
+                                <HBox layoutX="288.0" layoutY="4.0" prefHeight="36.0" prefWidth="410.0">
                                     <children>
-                                        <Label prefHeight="17.0" prefWidth="141.0" text="Sort by Contact">
+                                        <Label prefHeight="27.0" prefWidth="141.0" text="Sort by Contact:">
                                             <font>
-                                                <Font size="14.0" />
+                                                <Font name="System Bold" size="18.0" />
                                             </font>
                                         </Label>
-                                        <ComboBox fx:id="sortByContactComboBox" onAction="#sortByContactComboBoxClick" prefHeight="25.0" prefWidth="125.0" />
+                                        <ComboBox fx:id="sortByContactComboBox" onAction="#sortByContactComboBoxClick" prefHeight="26.0" prefWidth="201.0" />
                                     </children>
                                 </HBox>
                             </children></AnchorPane>
@@ -72,13 +72,13 @@
                     <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-border-color: #000000;">
                             <children>
-                                <TableView fx:id="customerCountryTotal" layoutX="61.0" layoutY="33.0" prefHeight="253.0" prefWidth="781.0">
+                                <TableView fx:id="durationTable" layoutX="61.0" layoutY="33.0" prefHeight="253.0" prefWidth="781.0">
                                     <columns>
                                         <TableColumn fx:id="durationApptIDColumn" prefWidth="128.0" text="Appointment ID" />
                                         <TableColumn fx:id="durationDurationColumn" prefWidth="164.0" text="Duration" />
                               <TableColumn fx:id="durationStartDateColumn" prefWidth="164.0" text="Start Date/Time" />
                               <TableColumn fx:id="durationEndDateColumn" prefWidth="148.0" text="End Date/Time" />
-                              <TableColumn fx:id="durationTotalColumn" prefWidth="161.0" text="Total" />
+                              <TableColumn fx:id="durationTypeColumn" prefWidth="161.0" text="Type" />
                                     </columns>
                                 </TableView>
                             </children></AnchorPane>
