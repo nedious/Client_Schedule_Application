@@ -1,8 +1,10 @@
 package Controller;
 
 import DAO.DAO_Appointments;
+import DAO.DAO_Contacts;
 import Model.Appointments;
 
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -17,14 +19,15 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ResourceBundle;
 
 /**
  * class: ReportsController. Generates a GUI for the user to view reports. Pulls data from database to display and performs logic on data for user.
  *
- * Method: filterAppointmentsByType. Has a lambda expression
- *   // Lambda Expression: allAppointments.filtered(appointment -> appointment.getApptType().equals(type));
+ * Method: filterAppointmentsByType. Has a lambda expression.
+ *      Lambda Expression: allAppointments.filtered(appointment -> appointment.getApptType().equals(type));
  *      'appointment ->':
  *          This takes an Appointment object (from the ObservableList<Appointments>) and enters it as the input parameter to the lambda.
  *      'appointment.getApptType()':
@@ -39,6 +42,11 @@ import java.util.ResourceBundle;
  *          startDateTime is retrived, and it is formatted for readibility.
  *          then there is a comparision checking if the formattedMonthYear value is equal to the selectedMonth value from the combo box
  *          if they are equal, the value is added to the table
+ *
+ * Method: filterAppointmentsByContact. Supports Contact Combo box by creating a filtered list by checking if values in the database match the value selected in the combo box. The values are then displayed in the table.
+ *      Lambda Expression:
+ *          retrieve the contact name associated with the contactID of the appointment using the getContactNameByID method
+ *          from the DAO_Contacts class, then check if the retrieved contactName matches the selected contact from the combo box.
  * */
 public class ReportsController implements Initializable {
 
@@ -59,7 +67,7 @@ public class ReportsController implements Initializable {
     // --------- Schedule by Contact --------//
     @FXML private Tab tabApptByContact;
 
-    @FXML private TableView<?> apptReportContactsTable;
+    @FXML private TableView<Appointments> apptReportContactsTable;
 
     @FXML private TableColumn<?, ?> scheduleApptIDColumn;
     @FXML private TableColumn<?, ?> scheduleApptTitleColumn;
@@ -69,23 +77,28 @@ public class ReportsController implements Initializable {
     @FXML private TableColumn<?, ?> scheduleApptReportEndDateColumn;
     @FXML private TableColumn<?, ?> scheduleApptReportCustomerIDColumn;
 
-    @FXML private ComboBox<?> sortByContactComboBox;
+    @FXML private ComboBox<String> sortByContactComboBox;
 
     // --------- Appointment by Duration --------//
     @FXML private Tab tabApptByDuration;
 
-    @FXML private TableView<?> customerCountryTotal;
+    @FXML private TableView<Appointments> durationTable;
 
     @FXML private TableColumn<?, ?> durationApptIDColumn;
-    @FXML private TableColumn<?, ?> durationDurationColumn;
+    @FXML private TableColumn<Appointments, String> durationDurationColumn;
     @FXML private TableColumn<?, ?> durationStartDateColumn;
     @FXML private TableColumn<?, ?> durationEndDateColumn;
-    @FXML private TableColumn<?, ?> durationTotalColumn;
+    @FXML private TableColumn<?, ?> durationTypeColumn;
 
     @FXML private Button returnButton;
 
 //    private ObservableList<Appointments> allAppointments; // Keep a reference to the original appointments list
 
+    /**
+     * Method initializable. Initializes values needed for Appointment Reports form. Sets data for use in upcoming methods.
+     * @param url
+     * @param resourceBundle
+     * */
     @Override public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
             // --------- Appointments Table ----------- //
@@ -113,15 +126,48 @@ public class ReportsController implements Initializable {
             allAppointments = DAO_Appointments.getAllAppointments();
             apptReportMonthTypeTable.setItems(allAppointments);
 
+            // --------- Contact Schedule Table ----------- //
+            apptReportContactsTable.setItems(allAppointments);
 
+            scheduleApptIDColumn.setCellValueFactory(new PropertyValueFactory<>("apptID"));
+            scheduleApptTitleColumn.setCellValueFactory(new PropertyValueFactory<>("apptTitle"));
+            scheduleApptTypeColumn.setCellValueFactory(new PropertyValueFactory<>("apptType"));
+            scheduleApptReportDescriptionColumn.setCellValueFactory(new PropertyValueFactory<>("apptDescription"));
+            scheduleApptReportStartDateColumn.setCellValueFactory(new PropertyValueFactory<>("apptStartDateTime"));
+            scheduleApptReportEndDateColumn.setCellValueFactory(new PropertyValueFactory<>("apptEndDateTime"));
+            scheduleApptReportCustomerIDColumn.setCellValueFactory(new PropertyValueFactory<>("apptCustomerID"));
+
+            // ------------ set sortByContactComboBox with Contact Names ---------- //
+            ObservableList<String> contactNames = DAO_Contacts.getAllContactNames();
+            sortByContactComboBox.setItems(contactNames);
+            sortByContactComboBox.getItems().add(""); // Add blank value to reset filter
+
+            // --------- Duration Table ----------- //
+            durationTable.setItems(allAppointments);
+
+            durationApptIDColumn.setCellValueFactory(new PropertyValueFactory<>("apptID"));
+
+                    // lambda expression calculates the difference between the startDateTime and endDateTime of each Appointment object in the table and converts it to minutes. The result is displayed in the column
+            durationDurationColumn.setCellValueFactory(param -> {
+                Appointments appointment = param.getValue();
+                LocalDateTime startDateTime = appointment.getApptStartDateTime();
+                LocalDateTime endDateTime = appointment.getApptEndDateTime();
+                long durationInMinutes = Duration.between(startDateTime, endDateTime).toMinutes();
+                String formattedDuration = durationInMinutes + " minutes";
+                return new SimpleStringProperty(formattedDuration);
+            });
+
+            durationStartDateColumn.setCellValueFactory(new PropertyValueFactory<>("apptStartDateTime"));
+            durationEndDateColumn.setCellValueFactory(new PropertyValueFactory<>("apptEndDateTime"));
+            durationTypeColumn.setCellValueFactory(new PropertyValueFactory<>("apptType"));
 
         } catch (SQLException e) {
             e.printStackTrace();
-            // Handle the SQLException if needed
         }
-
     }
 
+    @FXML public void apptContactScheduleSelection() {}
+    @FXML public void apptDurationSelection() {}
 
     /**
      * Method: apptReportSelectMonthComboBoxClick. When a user selects a value, the table filters month values to match
@@ -168,14 +214,6 @@ public class ReportsController implements Initializable {
             return formattedMonthYear.equals(selectedMonth);
         });
     }
-
-
-    @FXML public void apptContactScheduleSelection() {
-    }
-
-    @FXML public void apptDurationSelection() {
-    }
-
 
     /**
      * Method: apptReportSelectTypeComboBoxClick. value selected from combo box is then filtered in apptReportMonthTypeTable
@@ -232,9 +270,43 @@ public class ReportsController implements Initializable {
     }
 
 
-    @FXML void sortByContactComboBoxClick(ActionEvent event) {
+    /**
+     * Method: sortByContactComboBoxClick. The value selected from the combo box is then filtered in the contacts schedule table
+     * @param event
+     * @throws SQLException
+     * */
+    @FXML void sortByContactComboBoxClick(ActionEvent event) throws SQLException {
 
+        String selectedContact = sortByContactComboBox.getValue();
+        ObservableList<Appointments> allAppointments = DAO_Appointments.getAllAppointments();
+
+        if (selectedContact != null && !selectedContact.isEmpty()) {
+            ObservableList<Appointments> filteredAppointments = filterAppointmentsByContact(allAppointments, selectedContact);
+            apptReportContactsTable.setItems(filteredAppointments);
+        } else {
+            apptReportContactsTable.setItems(allAppointments); // Reset to show all appointments if no contact is selected
+        }
     }
+
+    /**
+     * Method: filterAppointmentsByContact. Supports Contact Combo box by creating a filtered list by checking if values in the database match the value selected in the combo box. The values are then displayed in the table.
+     *      Lambda Expression:
+     *          retrieve the contact name associated with the contactID of the appointment using the getContactNameByID method
+     *          from the DAO_Contacts class, then check if the retrieved contactName matches the selected contact from the combo box.
+     * */
+    private ObservableList<Appointments> filterAppointmentsByContact(ObservableList<Appointments> allAppointments, String selectedContact) {
+        return allAppointments.filtered(appointment -> {
+            int contactID = appointment.getApptContactID();
+            String contactName = null;
+            try {
+                contactName = DAO_Contacts.getContactNameByID(contactID);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            return contactName != null && contactName.equals(selectedContact);
+        });
+    }
+
 
     /**
      * Method returnButtonClick. When user clicks, they are redirected to Appt and customer table main screen
