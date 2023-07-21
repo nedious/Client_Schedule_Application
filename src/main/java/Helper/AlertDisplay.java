@@ -167,17 +167,6 @@ public class AlertDisplay {
 }
 
 
-/**
- * TODO: fix the following alert with resourceBundle
- * Alert alert = new Alert(Alert.AlertType.ERROR);
- * alert.setTitle(resourceBundle.getString("errorTitle"));
- * alert.setContentText(resourceBundle.getString("errorText"));
- * alert.show();
- *   -------------
- *
- * */
-
-
 //    @FXML void addCustomerCancelButtonClick(ActionEvent event) throws IOException {
 //        Alert alertCancel = new Alert(Alert.AlertType.CONFIRMATION);
 //        alertCancel.setTitle("Canceling");
