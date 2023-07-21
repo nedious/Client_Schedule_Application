@@ -187,10 +187,6 @@ public class LoginController implements Initializable {
 
         ResourceBundle resourceBundle = ResourceBundle.getBundle("translation", locale);
 
-        if (locale.getLanguage().equals("fr")){
-            System.out.println(resourceBundle.getString("Username") + " : " + resourceBundle.getString("Nom d'utilisateur"));
-        }
-
         loginSecureLoginLabel.setText(resourceBundle.getString("loginSecureLoginLabel"));
         loginUsernameLabel.setText(resourceBundle.getString("loginUsernameLabel"));
         loginPasswordLabel.setText(resourceBundle.getString("loginPasswordLabel"));
