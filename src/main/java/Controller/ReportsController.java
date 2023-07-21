@@ -24,10 +24,10 @@ import java.time.LocalDateTime;
 import java.util.ResourceBundle;
 
 /**
- * class: ReportsController. Generates a GUI for the user to view reports. Pulls data from database to display and performs logic on data for user.
+ * class: ReportsController Generates a GUI for the user to view reports has LAMBDA EXPRESSION. Pulls data from database to display and performs logic on data for user.
  *
- * Method: filterAppointmentsByType. Has a lambda expression.
- *      Lambda Expression: allAppointments.filtered(appointment -> appointment.getApptType().equals(type));
+ * Method: filterAppointmentsByType. Has a LAMBDA EXPRESSION.
+ *      LAMBDA EXPRESSION: allAppointments.filtered(appointment -> appointment.getApptType().equals(type));
  *      'appointment ->':
  *          This takes an Appointment object (from the ObservableList<Appointments>) and enters it as the input parameter to the lambda.
  *      'appointment.getApptType()':
@@ -37,14 +37,14 @@ import java.util.ResourceBundle;
  *      For each Appointment object in the ObservableList<Appointments>, the lambda expression is applied, and if the appointment type matches the type parameter, that appointment is included in the filtered list.
  *
  * Method: filterAppointmentsByMonth. Supports MonthComboBox, creates a filtered list by checking if values in the database match the value selected in the combo box. The values are then displayed in the table.
- *      Lambda Expression:
+ *      LAMBDA EXPRESSION:
  *          An individual element of the ObservableList<Appointments> is the input
  *          startDateTime is retrived, and it is formatted for readibility.
  *          then there is a comparision checking if the formattedMonthYear value is equal to the selectedMonth value from the combo box
  *          if they are equal, the value is added to the table
  *
  * Method: filterAppointmentsByContact. Supports Contact Combo box by creating a filtered list by checking if values in the database match the value selected in the combo box. The values are then displayed in the table.
- *      Lambda Expression:
+ *      LAMBDA EXPRESSION:
  *          retrieve the contact name associated with the contactID of the appointment using the getContactNameByID method
  *          from the DAO_Contacts class, then check if the retrieved contactName matches the selected contact from the combo box.
  * */
@@ -92,10 +92,11 @@ public class ReportsController implements Initializable {
 
     @FXML private Button returnButton;
 
-//    private ObservableList<Appointments> allAppointments; // Keep a reference to the original appointments list
-
     /**
-     * Method initializable. Initializes values needed for Appointment Reports form. Sets data for use in upcoming methods.
+     * Method initializable, Initializes values needed for Appointment Reports form has LAMBDA EXPRESSION. Sets data for use in upcoming methods.
+     * <p>
+     *              durationDurationColumn.setCellValueFactory(param -> {
+     *              // LAMBDA EXPRESSION calculates the difference between the startDateTime and endDateTime of each Appointment object in the table and converts it to minutes. The result is displayed in the column
      * @param url
      * @param resourceBundle
      * */
@@ -200,12 +201,15 @@ public class ReportsController implements Initializable {
     }
 
     /**
-     * Method: filterAppointmentsByMonth. Supports MonthComboBox, creates a filtered list by checking if values in the database match the value selected in the combo box. The values are then displayed in the table.
-     *      Lambda Expression:
+     * Method: filterAppointmentsByMonth, Supports MonthComboBox, creates a filtered list by checking if values in the database match the value selected in the combo box, has LAMBDA EXPRESSION. The values are then displayed in the table.
+     * <p>
+     *     Lambda Expression:
      *          An individual element of the ObservableList<Appointments> is the input
      *          startDateTime is retrived, and it is formatted for readibility.
      *          then there is a comparision checking if the formattedMonthYear value is equal to the selectedMonth value from the combo box
      *          if they are equal, the value is added to the table
+     * </p>
+     *
      * */
     private ObservableList<Appointments> filterAppointmentsByMonth(ObservableList<Appointments> allAppointments, String selectedMonth) {
         return allAppointments.filtered(appointment -> {
@@ -248,8 +252,8 @@ public class ReportsController implements Initializable {
     }
 
     /**
-     * Method: filterAppointmentsByType. Helper method to filter appointments by type
-     *
+     * Method: filterAppointmentsByType, Helper method to filter appointments by type, has LAMBDA EXPRESSION.
+     *<p>
      *      // Lambda Expression: allAppointments.filtered(appointment -> appointment.getApptType().equals(type));
      *      'appointment ->':
      *          This takes an Appointment object (from the ObservableList<Appointments>) and enters it as the input parameter to the lambda.
@@ -259,6 +263,7 @@ public class ReportsController implements Initializable {
      *          checks if the appointment type obtained from getApptType() is equal to the type parameter passed to the filterAppointmentsByType method.
      *
      *      For each Appointment object in the ObservableList<Appointments>, the lambda expression is applied, and if the appointment type matches the type parameter, that appointment is included in the filtered list.
+     *</p>
      *
      * @param type
      * @throws SQLException
@@ -289,10 +294,12 @@ public class ReportsController implements Initializable {
     }
 
     /**
-     * Method: filterAppointmentsByContact. Supports Contact Combo box by creating a filtered list by checking if values in the database match the value selected in the combo box. The values are then displayed in the table.
+     * Method: filterAppointmentsByContact Supports Contact Combo box by creating a filtered list by checking if values in the database match the value selected in the combo box, has LAMBDA EXPRESSION. The values are then displayed in the table.
+     *      <p>
      *      Lambda Expression:
      *          retrieve the contact name associated with the contactID of the appointment using the getContactNameByID method
      *          from the DAO_Contacts class, then check if the retrieved contactName matches the selected contact from the combo box.
+     *      </p>
      * */
     private ObservableList<Appointments> filterAppointmentsByContact(ObservableList<Appointments> allAppointments, String selectedContact) {
         return allAppointments.filtered(appointment -> {

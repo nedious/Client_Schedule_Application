@@ -65,7 +65,13 @@ public class UpdateAppointmentController implements Initializable {
 // --------------------- Methods ------------------------//
 
     /**
-     * Method initializable. Initializes values needed for UpdateAppointment form. Sets data for use in upcoming methods. Data includes: systemListener, ApptID, contact combo box, start/end time combo box + logic
+     * Method initializable, Initializes values needed for UpdateAppointment form, has LAMBDA EXPRESSION. Sets data for use in upcoming methods. Data includes: systemListener, ApptID, contact combo box, start/end time combo box + logic
+     * <p>
+     *     lambda expression: updateNewApptStartTimeComboBox.  observable, oldValue, and newValue. These parameters represent the previous selected value, the current selected value, and the new selected value.
+     *        It Sets the selection change listener for the start time combo box
+     *        It dynamically populates the updateNewApptEndTimeComboBox combo box based on the selected start time in the updateNewApptStartTimeComboBox.
+     *        It ensures that only end times that are later than the selected start time are available for selection.
+     * </p>
      * @param url
      * @param resourceBundle
      * */

@@ -26,7 +26,13 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 /**
- * class: UpdateCustomerController. Allows input from user to update customer data. Customer selected data is autopopulated when form opens
+ * class: UpdateCustomerController, Allows input from user to update customer data, has LAMBDA EXPRESSION. Customer selected data is autopopulated when form opens
+ * <p>
+ * Method: updateCustomerCountryComboBoxSelectionChange Creates  observable list of division names, makes sub observable lists for US,UK, and Canada, those are assigned per the country code
+ *      reusing lambda expression from initializable() method to generate observable list of division names
+ *      lambda expression assigns division names to specific observale lists per matching country ID and the list is refined to display in combo box drop down, ex: US country = states displayed.
+
+ * </p>
  * */
 public class UpdateCustomerController implements Initializable {
     @FXML private TextField updateCustomerAutoGenerateIDNumTextField;
@@ -45,9 +51,11 @@ public class UpdateCustomerController implements Initializable {
 // --------------- Methods -------------- //
 
     /**
-     * Method: initialize. generates customersTable values. generates appropriate customerID value. has lambda expression to populate state and country names for combo-boxes
+     * Method: initialize, generates customersTable values, has LAMBDA EXPRESSION. generates appropriate customerID value. has lambda expression to populate state and country names for combo-boxes
+     *      <p>
      *      // lambda expression that allows stateProvinceDivisionNames and countryNames to populate in observable list
      *      that is used in customer combo-box. Name data is gathered from first_level_divisions table and countries table.
+     *      </p>
      * @param url
      * @param resourceBundle
      */
@@ -146,7 +154,6 @@ public class UpdateCustomerController implements Initializable {
 
     /**
      * Method: updateCustomerSaveButtonClick. when user clicks button the data is saved. if there are empty fields user will be notified and prompted to enter data
-     *      // lambda expression that allows stateProvinceDivisionNames to populate in observable list that is used in customer combo-box
      * @param event user click
      * */
     @FXML

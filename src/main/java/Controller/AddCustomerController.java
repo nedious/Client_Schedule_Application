@@ -25,7 +25,28 @@ import java.util.ResourceBundle;
 import static DAO.DAO_Customers.maxID;
 
 /**
- * class: AddCustomerController: allows input from user to generate new customer data and save to SQL database
+ * class: AddCustomerController: allows input from user to generate new customer data and save to SQL database, has LAMBDA EXPRESSION.
+ * <p>
+ * Method: initialize, generates customersTable values  INCLUDES LAMBDA EXPRESSION. generates appropriate customerID value. has lambda expression to populate state and country names for combo-boxes
+ * </p>
+ * <p>
+ *      // LAMBDA EXPRESSION that allows stateProvinceDivisionNames and countryNames to populate in observable list
+ *      that is used in customer combo-box. Name data is gathered from first_level_divisions table and countries table.
+ *</p>
+ * <p>
+ * Method: addCustomerCountryComboBoxSelectionChange, Creates  observable list of division names, makes sub observable lists for US,UK, and Canada, those are assigned per the country code
+ * </p>
+ * <p>
+ *        reusing LAMBDA EXPRESSION from initializable() method to generate observable list of division names
+ *        lambda expression assigns division names to specific observale lists per matching country ID and the list
+ *        is refined to display in combo box drop down, ex: US country = states displayed.
+ * </p>
+ * <p>
+ * Method: addCustomerSaveButtonClick when user clicks button the data is saved. if there are empty fields user will be notified and prompted to enter data
+ * </p>
+ * <p>
+ *        //LAMBDA EXPRESSION that allows stateProvinceDivisionNames to populate in observable list that is used in customer combo-box
+ * </p>
  * */
 public class AddCustomerController implements Initializable {
     @FXML private TextField addCustomerAutoGenerateIDNumTextField;
@@ -55,8 +76,8 @@ public class AddCustomerController implements Initializable {
 
     /**
      * /**
-     * Method: initialize. generates customersTable values. generates appropriate customerID value. has lambda expression to populate state and country names for combo-boxes
-     *      // lambda expression that allows stateProvinceDivisionNames and countryNames to populate in observable list
+     * Method: initialize, generates customersTable values  INCLUDES LAMBDA EXPRESSION. generates appropriate customerID value. has lambda expression to populate state and country names for combo-boxes
+     *      // LAMBDA EXPRESSION that allows stateProvinceDivisionNames and countryNames to populate in observable list
      *      that is used in customer combo-box. Name data is gathered from first_level_divisions table and countries table.
      * @param url
      * @param resourceBundle
@@ -88,8 +109,8 @@ public class AddCustomerController implements Initializable {
     }
 
     /**
-     * Method: addCustomerCountryComboBoxSelectionChange. Creates  observable list of division names, makes sub observable lists for US,UK, and Canada, those are assigned per the country code
-     *      // reusing lambda expression from initializable() method to generate observable list of division names
+     * Method: addCustomerCountryComboBoxSelectionChange, Creates  observable list of division names, makes sub observable lists for US,UK, and Canada, those are assigned per the country code
+     *      // reusing LAMBDA EXPRESSION from initializable() method to generate observable list of division names
      *      // lambda expression assigns division names to specific observale lists per matching country ID and the list
      *      is refined to display in combo box drop down, ex: US country = states displayed.
      * @param event
@@ -138,8 +159,8 @@ public class AddCustomerController implements Initializable {
     }
 
     /**
-     * Method: addCustomerSaveButtonClick. when user clicks button the data is saved. if there are empty fields user will be notified and prompted to enter data
-     *      //lambda expression that allows stateProvinceDivisionNames to populate in observable list that is used in customer combo-box
+     * Method: addCustomerSaveButtonClick when user clicks button the data is saved. if there are empty fields user will be notified and prompted to enter data
+     *      //LAMBDA EXPRESSION that allows stateProvinceDivisionNames to populate in observable list that is used in customer combo-box
      * @param event
      * */
     @FXML void addCustomerSaveButtonClick(ActionEvent event) {
