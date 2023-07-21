@@ -291,8 +291,7 @@ public class AppointmentsCustomersController {
      * @param event user click
      * @throws IOException
      * */
-    @FXML
-    void updateSelectedAppointmentButtonClick(ActionEvent event) throws IOException {
+    @FXML void updateSelectedAppointmentButtonClick(ActionEvent event) throws IOException {
 
         Appointments selectedAppointment = appointmentMainTable.getSelectionModel().getSelectedItem();
 

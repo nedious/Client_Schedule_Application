@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 import static DAO.DAO_Appointments.maxApptID;
 
 /**
- * class: AddAppointmentController. collects data from user input and saves data to SQL database. Checks appt time to ensure no overlapping times and 15 min between appts and appt alert reminders
+ * class: AddAppointmentController collects data from user input and saves data to SQL database. Checks appt time to ensure no overlapping times and 15 min between appts and appt alert reminders
  * */
 public class AddAppointmentController implements Initializable {
     @FXML private TextField addNewApptAutoGenApptIDTextField;   // apptID
@@ -72,7 +72,7 @@ public class AddAppointmentController implements Initializable {
 // --------------------- Methods ------------------------//
 
     /**
-     * Method initializable. initializes values needed for AddAppt form. Sets data for use in upcoming methods. Data includes: systemListener, ApptID, contact combo box, start/end time combo box + logic
+     * Method initializable, initializes values needed for AddAppt form. Sets data for use in upcoming methods. Data includes: systemListener, ApptID, contact combo box, start/end time combo box + logic
      *         // lambda expression:  observable, oldValue, and newValue. These parameters represent the previous selected
      *         value, the current selected value, and the new selected value.  dynamically populates
      *         the addNewApptEndTimeComboBox combo box based on the selected start time in the addNewApptStartTimeComboBox.
