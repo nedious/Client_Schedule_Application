@@ -72,8 +72,8 @@ public class AddAppointmentController implements Initializable {
 // --------------------- Methods ------------------------//
 
     /**
-     * Method initializable, initializes values needed for AddAppt form. Sets data for use in upcoming methods. Data includes: systemListener, ApptID, contact combo box, start/end time combo box + logic
-     *         // lambda expression:  observable, oldValue, and newValue. These parameters represent the previous selected
+     * Method initializable, initializes values needed for AddAppt form, INCLUDES LAMBDA EXPRESSION. Sets data for use in upcoming methods. Data includes: systemListener, ApptID, contact combo box, start/end time combo box + logic
+     *         // LAMBDA EXPRESSION:  observable, oldValue, and newValue. These parameters represent the previous selected
      *         value, the current selected value, and the new selected value.  dynamically populates
      *         the addNewApptEndTimeComboBox combo box based on the selected start time in the addNewApptStartTimeComboBox.
      *         It ensures that only end times that are later than the selected start time are available for selection.
