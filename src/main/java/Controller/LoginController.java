@@ -71,7 +71,7 @@ public class LoginController implements Initializable {
      */
     @FXML private void loginLoginButtonClick(ActionEvent event) throws SQLException, IOException, Exception {
         try {
-            ResourceBundle resourceBundle = ResourceBundle.getBundle("translation", Locale.getDefault());
+            ResourceBundle resourceBundle = ResourceBundle.getBundle("Translation2", Locale.getDefault());
 
             String username = loginUsernameTextField.getText();    // get username text from text field
             String password = loginPasswordField.getText();        // get password text from text field
@@ -185,7 +185,7 @@ public class LoginController implements Initializable {
         ZoneId zoneId = ZoneId.systemDefault();
         loginTimeZoneDynamicUpdate.setText(String.valueOf(zoneId));
 
-        ResourceBundle resourceBundle = ResourceBundle.getBundle("translation", locale);
+        ResourceBundle resourceBundle = ResourceBundle.getBundle("Translation2", locale);
 
         loginSecureLoginLabel.setText(resourceBundle.getString("loginSecureLoginLabel"));
         loginUsernameLabel.setText(resourceBundle.getString("loginUsernameLabel"));
