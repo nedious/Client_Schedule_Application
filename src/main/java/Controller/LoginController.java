@@ -73,6 +73,7 @@ public class LoginController implements Initializable {
         try {
             ResourceBundle resourceBundle = ResourceBundle.getBundle("Translation2", Locale.getDefault());
 
+
             String username = loginUsernameTextField.getText();    // get username text from text field
             String password = loginPasswordField.getText();        // get password text from text field
 
