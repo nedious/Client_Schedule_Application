@@ -329,7 +329,9 @@ public class UpdateAppointmentController implements Initializable {
 
                     int ApptCustomerID = appt.getApptCustomerID();
 
-                    if ( (startDateTime.isBefore(ApptEndDateTime)) && (endDateTime.isAfter(ApptStartDateTime))) {
+                    if ((startDateTime.equals(existingAppointment.getApptStartDateTime()) && endDateTime.equals(existingAppointment.getApptEndDateTime()))){
+
+                    } else if (((startDateTime.isBefore(ApptEndDateTime)) && (endDateTime.isAfter(ApptStartDateTime)))){
 
                         Alert alert = new Alert(Alert.AlertType.ERROR);
                         alert.setTitle("Time Conflict");
