@@ -8,8 +8,8 @@ Create a README.txt file that includes the following information:
 
     Author: Ned Imhoff
     Student ID: 005917082
-    Application Version: 1.0
-    Date: 20 July 2023
+    Application Version: 1.3
+    Date: 24 July 2023
 
 •  IDE including version number (e.g., IntelliJ Community 2020.01), full JDK of version used (e.g., Java SE 17.0.1), and JavaFX version compatible with JDK version (e.g. JavaFX-SDK-17.0.1)
 
