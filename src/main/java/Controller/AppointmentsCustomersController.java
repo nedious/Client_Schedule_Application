@@ -8,7 +8,9 @@ import Helper.JDBC;
 
 import Model.Appointments;
 import Model.Customers;
+import Model.Searchable;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -50,6 +52,9 @@ public class AppointmentsCustomersController {
     @FXML private TableColumn<?, ?> appointmentCustomerID;
     @FXML private TableColumn<?, ?> appointmentUserID;
 
+    // search appointment text field
+    @FXML public TextField searchAppts;
+
     // appointment radio buttons
     @FXML private RadioButton allAppointmentsRadio;
     @FXML private RadioButton currentWeekRadio;
@@ -71,6 +76,9 @@ public class AppointmentsCustomersController {
     @FXML private TableColumn<?, ?> customerCountry;
     @FXML private TableColumn<?, ?> stateProvinceDivisionID;
     @FXML private TableColumn<?, ?> customerPhoneNumber;
+
+    // search customer text field
+    @FXML public TextField searchCustomers;
 
     // customer buttons
     @FXML private Button addNewCustomerButton;
@@ -126,7 +134,68 @@ public class AppointmentsCustomersController {
         allAppointmentsRadio.setToggleGroup(toggleGroup);
         currentWeekRadio.setToggleGroup(toggleGroup);
         currentMonthRadio.setToggleGroup(toggleGroup);
+
+        // ------------ Set up search listeners ----------- //
+        setUpSearchListener(searchAppts, allAppointments, appointmentMainTable);
+        setUpSearchListener(searchCustomers, allCustomers, customerMainTable);
     }
+
+    /**
+     * Sets up a search listener for a TextField that filters and updates a TableView based on search criteria.
+     *
+     * @param <T>         The type of items in the TableView, must extend Searchable interface.
+     * @param searchField The TextField used for entering search queries.
+     * @param allItems    The complete list of items in the TableView.
+     * @param tableView   The TableView to be updated based on search results.
+     */
+
+    //    Both 'setUpSearchListener' and 'search' are generic methods that operate on any type 'T' that extends the Searchable interface.
+    //    This enables the methods to work with different types of objects as long as they adhere to the common interface.
+    //    Polymorphism
+    private <T extends Searchable> void setUpSearchListener(TextField searchField, ObservableList<T> allItems, TableView<T> tableView) {
+        searchField.textProperty().addListener((observable, oldValue, newValue) -> {
+            // Trim and convert the search text to lowercase for case-insensitive matching
+            String searchText = newValue.trim().toLowerCase();
+
+            if (searchText.isEmpty()) {
+                // If search text is empty, display the entire list
+                tableView.setItems(allItems);
+            } else {
+                // Filter the list based on the search text
+                ObservableList<T> matchingItems = search(searchText, allItems);
+
+                if (matchingItems.isEmpty()) {
+                    // If no matches, display an error alert
+                    AlertDisplay.displayAlert(22);
+                } else {
+                    // Display matching items
+                    tableView.setItems(matchingItems);
+                }
+            }
+        });
+    }
+
+    /**
+     * Performs a generic search on a list of Searchable items based on a query.
+     *
+     * @param <T>   The type of items in the list, must extend Searchable interface.
+     * @param query The search query.
+     * @param items The list of items to be searched.
+     * @return An ObservableList containing items that match the search query.
+     */
+    private <T extends Searchable> ObservableList<T> search(String query, ObservableList<T> items) {
+        ObservableList<T> result = FXCollections.observableArrayList();
+
+        for (T item : items) {
+            // Check if the searchable text of the item contains the query (case-insensitive)
+            if (item.getSearchableText().toLowerCase().contains(query)) {
+                result.add(item);
+            }
+        }
+
+        return result;
+    }
+
 
     /**
      * Method: addNewAppointmentButtonClick. takes user to AddAppointment screen

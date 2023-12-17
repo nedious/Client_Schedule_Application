@@ -118,13 +118,13 @@
             <Font size="18.0" />
          </font>
       </Button>
-      <TextField fx:id="searchAppts" layoutX="420.0" layoutY="58.0" promptText="Search Appointments" />
+      <TextField fx:id="searchAppts" layoutX="420.0" layoutY="58.0" promptText="Search Appointment Title" />
       <Label layoutX="358.0" layoutY="60.0" text="Search:">
          <font>
             <Font name="System Bold" size="18.0" />
          </font>
       </Label>
-      <TextField layoutX="420.0" layoutY="385.0" promptText="Search Customers" />
+      <TextField fx:id="searchCustomers" layoutX="420.0" layoutY="385.0" promptText="Search Customer Name" />
       <Label layoutX="358.0" layoutY="387.0" text="Search:">
          <font>
             <Font name="System Bold" size="18.0" />
