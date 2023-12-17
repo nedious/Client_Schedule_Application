@@ -5,7 +5,7 @@ import java.time.*;
 /**
  * class: Appointments. Encapsulates information about a Appointment, identified by apptID, apptTitle, description, location, type etc.
  * */
-public class Appointments {
+public class Appointments implements Searchable {
     private int apptID;
     private String apptTitle;
     private String apptDescription;
@@ -120,6 +120,11 @@ public class Appointments {
      * */
     public int getApptUserID() {
         return apptUserID;
+    }
+
+    @Override
+    public String getSearchableText() {
+        return getApptTitle();
     }
 }
 

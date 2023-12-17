@@ -161,6 +161,15 @@ public class AlertDisplay {
                 alertConfirmation.setHeaderText("No Upcoming Appointments");
                 alertConfirmation.showAndWait();
                 break;
+
+
+// --------------------- Search errors --------------------- //
+            case 22:
+                alertError.setTitle("Error");
+                alertError.setHeaderText("No matches found");
+                alertError.setContentText("No matches found");
+                alertError.showAndWait();
+                break;
         }
     }
 

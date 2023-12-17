@@ -3,7 +3,7 @@ package Model;
 /**
  * class: Customers. Encapsulates information about a Customers, identified by their customerID, customerName, address, postal code, country, state, and phone number.
  * */
-public class Customers {
+public class Customers implements Searchable {
     private int customerID;
     private String customerName;
     private String customerAddress;
@@ -84,4 +84,10 @@ public class Customers {
     public String getCustomerPhoneNumber() {
         return customerPhoneNumber;
     }
+
+    @Override
+    public String getSearchableText() {
+        return getCustomerName();
+    }
+
 }
