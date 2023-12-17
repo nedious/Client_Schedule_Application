@@ -124,7 +124,7 @@
             <Font name="System Bold" size="18.0" />
          </font>
       </Label>
-      <TextField layoutX="420.0" layoutY="385.0" promptText="Search Customers" />
+      <TextField fx:id="searchCustomers" layoutX="420.0" layoutY="385.0" promptText="Search Customers" />
       <Label layoutX="358.0" layoutY="387.0" text="Search:">
          <font>
             <Font name="System Bold" size="18.0" />
