@@ -148,6 +148,10 @@ public class AppointmentsCustomersController {
      * @param allItems    The complete list of items in the TableView.
      * @param tableView   The TableView to be updated based on search results.
      */
+
+    //    Both 'setUpSearchListener' and 'search' are generic methods that operate on any type 'T' that extends the Searchable interface.
+    //    This enables the methods to work with different types of objects as long as they adhere to the common interface.
+    //    Polymorphism
     private <T extends Searchable> void setUpSearchListener(TextField searchField, ObservableList<T> allItems, TableView<T> tableView) {
         searchField.textProperty().addListener((observable, oldValue, newValue) -> {
             // Trim and convert the search text to lowercase for case-insensitive matching
