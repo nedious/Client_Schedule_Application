@@ -5,6 +5,7 @@
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.shape.Line?>
@@ -17,7 +18,7 @@
                 <Font name="System Bold" size="24.0" />
             </font>
         </Label>
-        <RadioButton fx:id="currentWeekRadio" layoutX="704.0" layoutY="41.0" mnemonicParsing="false" onAction="#selectCurrentWeekRadio" selected="false" text="Week">
+        <RadioButton fx:id="currentWeekRadio" layoutX="824.0" layoutY="41.0" mnemonicParsing="false" onAction="#selectCurrentWeekRadio" selected="false" text="Week">
             <font>
                 <Font size="16.0" />
             </font>
@@ -46,12 +47,12 @@
                 <Font name="System Bold" size="24.0" />
             </font>
         </Label>
-        <RadioButton fx:id="currentMonthRadio" layoutX="704.0" layoutY="70.0" mnemonicParsing="false" onAction="#selectCurrentMonthRadio" selected="false" text="Month">
+        <RadioButton fx:id="currentMonthRadio" layoutX="824.0" layoutY="70.0" mnemonicParsing="false" onAction="#selectCurrentMonthRadio" selected="false" text="Month">
             <font>
                 <Font size="16.0" />
             </font>
         </RadioButton>
-        <RadioButton fx:id="allAppointmentsRadio" layoutX="704.0" layoutY="13.0" mnemonicParsing="false" onAction="#selectAllAppointmentsRadio" selected="true" text="All Appointments">
+        <RadioButton fx:id="allAppointmentsRadio" layoutX="824.0" layoutY="13.0" mnemonicParsing="false" onAction="#selectAllAppointmentsRadio" selected="true" text="All">
             <font>
                 <Font size="16.0" />
             </font>
@@ -97,7 +98,7 @@
                 <Font size="18.0" />
             </font>
         </Button>
-      <Label layoutX="512.0" layoutY="40.0" text="View appointments by :">
+      <Label layoutX="632.0" layoutY="17.0" text="View appointments by :">
          <font>
             <Font name="System Bold" size="18.0" />
          </font>
@@ -117,5 +118,17 @@
             <Font size="18.0" />
          </font>
       </Button>
+      <TextField fx:id="searchAppts" layoutX="420.0" layoutY="58.0" promptText="Search Appointments" />
+      <Label layoutX="358.0" layoutY="60.0" text="Search:">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Label>
+      <TextField layoutX="420.0" layoutY="385.0" promptText="Search Customers" />
+      <Label layoutX="358.0" layoutY="387.0" text="Search:">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Label>
     </children>
 </Pane>
