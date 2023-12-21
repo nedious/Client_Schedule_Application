@@ -2,6 +2,7 @@ package Controller;
 
 import DAO.DAO_Appointments;
 import DAO.DAO_Contacts;
+import DAO.DAO_Customers;
 import Model.Appointments;
 
 import javafx.beans.property.SimpleStringProperty;
@@ -80,7 +81,9 @@ public class ReportsController implements Initializable {
     @FXML private TableColumn<?, ?> scheduleApptReportDescriptionColumn;
     @FXML private TableColumn<?, ?> scheduleApptReportStartDateColumn;
     @FXML private TableColumn<?, ?> scheduleApptReportEndDateColumn;
-    @FXML private TableColumn<?, ?> scheduleApptReportCustomerIDColumn;
+//    @FXML private TableColumn<?, ?> scheduleApptReportCustomerIDColumn;
+    @FXML private TableColumn<Appointments, String> scheduleApptReportCustomerIDColumn;
+
 
     @FXML private ComboBox<String> sortByContactComboBox;
 
@@ -146,7 +149,23 @@ public class ReportsController implements Initializable {
             scheduleApptReportDescriptionColumn.setCellValueFactory(new PropertyValueFactory<>("apptDescription"));
             scheduleApptReportStartDateColumn.setCellValueFactory(new PropertyValueFactory<>("apptStartDateTime"));
             scheduleApptReportEndDateColumn.setCellValueFactory(new PropertyValueFactory<>("apptEndDateTime"));
-            scheduleApptReportCustomerIDColumn.setCellValueFactory(new PropertyValueFactory<>("apptCustomerID"));
+//            scheduleApptReportCustomerIDColumn.setCellValueFactory(new PropertyValueFactory<>("apptCustomerID"));
+
+
+            scheduleApptReportCustomerIDColumn.setCellValueFactory(cellData -> {
+                try {
+                    Appointments appointment = cellData.getValue();
+                    int customerID = appointment.getApptCustomerID();
+                    String customerName = DAO_Customers.getCustomerNameByID(customerID);
+                    return new SimpleStringProperty(customerName);
+                } catch (SQLException e) {
+                    e.printStackTrace(); // Handle the exception according to your needs
+                    return new SimpleStringProperty("");
+                }
+            });
+
+
+
 
             // ------------ set sortByContactComboBox with Contact Names ---------- //
             ObservableList<String> contactNames = DAO_Contacts.getAllContactNames();
