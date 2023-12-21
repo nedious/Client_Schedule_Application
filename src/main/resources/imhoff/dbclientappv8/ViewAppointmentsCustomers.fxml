@@ -11,7 +11,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="925.0" style="-fx-background-color: #8ecbf9  #8ecbf9;" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.AppointmentsCustomersController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="782.0" prefWidth="926.0" style="-fx-background-color: #8ecbf9  #8ecbf9;" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.AppointmentsCustomersController">
     <children>
         <Label layoutX="24.0" layoutY="56.0" text="Scheduled Appointments">
             <font>
@@ -34,15 +34,15 @@
                 <TableColumn fx:id="appointmentTitle" prefWidth="75.0" text="Title" />
                 <TableColumn fx:id="appointmentDescription" prefWidth="75.0" text="Description" />
                 <TableColumn fx:id="appointmentLocation" prefWidth="86.66673278808594" text="Location" />
-                <TableColumn fx:id="appointmentContact" prefWidth="79.333251953125" text="Contact" />
+                <TableColumn fx:id="appointmentContact" prefWidth="79.333251953125" text="Faculty" />
                 <TableColumn fx:id="appointmentType" prefWidth="101.0" text="Type" />
                 <TableColumn fx:id="appointmentStartDateTime" prefWidth="111.5" text="Start Date/Time" />
                 <TableColumn fx:id="appointmentEndDateTime" minWidth="0.0" prefWidth="117.0" text="End Date/Time" />
-                <TableColumn fx:id="appointmentCustomerID" prefWidth="73.5" text="Customer ID" />
+                <TableColumn fx:id="appointmentCustomerID" prefWidth="73.5" text="Student ID" />
                 <TableColumn fx:id="appointmentUserID" prefWidth="72.6666259765625" text="User ID" />
             </columns>
         </TableView>
-        <Label layoutX="24.0" layoutY="383.0" text="Customers">
+        <Label layoutX="24.0" layoutY="383.0" text="Students">
             <font>
                 <Font name="System Bold" size="24.0" />
             </font>
@@ -69,7 +69,7 @@
         </Button>
         <TableView fx:id="customerMainTable" layoutX="24.0" layoutY="425.0" prefHeight="200.0" prefWidth="869.0">
             <columns>
-                <TableColumn fx:id="customerID" prefWidth="75.0" text="Customer ID" />
+                <TableColumn fx:id="customerID" prefWidth="75.0" text="Student ID" />
                 <TableColumn fx:id="customerName" prefWidth="150" text="Name" />
                 <TableColumn fx:id="customerAddress" prefWidth="150" text="Address" />
                 <TableColumn fx:id="customerPostalCode" prefWidth="150" text="Postal Code" />
@@ -78,17 +78,17 @@
                 <TableColumn fx:id="customerPhoneNumber" prefWidth="116.0" text="Phone Number" />
             </columns>
         </TableView>
-        <Button fx:id="addNewCustomerButton" layoutX="26.0" layoutY="637.0" mnemonicParsing="false" onAction="#addNewCustomerButtonClick" text="Add New Customer">
+        <Button fx:id="addNewCustomerButton" layoutX="26.0" layoutY="637.0" mnemonicParsing="false" onAction="#addNewCustomerButtonClick" text="Add New Student">
             <font>
                 <Font size="14.0" />
             </font>
         </Button>
-        <Button fx:id="updateSelectedCustomerButton" layoutX="178.0" layoutY="637.0" mnemonicParsing="false" onAction="#updateSelectedCustomerButtonClick" text="Update Selected Customer">
+        <Button fx:id="updateSelectedCustomerButton" layoutX="178.0" layoutY="637.0" mnemonicParsing="false" onAction="#updateSelectedCustomerButtonClick" text="Update Selected Student">
             <font>
                 <Font size="14.0" />
             </font>
         </Button>
-        <Button fx:id="deleteSelectedCustomerButton" layoutX="372.0" layoutY="637.0" mnemonicParsing="false" onAction="#deleteSelectedCustomerButtonClick" text="Delete Selected Customer">
+        <Button fx:id="deleteSelectedCustomerButton" layoutX="372.0" layoutY="637.0" mnemonicParsing="false" onAction="#deleteSelectedCustomerButtonClick" text="Delete Selected Student">
             <font>
                 <Font size="14.0" />
             </font>
@@ -124,7 +124,7 @@
             <Font name="System Bold" size="18.0" />
          </font>
       </Label>
-      <TextField fx:id="searchCustomers" layoutX="420.0" layoutY="385.0" promptText="Search Customer Name" />
+      <TextField fx:id="searchCustomers" layoutX="420.0" layoutY="385.0" promptText="Search Student Name" />
       <Label layoutX="358.0" layoutY="387.0" text="Search:">
          <font>
             <Font name="System Bold" size="18.0" />
