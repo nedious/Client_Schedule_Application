@@ -96,6 +96,26 @@ public class DAO_Customers {
     }
 
     /**
+     * Method: getCustomerNameByID. Retrieves customer name by customer ID.
+     * @param customerID
+     * @return customerName
+     * @throws SQLException
+     */
+    public static String getCustomerNameByID(int customerID) throws SQLException {
+        String sqlSelect = "SELECT Customer_Name FROM customers WHERE Customer_ID = ?";
+        try (PreparedStatement preparedStatement = JDBC.getConnection().prepareStatement(sqlSelect)) {
+            preparedStatement.setInt(1, customerID);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getString("Customer_Name");
+            } else {
+                return ""; // Return an empty string if customer not found
+            }
+        }
+    }
+
+
+    /**
      * Method: deleteCustomerWithCustomerID. Customer with the appropriate Customer_ID is deleted
      * @param customerID
      * @return deleteResult
