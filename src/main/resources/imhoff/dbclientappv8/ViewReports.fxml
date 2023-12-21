@@ -21,20 +21,20 @@
                     <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="324.0" prefWidth="864.0">
                             <children>
-                                <TableView fx:id="apptReportContactsTable" layoutX="16.0" layoutY="40.0" prefHeight="272.0" prefWidth="878.0">
+                                <TableView fx:id="apptReportContactsTable" layoutX="16.0" layoutY="66.0" prefHeight="272.0" prefWidth="878.0">
                                     <columns>
                                         <TableColumn fx:id="scheduleApptIDColumn" prefWidth="94.0" text="Appointment ID" />
-                                        <TableColumn fx:id="scheduleApptTitleColumn" prefWidth="124.0" text="Title" />
+                                        <TableColumn fx:id="scheduleApptReportCustomerIDColumn" prefWidth="100.4095458984375" text="Student Name" />
+                                        <TableColumn fx:id="scheduleApptTitleColumn" prefWidth="109.45614624023438" text="Title" />
                                         <TableColumn fx:id="scheduleApptTypeColumn" prefWidth="141.0" text="Type" />
                                         <TableColumn fx:id="scheduleApptReportDescriptionColumn" prefWidth="150.0" text="Description" />
                                         <TableColumn fx:id="scheduleApptReportStartDateColumn" prefWidth="154.0" text="Start Date/Time" />
-                                        <TableColumn fx:id="scheduleApptReportEndDateColumn" prefWidth="134.0" text="End Date/Time" />
-                                        <TableColumn fx:id="scheduleApptReportCustomerIDColumn" text="Customer ID" />
+                                        <TableColumn fx:id="scheduleApptReportEndDateColumn" prefWidth="126.50531005859375" text="End Date/Time" />
                                     </columns>
                                 </TableView>
-                                <HBox layoutX="288.0" layoutY="4.0" prefHeight="36.0" prefWidth="410.0">
+                                <HBox layoutX="19.0" layoutY="6.0" prefHeight="36.0" prefWidth="410.0">
                                     <children>
-                                        <Label prefHeight="27.0" prefWidth="141.0" text="Sort by Faculty:">
+                                        <Label prefHeight="27.0" prefWidth="141.0" text="Report by Faculty:">
                                             <font>
                                                 <Font name="System Bold" size="18.0" />
                                             </font>
@@ -42,6 +42,12 @@
                                         <ComboBox fx:id="sortByContactComboBox" onAction="#sortByContactComboBoxClick" prefHeight="26.0" prefWidth="201.0" />
                                     </children>
                                 </HBox>
+                        <Label fx:id="facultyReportTitle" layoutX="392.0" layoutY="1.0" prefHeight="44.0" prefWidth="442.0" text="Report Title:">
+                           <font>
+                              <Font size="36.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="facultyReportDateTimeStamp" layoutX="393.0" layoutY="40.0" prefHeight="25.0" prefWidth="424.0" text="Date-Time Stamp" wrapText="true" />
                             </children></AnchorPane>
                     </content>
                 </Tab>

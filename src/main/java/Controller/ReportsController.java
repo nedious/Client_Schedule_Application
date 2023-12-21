@@ -84,6 +84,10 @@ public class ReportsController implements Initializable {
 
     @FXML private ComboBox<String> sortByContactComboBox;
 
+    @FXML private Label facultyReportTitle;
+
+    @FXML private Label facultyReportDateTimeStamp;
+
     // --------- Appointment by Duration --------//
     @FXML private Tab tabApptByDuration;
 
@@ -105,7 +109,8 @@ public class ReportsController implements Initializable {
      * @param url
      * @param resourceBundle
      * */
-    @Override public void initialize(URL url, ResourceBundle resourceBundle) {
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
             // --------- Appointments Table ----------- //
             ObservableList<Appointments> allAppointments = DAO_Appointments.getAllAppointments();
@@ -148,6 +153,17 @@ public class ReportsController implements Initializable {
             sortByContactComboBox.setItems(contactNames);
             sortByContactComboBox.getItems().add(""); // Add blank value to reset filter
 
+            // Setting up the listener for sortByContactComboBox
+            sortByContactComboBox.valueProperty().addListener((observable, oldValue, newValue) -> {
+                if (newValue != null && !newValue.isEmpty()) {
+                    facultyReportTitle.setText("Report: " + newValue);
+                    updateDateTimeStamp(); // Update date-time stamp
+                } else {
+                    facultyReportTitle.setText("Report");
+                    facultyReportDateTimeStamp.setText(""); // Reset date-time stamp when no contact is selected
+                }
+            });
+
             // --------- Duration Table ----------- //
             durationTable.setItems(allAppointments);
 
@@ -170,6 +186,15 @@ public class ReportsController implements Initializable {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+//        sortByContactComboBox.valueProperty().addListener((observable, oldValue, newValue) -> {
+//            if (newValue != null && !newValue.isEmpty()) {
+//                facultyReportTitle.setText("Report: " + newValue);
+//            } else {
+//                facultyReportTitle.setText("Report");
+//            }
+//        });
+
     }
 
     @FXML public void apptContactScheduleSelection() {}
@@ -285,17 +310,28 @@ public class ReportsController implements Initializable {
      * @param event
      * @throws SQLException
      * */
-    @FXML void sortByContactComboBoxClick(ActionEvent event) throws SQLException {
-
+    @FXML
+    void sortByContactComboBoxClick(ActionEvent event) throws SQLException {
         String selectedContact = sortByContactComboBox.getValue();
         ObservableList<Appointments> allAppointments = DAO_Appointments.getAllAppointments();
 
         if (selectedContact != null && !selectedContact.isEmpty()) {
             ObservableList<Appointments> filteredAppointments = filterAppointmentsByContact(allAppointments, selectedContact);
             apptReportContactsTable.setItems(filteredAppointments);
+
+            // Update date-time stamp when the contact is selected
+            updateDateTimeStamp();
         } else {
             apptReportContactsTable.setItems(allAppointments); // Reset to show all appointments if no contact is selected
+            facultyReportDateTimeStamp.setText(""); // Reset date-time stamp when no contact is selected
         }
+    }
+
+    // Method to update date-time stamp dynamically
+    private void updateDateTimeStamp() {
+        LocalDateTime currentDateTime = LocalDateTime.now();
+        String formattedDateTime = currentDateTime.toString();
+        facultyReportDateTimeStamp.setText("Timestamp: " + formattedDateTime);
     }
 
     /**
