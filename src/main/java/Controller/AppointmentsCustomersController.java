@@ -166,18 +166,6 @@ public class AppointmentsCustomersController {
         setUpSearchListener(searchCustomers, allCustomers, customerMainTable);
     }
 
-    /**
-     * Sets up a search listener for a TextField that filters and updates a TableView based on search criteria.
-     *
-     * @param <T>         The type of items in the TableView, must extend Searchable interface.
-     * @param searchField The TextField used for entering search queries.
-     * @param allItems    The complete list of items in the TableView.
-     * @param tableView   The TableView to be updated based on search results.
-     */
-
-    //    Both 'setUpSearchListener' and 'search' are generic methods that operate on any type 'T' that extends the Searchable interface.
-    //    This enables the methods to work with different types of objects as long as they adhere to the common interface.
-    //    Polymorphism
     private <T extends Searchable> void setUpSearchListener(TextField searchField, ObservableList<T> allItems, TableView<T> tableView) {
         searchField.textProperty().addListener((observable, oldValue, newValue) -> {
             // Trim and convert the search text to lowercase for case-insensitive matching
@@ -188,7 +176,7 @@ public class AppointmentsCustomersController {
                 tableView.setItems(allItems);
             } else {
                 // Filter the list based on the search text
-                ObservableList<T> matchingItems = search(searchText, allItems);
+                ObservableList<T> matchingItems = search(searchText, allItems, tableView);
 
                 if (matchingItems.isEmpty()) {
                     // If no matches, display an error alert
@@ -201,6 +189,7 @@ public class AppointmentsCustomersController {
         });
     }
 
+
     /**
      * Performs a generic search on a list of Searchable items based on a query.
      *
@@ -209,18 +198,52 @@ public class AppointmentsCustomersController {
      * @param items The list of items to be searched.
      * @return An ObservableList containing items that match the search query.
      */
-    private <T extends Searchable> ObservableList<T> search(String query, ObservableList<T> items) {
+    private <T extends Searchable> ObservableList<T> search(String query, ObservableList<T> items, TableView<T> tableView) {
         ObservableList<T> result = FXCollections.observableArrayList();
 
         for (T item : items) {
-            // Check if the searchable text of the item contains the query (case-insensitive)
-            if (item.getSearchableText().toLowerCase().contains(query)) {
+            // Check if any column's searchable text contains the query (case-insensitive)
+            if (containsSearchQuery(item, query, tableView)) {
                 result.add(item);
             }
         }
 
         return result;
     }
+
+    /**
+     * Checks if any part of the searchable text in any column contains the search query.
+     *
+     * @param item     The item to check for a match.
+     * @param query    The search query.
+     * @param tableView The TableView containing the columns to search.
+     * @return True if any part of the searchable text in any column contains the query; otherwise, false.
+     */
+    private <T extends Searchable> boolean containsSearchQuery(T item, String query, TableView<T> tableView) {
+        for (TableColumn<T, ?> column : tableView.getColumns()) {
+            if (containsTextInColumn(item, query, column)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Checks if the searchable text in a specific column contains the search query.
+     *
+     * @param item   The item to check for a match.
+     * @param query  The search query.
+     * @param column The TableColumn to check.
+     * @return True if the searchable text in the column contains the query; otherwise, false.
+     */
+    private <T extends Searchable> boolean containsTextInColumn(T item, String query, TableColumn<T, ?> column) {
+        if (column.getCellData(item) != null) {
+            String columnText = column.getCellData(item).toString().toLowerCase();
+            return columnText.contains(query.toLowerCase());
+        }
+        return false;
+    }
+
 
 
     /**
