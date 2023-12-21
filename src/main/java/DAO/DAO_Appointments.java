@@ -37,6 +37,8 @@ public class DAO_Appointments {
             int apptContactID = resultSet.getInt("Contact_ID");
             String apptType = resultSet.getString("Type");
 
+//            String facultyName = resultSet.getString("Contact_Name");
+
             LocalDateTime apptStartDateTime = resultSet.getTimestamp("Start").toLocalDateTime();    // displays table contense in system time
             LocalDateTime apptEndDateTime = resultSet.getTimestamp("End").toLocalDateTime();
 

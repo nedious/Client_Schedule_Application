@@ -1,6 +1,7 @@
 package Controller;
 
 import DAO.DAO_Appointments;
+import DAO.DAO_Contacts;
 import DAO.DAO_Customers;
 
 import Helper.AlertDisplay;
@@ -10,6 +11,7 @@ import Model.Appointments;
 import Model.Customers;
 import Model.Searchable;
 
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -41,16 +43,28 @@ public class AppointmentsCustomersController {
 // -------------- appointment table (columns) --------------- //
     @FXML private TableView<Appointments> appointmentMainTable;
 
-    @FXML private TableColumn<?, ?> appointmentID;
-    @FXML private TableColumn<?, ?> appointmentTitle;
-    @FXML private TableColumn<?, ?> appointmentDescription;
-    @FXML private TableColumn<?, ?> appointmentLocation;
-    @FXML private TableColumn<?, ?> appointmentContact;
-    @FXML private TableColumn<?, ?> appointmentType;
-    @FXML private TableColumn<?, ?> appointmentStartDateTime;
-    @FXML private TableColumn<?, ?> appointmentEndDateTime;
-    @FXML private TableColumn<?, ?> appointmentCustomerID;
-    @FXML private TableColumn<?, ?> appointmentUserID;
+//    @FXML private TableColumn<?, ?> appointmentID;
+//    @FXML private TableColumn<?, ?> appointmentTitle;
+//    @FXML private TableColumn<?, ?> appointmentDescription;
+//    @FXML private TableColumn<?, ?> appointmentLocation;
+//    @FXML private TableColumn<?, ?> appointmentContact;
+//    @FXML private TableColumn<?, ?> appointmentType;
+//    @FXML private TableColumn<?, ?> appointmentStartDateTime;
+//    @FXML private TableColumn<?, ?> appointmentEndDateTime;
+//    @FXML private TableColumn<?, ?> appointmentCustomerID;
+//    @FXML private TableColumn<?, ?> appointmentUserID;
+
+    @FXML private TableColumn<Appointments, Integer> appointmentID;
+    @FXML private TableColumn<Appointments, String> appointmentTitle;
+    @FXML private TableColumn<Appointments, String> appointmentDescription;
+    @FXML private TableColumn<Appointments, String> appointmentLocation;
+    @FXML private TableColumn<Appointments, String> appointmentContact; // Adjusted generic type
+    @FXML private TableColumn<Appointments, String> appointmentType;
+    @FXML private TableColumn<Appointments, LocalDateTime> appointmentStartDateTime;
+    @FXML private TableColumn<Appointments, LocalDateTime> appointmentEndDateTime;
+    @FXML private TableColumn<Appointments, Integer> appointmentCustomerID;
+    @FXML private TableColumn<Appointments, Integer> appointmentUserID;
+
 
     // search appointment text field
     @FXML public TextField searchAppts;
@@ -113,6 +127,18 @@ public class AppointmentsCustomersController {
         appointmentEndDateTime.setCellValueFactory(new PropertyValueFactory<>("apptEndDateTime"));
         appointmentCustomerID.setCellValueFactory(new PropertyValueFactory<>("apptCustomerID"));
         appointmentUserID.setCellValueFactory(new PropertyValueFactory<>("apptUserID"));
+
+        appointmentContact.setCellValueFactory(cellData -> {
+            int contactID = cellData.getValue().getApptContactID();
+            try {
+                String contactName = DAO_Contacts.getContactNameByID(contactID);
+                return new SimpleStringProperty(contactName);
+            } catch (SQLException e) {
+                e.printStackTrace(); // Handle the exception according to your needs
+                return new SimpleStringProperty("");
+            }
+        });
+
 
         // --------- Customers Table ----------- //
 
