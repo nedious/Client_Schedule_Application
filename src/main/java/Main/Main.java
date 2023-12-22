@@ -25,7 +25,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException{       // Method declaration. Stage = object and primary window to open
         Parent root = FXMLLoader.load(getClass().getResource("/imhoff/dbclientappv8/ViewLogin.fxml"));      // loads Login.fxml. FXMLLoader.load() method returns a Parent object representing the root node of the loaded FXML file, which is then assigned to the root variable.
-        primaryStage.setTitle("Global Consulting");                 // sets window title
+        primaryStage.setTitle("NMC");                 // sets window title
         primaryStage.setScene(new Scene(root, 500, 400));    // creates a new Scene object with the root as its root node. The Scene constructor takes the root node and sets scene size
         primaryStage.show();                                        // displays the Stage (the main window) on the screen.
     }
