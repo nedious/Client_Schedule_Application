@@ -49,7 +49,7 @@
                 <Font size="20.0" />
             </font>
         </Label>
-        <Label layoutX="69.0" layoutY="487.0" text="Customer ID">
+        <Label layoutX="69.0" layoutY="487.0" text="Student ID">
             <font>
                 <Font size="20.0" />
             </font>

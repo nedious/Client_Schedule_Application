@@ -9,12 +9,12 @@
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="550.0" prefWidth="600.0" style="-fx-background-color: #8ecbf9  #8ecbf9;" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.UpdateCustomerController">
     <children>
-        <Label alignment="CENTER" layoutX="187.0" layoutY="23.0" prefHeight="31.0" prefWidth="252.0" text="UPDATE Customer">
+        <Label alignment="CENTER" layoutX="187.0" layoutY="23.0" prefHeight="31.0" prefWidth="252.0" text="UPDATE Student">
             <font>
                 <Font name="System Bold" size="26.0" />
             </font>
         </Label>
-        <Label layoutX="35.0" layoutY="85.0" text="Customer ID">
+        <Label layoutX="35.0" layoutY="85.0" text="Student ID">
             <font>
                 <Font size="20.0" />
             </font>
@@ -45,7 +45,7 @@
             </font>
         </Label>
 
-        <TextField fx:id="updateCustomerAutoGenerateIDNumTextField" editable="false" layoutX="210.0" layoutY="85.0" opacity="0.5" prefHeight="25.0" prefWidth="300.0"/>
+        <TextField fx:id="updateCustomerAutoGenerateIDNumTextField" editable="false" layoutX="210.0" layoutY="85.0" opacity="0.5" prefHeight="25.0" prefWidth="300.0" />
         <TextField fx:id="updateCustomerNameTextField" layoutX="210.0" layoutY="135.0" prefHeight="25.0" prefWidth="300.0" />
         <TextField fx:id="updateCustomerAddressTextField" layoutX="210.0" layoutY="185.0" prefHeight="25.0" prefWidth="300.0" />
         <TextField fx:id="updateCustomerPostalCodeTextField" layoutX="210.0" layoutY="235.0" prefHeight="25.0" prefWidth="300.0" />

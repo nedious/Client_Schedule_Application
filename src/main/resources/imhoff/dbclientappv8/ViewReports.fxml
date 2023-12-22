@@ -51,35 +51,6 @@
                             </children></AnchorPane>
                     </content>
                 </Tab>
-            <Tab fx:id="tabApptByContact1" onSelectionChanged="#apptContactScheduleSelection" text="Appointment Schedule by Student">
-               <content>
-                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="324.0" prefWidth="864.0">
-                     <children>
-                        <TableView fx:id="apptReportContactsTable1" layoutX="16.0" layoutY="40.0" prefHeight="272.0" prefWidth="878.0">
-                           <columns>
-                              <TableColumn fx:id="scheduleApptIDColumn1" prefWidth="94.0" text="Appointment ID" />
-                              <TableColumn fx:id="scheduleApptTitleColumn1" prefWidth="124.0" text="Title" />
-                              <TableColumn fx:id="scheduleApptTypeColumn1" prefWidth="141.0" text="Type" />
-                              <TableColumn fx:id="scheduleApptReportDescriptionColumn1" prefWidth="150.0" text="Description" />
-                              <TableColumn fx:id="scheduleApptReportStartDateColumn1" prefWidth="154.0" text="Start Date/Time" />
-                              <TableColumn fx:id="scheduleApptReportEndDateColumn1" prefWidth="134.0" text="End Date/Time" />
-                              <TableColumn fx:id="scheduleApptReportCustomerIDColumn1" text="Customer ID" />
-                           </columns>
-                        </TableView>
-                        <HBox layoutX="288.0" layoutY="4.0" prefHeight="36.0" prefWidth="410.0">
-                           <children>
-                              <Label prefHeight="27.0" prefWidth="141.0" text="Sort by Student:">
-                                 <font>
-                                    <Font name="System Bold" size="18.0" />
-                                 </font>
-                              </Label>
-                              <ComboBox fx:id="sortByStudentComboBox" prefHeight="26.0" prefWidth="201.0" />
-                           </children>
-                        </HBox>
-                     </children>
-                  </AnchorPane>
-               </content>
-            </Tab>
                 <Tab fx:id="tabApptByDuration" onSelectionChanged="#apptDurationSelection" text="Appointments by Duration">
                     <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-border-color: #000000;">
@@ -126,7 +97,7 @@
             <Font size="18.0" />
          </font>
       </Button>
-      <Label alignment="TOP_LEFT" layoutX="21.0" layoutY="14.0" prefHeight="30.0" prefWidth="303.0" text="Global Consulting" textFill="WHITE">
+      <Label alignment="TOP_LEFT" layoutX="21.0" layoutY="14.0" prefHeight="30.0" prefWidth="303.0" text="NMC" textFill="WHITE">
          <font>
             <Font name="Verdana Bold" size="24.0" />
          </font>

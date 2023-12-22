@@ -321,30 +321,54 @@ public class UpdateAppointmentController implements Initializable {
                     }
                 }
 
-        // ------------ logic for avoiding overlaping appt times -----------//
-                for (Appointments appt : allAppointments) {
+// ------------ logic for avoiding overlapping appt times -----------//
+                ObservableList<Appointments> allAppointmentsList = DAO_Appointments.getAllAppointments();
 
-                    LocalDateTime ApptStartDateTime = appt.getApptStartDateTime();
-                    LocalDateTime ApptEndDateTime = appt.getApptEndDateTime();
+                for (Appointments appt : allAppointmentsList) {
+                    LocalDateTime apptStartDateTime = appt.getApptStartDateTime();
+                    LocalDateTime apptEndDateTime = appt.getApptEndDateTime();
+                    int apptContactID = appt.getApptContactID();
+                    int apptCustomerID = appt.getApptCustomerID();
 
-                    int ApptCustomerID = appt.getApptCustomerID();
+                    // Get the contact name for display in the error message
+                    String apptContactName = DAO_Contacts.getContactNameByID(appt.getApptContactID());
 
-                    if ((startDateTime.equals(existingAppointment.getApptStartDateTime()) && endDateTime.equals(existingAppointment.getApptEndDateTime()))){
 
-                    } else if (((startDateTime.isBefore(ApptEndDateTime)) && (endDateTime.isAfter(ApptStartDateTime)))){
+                    // Check for overlapping times only if the contact is the same
+                    if (apptContactID == contactID) {
+                        if ((startDateTime.isBefore(apptEndDateTime)) && (endDateTime.isAfter(apptStartDateTime))) {
+                            Alert alert = new Alert(Alert.AlertType.ERROR);
+                            alert.setTitle("Time Conflict");
+                            alert.setHeaderText(null);
+                            alert.setContentText("The selected time overlaps with an existing appointment for the same faculty." +
+                                    " Faculty Name: " + apptContactName  // Display Contact Name
+                                    + "\n\nExisting Start Time: " + apptStartDateTime.format(DateTimeFormatter.ofPattern("HH:mm"))
+                                    + "\n\nExisting End Time: " + apptEndDateTime.format(DateTimeFormatter.ofPattern("HH:mm"))
+                                    + "\n\nPlease select a different time.");
+                            alert.showAndWait();
+                            return; // Exit the method without saving the data
+                        }
+                    }
 
-                        Alert alert = new Alert(Alert.AlertType.ERROR);
-                        alert.setTitle("Time Conflict");
-                        alert.setHeaderText(null);
-                        alert.setContentText("The selected time overlaps with an existing appointment for another customer: Customer ID # " + ApptCustomerID
-                                + "\n\nExisting Start Time: " + ApptStartDateTime.format(DateTimeFormatter.ofPattern("HH:mm"))
-                                + "\n\nExisting End Time: " + ApptEndDateTime.format(DateTimeFormatter.ofPattern("HH:mm"))
-                                + "\n\nPlease select a different time.");
-                        alert.showAndWait();
-
-                        return; // Exit the method without saving the data
+                    // Check for overlapping times only if the customer is the same
+                    if (apptCustomerID == Integer.parseInt(updateNewApptCustomerIDComboBox.getSelectionModel().getSelectedItem().toString())) {
+                        if ((startDateTime.isBefore(apptEndDateTime)) && (endDateTime.isAfter(apptStartDateTime))) {
+                            Alert alert = new Alert(Alert.AlertType.ERROR);
+                            alert.setTitle("Time Conflict");
+                            alert.setHeaderText(null);
+                            alert.setContentText("The selected time overlaps with an existing appointment for the same student" +
+                                    ": Student ID # " + apptCustomerID
+                                    + "\n\nExisting Start Time: " + apptStartDateTime.format(DateTimeFormatter.ofPattern("HH:mm"))
+                                    + "\n\nExisting End Time: " + apptEndDateTime.format(DateTimeFormatter.ofPattern("HH:mm"))
+                                    + "\n\nPlease select a different time.");
+                            alert.showAndWait();
+                            return; // Exit the method without saving the data
+                        }
                     }
                 }
+
+
+
 
         // ------------ SQL update statement -------------//
                 String sqlUpdate =

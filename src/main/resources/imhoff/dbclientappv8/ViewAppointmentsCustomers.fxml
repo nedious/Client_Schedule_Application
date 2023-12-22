@@ -104,7 +104,7 @@
          </font>
       </Label>
       <Line endX="9.5" endY="370.5" startX="910.0" startY="370.5" />
-      <Label alignment="TOP_LEFT" layoutX="24.0" layoutY="16.0" prefHeight="30.0" prefWidth="303.0" text="Global Consulting" textFill="WHITE">
+      <Label alignment="TOP_LEFT" layoutX="24.0" layoutY="16.0" prefHeight="30.0" prefWidth="303.0" text="NMC" textFill="WHITE">
          <font>
             <Font name="Verdana Bold" size="24.0" />
          </font>
