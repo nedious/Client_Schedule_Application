@@ -22,6 +22,7 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
 /**
@@ -349,7 +350,8 @@ public class ReportsController implements Initializable {
     // Method to update date-time stamp dynamically
     private void updateDateTimeStamp() {
         LocalDateTime currentDateTime = LocalDateTime.now();
-        String formattedDateTime = currentDateTime.toString();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String formattedDateTime = currentDateTime.format(formatter);
         facultyReportDateTimeStamp.setText("Timestamp: " + formattedDateTime);
     }
 
