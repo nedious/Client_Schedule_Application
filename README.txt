@@ -1,10 +1,17 @@
-Create a README.txt file that includes the following information:
-•  title and purpose of the application
+Application designed to organize appointments over multiple time zones with the ability to add, update, delete appointments and investigate aggregate data with appointment reports.
 
-    Title: Global Consulting Application Scheduler. Created for WGU course C195. Designed to organize appointments over multiple
-    time zones with the ability to add, update, delete appointments and investigate aggregate data with appointment reports.
+For storyboard and directions for how to use, see: Appointment Scheduler for Local College - Task 2 - Section C.
 
-•  author, contact information, student application version, and date
+For business problem and proposed solution, see: Appointment Scheduler for Local College - Task 2 - Section A.
+
+
+•  Title and purpose of the application
+
+    Title: Global Consulting Application Scheduler. Created for WGU course C195. 
+    
+    Designed to organize appointments over multiple time zones with the ability to add, update, delete appointments and investigate aggregate data with appointment reports.
+
+•  Author, contact information, student application version, and date
 
     Author: Ned Imhoff
     Student ID: 005917082
@@ -17,7 +24,7 @@ Create a README.txt file that includes the following information:
     JDK: Java 17.0.6
     JavaFX: JavaFX API of version 20.0.1 by JavaFX runtime of version 17.0.6
 
-•  directions for how to run the program
+•  Directions for how to run the program
 
     Open app, and after a successful login use buttons to add, update, delete both customers and appointments. There are
     restrictions when you can add appointmetns due to time constraints to Eastern time. Enter the required fields for
@@ -30,12 +37,12 @@ Create a README.txt file that includes the following information:
     To set up the resource bundle “Translate” needs to be set as “Resources”.
     Go to: Project Structure -> Modules, (select) Translate (under src, java), (select) “Resources”, apply, ok.
 
-•  a description of the additional report of your choice you ran in part A3f
+•  A description of the additional report of your choice you ran in part A3f
 
     The additional report shows Appointment ID, Type, StartDateTime, EndDateTime and Duration that calculates the duration
     of time in every appointment displayed.
 
-•  the MySQL Connector driver version number, including the update number (e.g., mysql-connector-java-8.1.23)
+•  The MySQL Connector driver version number, including the update number (e.g., mysql-connector-java-8.1.23)
 
     mysql-connector-java-8.0.25.jar
 
